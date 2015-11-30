@@ -1,0 +1,17 @@
+escola - informação sobre a instituição, e conjunto de cursos lecionados, e audições.
+
+curso - informação sobre o curso lecionado(inclui ano), conjunto de professores que lecionam o curso, alunos matriculados neste curso.
+
+professor - informações sobre o professor, conjunto de habilitações.
+
+aluno - informações sobre o aluno, e conjunto de habilitacoes .
+
+audicao - informação sobre a audição, incluindo o tema, conjunto de atuações previstas.
+
+atuação - Obra a ser interpretada, e detalhes sobre a atuação, tais como hora e identificador unico.
+
+obra - informação sobre a obra, possibilidade de um profesor assumir o papel de maestro, e conjunto de musicos que a vão interpretar.
+
+musico - identificador unico do musico, e partitura atribuida para a atuação.
+
+
