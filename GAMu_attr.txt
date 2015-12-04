@@ -1,4 +1,4 @@
-grammar GAMu; !!!
+grammar GAMu; 
 
 Escola	:	 MetaE Curso+ Audicao+   
   		;

@@ -1,3 +1,5 @@
+!!!
+
 escola - informação sobre a instituição, e conjunto de cursos lecionados, e audições.
 
 curso - informação sobre o curso lecionado(inclui ano), conjunto de professores que lecionam o curso, alunos matriculados neste curso.
