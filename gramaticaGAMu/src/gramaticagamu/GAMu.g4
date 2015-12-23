@@ -7,7 +7,7 @@
  * Linguagem para validar uma Audição
  *
  audicao:
-	a001 "Natal dos pobres" data "2015-12-20"
+	a001 "Natal" data "2015-12-20"
 	atuacoes:
 		at01 (0:5:55) ob01 
 		musicos:
