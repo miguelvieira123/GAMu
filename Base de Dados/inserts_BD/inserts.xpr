@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="17.0">
+    <meta>
+        <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
+        <options/>
+    </meta>
+    <projectTree name="inserts.xpr">
+        <folder name="dataSets">
+            <file name="dataSets/alunos.xml"/>
+            <file name="dataSets/compositores.xml"/>
+            <file name="dataSets/cursos.xml"/>
+            <file name="dataSets/habilitacoes.xml"/>
+            <file name="dataSets/instrumentos.xml"/>
+            <file name="dataSets/obras.xml"/>
+            <file name="dataSets/periodos.xml"/>
+            <file name="dataSets/professores.xml"/>
+        </folder>
+        <folder name="insert_scripts">
+            <file name="insert_instrumentos.php"/>
+        </folder>
+        <folder name="select_scripts">
+            <file name="select_instrumentos.php"/>
+        </folder>
+    </projectTree>
+</project>
