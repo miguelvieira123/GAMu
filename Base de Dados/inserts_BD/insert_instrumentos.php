@@ -6,7 +6,7 @@
     echo "<pre>";
     foreach($instrumentos->instrumento as $instr){
         $qstring ="INSERT INTO instrumento(id, designacao) 
-                            VALUES ('"   .(string)$instr['id']."','"
+                            VALUES ('"  .(string)$instr['id']."','"
                                         .(string)$instr.
                                   "')";
                                                 
