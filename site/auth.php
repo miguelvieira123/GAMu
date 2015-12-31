@@ -3,19 +3,19 @@
 	if($_REQUEST['login']==NULL)header("Location:index.html");
 	include_once 'connectBD.php';
 
-	$sql = "SELECT * from auth where login='".$_REQUEST['login']."' and passwd='".md5($_REQUEST['passwd'])."' limit 1";
+	$sql = "SELECT * from utilizador where id_perfil='".$_REQUEST['login']."' and pass='".md5($_REQUEST['passwd'])."' limit 1";
 	try{
 		$res = $dbh->query($sql);
 		$row_count = $res->rowCount();
 		if ($row_count>0) {
         		foreach($res as $row) {
-        			switch($row['accessLevel']){
-        				case '1':
-        					$link = "Location:students.php?id=".$row['login'];
+        			switch($row['tipo_perfil']){
+        				case "1":
+        					$link = "Location:students.php?id=".$row['id_perfil'];
         					header($link);
         					break;
-        				case 6:
-        					$link = "Location:professor.php?id=".$row['login'];
+        				case "6":
+        					$link = "Location:professor.php?id=".$row['id_perfil'];
         					header($link);
         					break;
         				default:
