@@ -16,11 +16,14 @@
             <file name="dataSets/professores.xml"/>
         </folder>
         <folder name="insert_scripts">
+            <folder name="InsertObras">
+                <file name="insert_obras.php"/>
+            </folder>
             <file name="insert_alunos.php"/>
+            <file name="insert_compositores.php"/>
             <file name="insert_cursos.php"/>
             <file name="insert_habilitacoes.php"/>
             <file name="insert_instrumentos.php"/>
-            <file name="insert_obras.php"/>
             <file name="insert_periodos.php"/>
             <file name="insert_professores.php"/>
         </folder>

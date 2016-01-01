@@ -1,6 +1,8 @@
 <?php
 	include_once 'connectBD.php';
 	include_once 'functions.php';
+	$st = new Student();
+	$stID = array_key_exists("id", $_REQUEST)?$_REQUEST['id']:"";
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -14,8 +16,6 @@
 	<div id="top">
 		<span>
 			<?php
-				$st = new Student();
-				$stID = array_key_exists("id", $_REQUEST)?$_REQUEST['id']:"";
 				echo $st->getName($stID,$dbh);
 				echo "::";
 				echo $st->getBirthday($stID,$dbh);
@@ -36,6 +36,14 @@
 		<div class="heads">
 			<span>Menu3</span>
 		</div>
+		<?php
+			echo "<ul>";
+			$instrs = $st->getInstruments($stID,$dbh);
+			foreach($instrs as $instr){
+				echo "<li>".$instr['name']."</li>";
+			}
+			echo "</ul>";
+		?>
 	</div>
 	<div id="left-menu">
 		<div class="heads">
