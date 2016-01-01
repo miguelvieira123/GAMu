@@ -1,6 +1,6 @@
 <?php
 	include_once 'connectBD.php';
-	include_once 'functions.php';
+	include_once './classes/student.php';
 	$st = new Student();
 	$stID = array_key_exists("id", $_REQUEST)?$_REQUEST['id']:"";
 ?>
@@ -27,11 +27,6 @@
 			<span>Menu</span>
 		</div>
 	</div>
-	<div id="top_center">
-		<div class="heads">
-			<span>Menu2</span>
-		</div>
-	</div>
 	<div id="center">
 		<div class="heads">
 			<span>Menu3</span>
@@ -44,11 +39,6 @@
 			}
 			echo "</ul>";
 		?>
-	</div>
-	<div id="left-menu">
-		<div class="heads">
-			<span>Menu4</span>
-		</div>
 	</div>
 
 </body>
