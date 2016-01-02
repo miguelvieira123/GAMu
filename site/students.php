@@ -1,31 +1,45 @@
 <?php
 	include_once 'connectBD.php';
-	//echo $_REQUEST['id'];
-	$usr = $_REQUEST['id'];
-	$sql = "SELECT * FROM aluno WHERE id='".$usr."'";
-
-	$sql_inner_join = 	"SELECT * FROM aluno
-												INNER JOIN aluno_instrumento ON aluno.id = aluno_instrumento.id_aluno
-    										INNER JOIN instrumento ON aluno_instrumento.id_instrumento=instrumento.id
-												WHERE aluno.id='A1510'
-											";
-	try{
-		$result = $dbh->query($sql);
-		$result = $result->fetch();
-		// informação sobre o aluno
-		echo "<br/>id = ".$result['id'];
-		echo "<br/>nome = ".$result['nome'];
-		echo "<br/>data Nascimento = ".$result['dataNsc'];
-		// instrumentos que para os quais tem formação
-		$result = $dbh->query($sql_inner_join);
-		$result = $result->fetch();
-		echo "<br/>id_instrumento = ".$result['id'];
-		echo "<br/>designacao instrumento = ".$result['designacao'];
-
-	}catch (PDOException $e) {
-		print "Error!: " . $e->getMessage() . "<br/>";
-	}
-
-
-
+	include_once './classes/student.php';
+	$st = new Student();
+	$stID = array_key_exists("id", $_REQUEST)?$_REQUEST['id']:"";
 ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title></title>
+	<meta charset="UTF-8" />
+	<link href="./css/css.css" rel="stylesheet" />
+</head>
+
+<body>
+	<div id="top">
+		<span>
+			<?php
+				echo $st->getName($stID,$dbh);
+				echo "::";
+				echo $st->getBirthday($stID,$dbh);
+			?>
+		</span>
+	</div>
+	<div id="right-menu">
+		<div class="heads">
+			<span>Menu</span>
+		</div>
+	</div>
+	<div id="center">
+		<div class="heads">
+			<span>Menu3</span>
+		</div>
+		<?php
+			echo "<ul>";
+			$instrs = $st->getInstruments($stID,$dbh);
+			foreach($instrs as $instr){
+				echo "<li>".$instr['name']."</li>";
+			}
+			echo "</ul>";
+		?>
+	</div>
+
+</body>
+</html>
