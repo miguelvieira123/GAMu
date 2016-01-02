@@ -76,11 +76,13 @@
             package-structured output. In this call, ANTLR runs with the
             grammar base directory as the current directory.
             -->
-        <java classname="org.antlr.Tool" fork="true" dir="${antlr.src.dir}"
+        <java classname="org.antlr.v4.Tool" fork="true" dir="${antlr.src.dir}"
                 failonerror="true">
+            <!-- 
             <arg value="-verbose"/>
             <arg value="-report"/>
             <arg value="-make"/>
+            -->
             <arg value="-o"/>
             <arg path="${antlr.generated.dir}"/>
             <arg value="-lib"/>

@@ -24,6 +24,12 @@
 
 grammar GAMu;
 
+options 
+{
+    language = Java;
+}
+
+
 
 audicao     :	'audicao:' idAud metaAud 'data' data=STRING atuacoes 
             ;
@@ -33,7 +39,7 @@ metaAud     :	tema=STRING
 atuacoes    :   'atuacoes:' atuacao '#' (atuacao '#')*
             ;
 
-atuacao     :	idAt duracao idObra maestro? musicos
+atuacoa     :	idAt duracao idObra maestro? musicos
             ;
 
 duracao     :   '('hora=INT ':' minuto=INT ':' segundo=INT ')'
