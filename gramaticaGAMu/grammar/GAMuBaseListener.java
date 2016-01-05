@@ -1,5 +1,13 @@
 // Generated from C:\Users\Miguel\Desktop\-MiEI-\-MEI-\Gramáticas na Compreensão de Software\TrabalhoGitHub\GAMu\gramaticaGAMu\grammar\GAMu.g4 by ANTLR 4.4
 
+        import java.util.*;
+        import java.sql.Connection;
+        import java.sql.DriverManager;
+        import java.sql.SQLException;
+        import java.sql.ResultSet;
+        import java.sql.Statement;
+        
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -28,13 +36,25 @@ public class GAMuBaseListener implements GAMuListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIdAud(@NotNull GAMuParser.IdAudContext ctx) { }
+	@Override public void enterData(@NotNull GAMuParser.DataContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIdAud(@NotNull GAMuParser.IdAudContext ctx) { }
+	@Override public void exitData(@NotNull GAMuParser.DataContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHora(@NotNull GAMuParser.HoraContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHora(@NotNull GAMuParser.HoraContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -52,6 +72,18 @@ public class GAMuBaseListener implements GAMuListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterGrupo(@NotNull GAMuParser.GrupoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGrupo(@NotNull GAMuParser.GrupoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIdAluno(@NotNull GAMuParser.IdAlunoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -59,6 +91,18 @@ public class GAMuBaseListener implements GAMuListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIdAluno(@NotNull GAMuParser.IdAlunoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSolo(@NotNull GAMuParser.SoloContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSolo(@NotNull GAMuParser.SoloContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -100,6 +144,18 @@ public class GAMuBaseListener implements GAMuListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterElementos(@NotNull GAMuParser.ElementosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElementos(@NotNull GAMuParser.ElementosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMetaAud(@NotNull GAMuParser.MetaAudContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -112,25 +168,13 @@ public class GAMuBaseListener implements GAMuListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDuracao(@NotNull GAMuParser.DuracaoContext ctx) { }
+	@Override public void enterObras(@NotNull GAMuParser.ObrasContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDuracao(@NotNull GAMuParser.DuracaoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterMaestro(@NotNull GAMuParser.MaestroContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMaestro(@NotNull GAMuParser.MaestroContext ctx) { }
+	@Override public void exitObras(@NotNull GAMuParser.ObrasContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -155,30 +199,6 @@ public class GAMuBaseListener implements GAMuListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAtuacao(@NotNull GAMuParser.AtuacaoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIdAt(@NotNull GAMuParser.IdAtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIdAt(@NotNull GAMuParser.IdAtContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPartitura(@NotNull GAMuParser.PartituraContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPartitura(@NotNull GAMuParser.PartituraContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -19,21 +19,23 @@ public class GramaticaGAMu {
         System.out.println("versao ANTLR: "+ RuntimeMetaData.getRuntimeVersion());
         
         
-        ANTLRInputStream in = new ANTLRInputStream("audicao:\n" +
-                                                    "	a001 \"Natal\" data \"2015-12-20\"\n" +
-                                                    "	atuacoes:\n" +
-                                                    "		at01 (0:5:55) ob01 \n" +
-                                                    "		musicos:\n" +
-                                                    "			alun98 \"clarinete.pdf\",\n" +
-                                                    "			prof07 \"piano.pdf\",\n" +
-                                                    "			alun77 \"ferrinhos.txt\"\n" +
-                                                    "		#\n" +
-                                                    "		at02 (0:9:23) ob33 \n" +
-                                                    "		musicos:\n" +
-                                                    "			alun47 \"guitarra_1.pdf\",\n" +
-                                                    "			prof12 \"guitarra_2.pdf\",\n" +
-                                                    "			alun11 \"bateria.txt\"\n" +
-                                                    "		#");
+        ANTLRInputStream in = new ANTLRInputStream( "titulo: \"titulo\"\n" +
+                                                    "        subtitulo: \"subtitulo\" \n" +
+                                                    "        tema: \"tema da audicao\" \n" +
+                                                    "        data: 5-1-2016 \n" +
+                                                    "        hora: 15:30\n" +
+                                                    "        local: \"local da audicao\"\n" +
+                                                    "        organizador: P13\n" +
+                                                    "        duracao-maxima: 02:00\n" +
+                                                    "\n" +
+                                                    "        atuacoes:\n" +
+                                                    "            grupo: \"nome da banda\" \n" +
+                                                    "            elementos: A1510,P11,A20021\n" +
+                                                    "            obras: O1,O2,O3,O4,O32\n" +
+                                                    "            #\n" +
+                                                    "            solo: a1510 \n" +
+                                                    "            obras: O22,O23\n" +
+                                                    "            #");
         
         
         

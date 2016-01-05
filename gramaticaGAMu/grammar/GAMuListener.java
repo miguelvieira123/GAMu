@@ -1,4 +1,12 @@
 // Generated from C:\Users\Miguel\Desktop\-MiEI-\-MEI-\Gramáticas na Compreensão de Software\TrabalhoGitHub\GAMu\gramaticaGAMu\grammar\GAMu.g4 by ANTLR 4.4
+
+        import java.util.*;
+        import java.sql.Connection;
+        import java.sql.DriverManager;
+        import java.sql.SQLException;
+        import java.sql.ResultSet;
+        import java.sql.Statement;
+        
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -18,15 +26,25 @@ public interface GAMuListener extends ParseTreeListener {
 	 */
 	void exitIdProf(@NotNull GAMuParser.IdProfContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GAMuParser#idAud}.
+	 * Enter a parse tree produced by {@link GAMuParser#data}.
 	 * @param ctx the parse tree
 	 */
-	void enterIdAud(@NotNull GAMuParser.IdAudContext ctx);
+	void enterData(@NotNull GAMuParser.DataContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GAMuParser#idAud}.
+	 * Exit a parse tree produced by {@link GAMuParser#data}.
 	 * @param ctx the parse tree
 	 */
-	void exitIdAud(@NotNull GAMuParser.IdAudContext ctx);
+	void exitData(@NotNull GAMuParser.DataContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GAMuParser#hora}.
+	 * @param ctx the parse tree
+	 */
+	void enterHora(@NotNull GAMuParser.HoraContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GAMuParser#hora}.
+	 * @param ctx the parse tree
+	 */
+	void exitHora(@NotNull GAMuParser.HoraContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GAMuParser#atuacoes}.
 	 * @param ctx the parse tree
@@ -38,6 +56,16 @@ public interface GAMuListener extends ParseTreeListener {
 	 */
 	void exitAtuacoes(@NotNull GAMuParser.AtuacoesContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GAMuParser#grupo}.
+	 * @param ctx the parse tree
+	 */
+	void enterGrupo(@NotNull GAMuParser.GrupoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GAMuParser#grupo}.
+	 * @param ctx the parse tree
+	 */
+	void exitGrupo(@NotNull GAMuParser.GrupoContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GAMuParser#idAluno}.
 	 * @param ctx the parse tree
 	 */
@@ -47,6 +75,16 @@ public interface GAMuListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIdAluno(@NotNull GAMuParser.IdAlunoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GAMuParser#solo}.
+	 * @param ctx the parse tree
+	 */
+	void enterSolo(@NotNull GAMuParser.SoloContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GAMuParser#solo}.
+	 * @param ctx the parse tree
+	 */
+	void exitSolo(@NotNull GAMuParser.SoloContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GAMuParser#musico}.
 	 * @param ctx the parse tree
@@ -78,6 +116,16 @@ public interface GAMuListener extends ParseTreeListener {
 	 */
 	void exitIdObra(@NotNull GAMuParser.IdObraContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GAMuParser#elementos}.
+	 * @param ctx the parse tree
+	 */
+	void enterElementos(@NotNull GAMuParser.ElementosContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GAMuParser#elementos}.
+	 * @param ctx the parse tree
+	 */
+	void exitElementos(@NotNull GAMuParser.ElementosContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GAMuParser#metaAud}.
 	 * @param ctx the parse tree
 	 */
@@ -88,25 +136,15 @@ public interface GAMuListener extends ParseTreeListener {
 	 */
 	void exitMetaAud(@NotNull GAMuParser.MetaAudContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GAMuParser#duracao}.
+	 * Enter a parse tree produced by {@link GAMuParser#obras}.
 	 * @param ctx the parse tree
 	 */
-	void enterDuracao(@NotNull GAMuParser.DuracaoContext ctx);
+	void enterObras(@NotNull GAMuParser.ObrasContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GAMuParser#duracao}.
+	 * Exit a parse tree produced by {@link GAMuParser#obras}.
 	 * @param ctx the parse tree
 	 */
-	void exitDuracao(@NotNull GAMuParser.DuracaoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link GAMuParser#maestro}.
-	 * @param ctx the parse tree
-	 */
-	void enterMaestro(@NotNull GAMuParser.MaestroContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GAMuParser#maestro}.
-	 * @param ctx the parse tree
-	 */
-	void exitMaestro(@NotNull GAMuParser.MaestroContext ctx);
+	void exitObras(@NotNull GAMuParser.ObrasContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GAMuParser#musicos}.
 	 * @param ctx the parse tree
@@ -127,24 +165,4 @@ public interface GAMuListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAtuacao(@NotNull GAMuParser.AtuacaoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link GAMuParser#idAt}.
-	 * @param ctx the parse tree
-	 */
-	void enterIdAt(@NotNull GAMuParser.IdAtContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GAMuParser#idAt}.
-	 * @param ctx the parse tree
-	 */
-	void exitIdAt(@NotNull GAMuParser.IdAtContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link GAMuParser#partitura}.
-	 * @param ctx the parse tree
-	 */
-	void enterPartitura(@NotNull GAMuParser.PartituraContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GAMuParser#partitura}.
-	 * @param ctx the parse tree
-	 */
-	void exitPartitura(@NotNull GAMuParser.PartituraContext ctx);
 }
