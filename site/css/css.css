@@ -19,9 +19,25 @@ body{
 	padding: 0;
 	margin: 0;
 	top: 15px;
-	left: 10px;
+	left: 30px;
 	font-size: 19px;
 	color: grey;
+}
+#top .exit	{
+	position: relative;
+	text-decoration: none;
+	color: grey;
+	font-size: 18px;
+	top:13px;
+	float: right;
+	left: -30px;
+	border: 1px solid #cccccc;
+	border-radius: 10px;
+	background-color: #cccccc;
+	
+}
+#top a:hover	{
+	background-color: #aaaaaa;
 }
 #right-menu {
 	position: absolute;
@@ -72,14 +88,14 @@ body{
 }
 
 
-.heads {
+#all-heads {
 	width: 99.%;
 	height: 30px;
 	background:  lavender;
 	box-shadow: 0 1px 10px rgba(0,0,0,0.08);
 }
 
-.heads span{
+#all-heads span{
 	position: relative;
 	padding: 0;
 	margin: 0;
@@ -87,4 +103,25 @@ body{
 	left: 10px;
 	font-size: 19px;
 	color: grey;
+}
+#center-heads {
+	width: 99.%;
+	height: 30px;
+	background:  lavender;
+	box-shadow: 0 1px 10px rgba(0,0,0,0.08);
+}
+
+#center-heads span{
+	position: relative;
+	padding: ;
+	margin: 0;
+	top: 4px;
+	left: 10px;
+	font-size: 17px;
+	color: grey;
+}
+
+.normLink {
+	color:cadetblue;
+	text-decoration: underline;
 }
