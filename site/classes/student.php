@@ -1,5 +1,5 @@
 <?php
-class Student{
+class Students{
 	function getName($stID,$dbh){
 		if($stID==NULL)return "";
 		$sql = "SELECT nome from aluno where id='".$stID."' limit 1";
@@ -33,7 +33,21 @@ class Student{
 		}
 
 	}
-
+	function getMail($stID,$dbh){
+		if($stID==NULL)return "";
+		$sql = "SELECT mail from aluno where id='".$stID."' limit 1";
+		try{
+			$res = $dbh->query($sql);
+			if($res->rowCount()>0){
+				foreach($res as $row){
+					return $row['mail'];
+				}
+			}
+		}
+		catch (PDOException $e) {
+    			 return "Error!: " . $e->getMessage();
+		}
+	}
 	function getInstruments($stID,$dbh){
 		$out = array();
 		if($stID==NULL)return $out;
@@ -46,7 +60,6 @@ class Student{
 					$out[$i]['id'] = $row['id'];
 					$out[$i]['name']= $row['name'];
 					$i++;
-					//return $row['dataNsc'];
 				}
 				return $out;
 			}
@@ -54,34 +67,19 @@ class Student{
 		}
 		catch (PDOException $e) {
     			return $out;
-    			 //return "Error!: " . $e->getMessage();
 		}
 	}
-
-/*	function getQQQ($usr){
-		//echo $_REQUEST['id'];
-		$usr = $_REQUEST['id'];
-		$sql = "SELECT * FROM aluno WHERE id='".$usr."'";
-
-		$sql_inner_join = "SELECT * FROM aluno INNER JOIN aluno_instrumento ON aluno.id = aluno_instrumento.id_aluno INNER JOIN instrumento ON aluno_instrumento.id_instrumento=instrumento.id WHERE aluno.id='A1510'";
+	function changeInfoP($stID,$dbh,$name,$birthday,$mail){
+		if($stID==NULL||$name==NULL||$birthday==NULL||$mail==NULL)return -1;
+		$sql = "UPDATE  aluno set nome='".$name."',dataNsc='".$birthday."',mail='".$mail."' where id='".$stID."'";
 		try{
-			$result = $dbh->query($sql);
-			$result = $result->fetch();
-			// informação sobre o aluno
-			echo "<br/>id = ".$result['id'];
-			echo "<br/>nome = ".$result['nome'];
-			echo "<br/>data Nascimento = ".$result['dataNsc'];
-			// instrumentos que para os quais tem formação
-			$result = $dbh->query($sql_inner_join);
-			$result = $result->fetch();
-			echo "<br/>id_instrumento = ".$result['id'];
-			echo "<br/>designacao instrumento = ".$result['designacao'];
-
-		}catch (PDOException $e) {
-			print "Error!: " . $e->getMessage() . "<br/>";
+			if($dbh->query($sql)==false)return -2;
+			else return 1;
 		}
-	}*/
-
+		catch (PDOException $e) {
+    			 return "Error!: " . $e->getMessage();
+		}
+	}
 
 }
 ?>
