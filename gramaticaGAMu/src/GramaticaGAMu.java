@@ -30,16 +30,25 @@ public class GramaticaGAMu {
                                                     "\n" +
                                                     "        atuacoes:\n" +
                                                     "            grupo: \"nome da banda\" \n" +
-                                                    "            elementos: A1510,P11,A20021\n" +
+                                                    "            elementos: A1510,P11,A20021,a0000,p123\n" +
                                                     "            obras: O1,O2,O3,O4,O32\n" +
                                                     "            #\n" +
-                                                    "            solo: a1510 \n" +
+                                                    "            solo: A1510 \n" +
                                                     "            obras: O22,O23\n" +
                                                     "            #");
         
         
         
-        GAMuLexer lexer = new GAMuLexer( (CharStream) in);
+        StringBuilder frase = new StringBuilder();
+        for( String frag : args ){
+            frase.append(" "+frag);
+        }
+        System.out.println("frase: "+frase);
+        
+        
+        ANTLRInputStream in2 = new ANTLRInputStream( frase.toString() );
+        
+        GAMuLexer lexer = new GAMuLexer( (CharStream) in2);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         GAMuParser parser = new GAMuParser(tokens);
         

@@ -22,19 +22,14 @@
             elementos: A1510,P11,A20021
             obras: O1,O2,O3,O4,O32
             #
-            solo: a1510 
+            solo: A1510 
             obras: O22,O23
             #
  
  */
 
 grammar GAMu;
-/*
-options 
-{
-    language = Java;
-}
-*/
+
 @header{
         import java.util.*;
         import java.sql.Connection;
@@ -51,61 +46,42 @@ options
             String USER = "usrPRI";
             String PASS = "popo";
             
+            Connection conn = null;
+            Statement stmt = null;
+            
         }
 audicao     @init{
-                   Connection conn = null;
-                   Statement stmt = null;
+                   
                    try{
                       //STEP 2: Register JDBC driver
                       Class.forName("com.mysql.jdbc.Driver");
-
                       //STEP 3: Open a connection
                       System.out.println("Connecting to database...");
                       conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
-
                       //STEP 4: Execute a query
                       System.out.println("Creating statement...");
                       stmt = (Statement) conn.createStatement();
-                      String sql;
-                      sql = "SELECT id, designacao FROM instrumento";
-                      ResultSet rs = (ResultSet) stmt.executeQuery(sql);
-
-                      //STEP 5: Extract data from result set
-                      while(rs.next()){
-                         //Retrieve by column name
-                         String id  = rs.getString("id");
-                         String design = rs.getString("designacao");
-
-                         //Display values
-                         System.out.print("ID: " + id);
-                         System.out.println(", First: " + design);
-                      }
-                      //STEP 6: Clean-up environment
-                      rs.close();
-                      stmt.close();
-                      conn.close();
+                      
                    }catch(SQLException se){
                       //Handle errors for JDBC
                       se.printStackTrace();
                    }catch(Exception e){
                       //Handle errors for Class.forName
                       e.printStackTrace();
-                   }finally{
-                      //finally block used to close resources
-                      try{
-                         if(stmt!=null)
-                            stmt.close();
-                      }catch(SQLException se2){
-                      }// nothing we can do
-                      try{
-                         if(conn!=null)
-                            conn.close();
-                      }catch(SQLException se){
-                         se.printStackTrace();
-                      }//end finally try
-                   }//end try
-                   System.out.println("Goodbye!");
                    }
+                   
+                   }
+            @after{
+                    try{
+                        if(stmt!=null)
+                            stmt.close();
+                        if(conn!=null)
+                            conn.close();
+                    }catch(SQLException se){
+                      //Handle errors for JDBC
+                      se.printStackTrace();
+                    }
+                  }
             :	metaAud atuacoes 
             ;
 
@@ -141,8 +117,37 @@ elementos   :   musicos
             ;
 musicos     :   musico (',' musico)*
             ;
-musico      :   idAluno {System.out.println("aluno: "+ $idAluno.id);} 
-            |   idProf  {System.out.println("professor: "+ $idProf.id);}
+musico      :   idAluno {
+                            try{
+                                //System.out.println("aluno: "+ $idAluno.id);
+                                String sql = "SELECT COUNT(1) AS existe FROM aluno WHERE id='"+$idAluno.id+"'";
+                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+                                if(rs.next()){
+                                    //System.out.println(" existe?: " + rs.getInt("existe"));
+                                    if(rs.getInt("existe") != 1){
+                                        System.out.println(" aluno: "+$idAluno.id+"  no existe");
+                                    }
+                                }
+                                rs.close();
+                            }catch(SQLException se){
+                                se.printStackTrace();
+                            }
+                         } 
+            |   idProf  {
+                         try{
+                                //System.out.println("professor: "+ $idProf.id);
+                                String sql = "SELECT COUNT(1) AS existe FROM professor WHERE id='"+$idProf.id+"'";
+                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+                                if(rs.next()){
+                                    if(rs.getInt("existe") != 1){
+                                        System.out.println(" professor: "+$idProf.id+"  no existe");
+                                    }
+                                }
+                                rs.close();
+                            }catch(SQLException se){
+                                se.printStackTrace();
+                            }
+                         }
             ;
 
 

@@ -52,6 +52,9 @@ public class GAMuLexer extends Lexer {
 	            String USER = "usrPRI";
 	            String PASS = "popo";
 	            
+	            Connection conn = null;
+	            Statement stmt = null;
+	            
 	        
 
 	public GAMuLexer(CharStream input) {
