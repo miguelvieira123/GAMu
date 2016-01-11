@@ -1,0 +1,74 @@
+<!DOCTYPE html SYSTEM "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        
+        <title>Test Editor</title>
+        
+    </head>
+    
+    <body>
+        
+        <iframe>
+        <script src="../js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+    var editor = ace.edit("editor");
+</script>
+        This should give you a working editor. You may want to control its sizing using CSS. I personally load the editor in an iframe and set its style to position: absolute, top: 0, left: 0 etc... but I'm sure you know better than me how to achieve results. 
+        The second thing to do is to configure the ACE editor to use your mode i.e. language configuration. A good place to start is to inherit from the built-in TextMode. The following is a very simple example, which only caters for comments, literals, and a limited subset of separators and keywords :
+        ace.define('ace/mode/my-mode',["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/text_highlight_rules", "ace/worker/worker_client" ], function(require, exports, module) {
+        
+        var oop = require("ace/lib/oop");
+        var TextMode = require("ace/mode/text").Mode;
+        var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
+        
+        var MyHighlightRules = function() {
+        var keywordMapper = this.createKeywordMapper({
+        "keyword.control": "if|then|else",
+        "keyword.operator": "and|or|not",
+        "keyword.other": "class",
+        "storage.type": "int|float|text",
+        "storage.modifier": "private|public",
+        "support.function": "print|sort",
+        "constant.language": "true|false"
+        }, "identifier");
+        this.$rules = {
+        "start": [
+        { token : "comment", regex : "//" },
+        { token : "string",  regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]' },
+        { token : "constant.numeric", regex : "0[xX][0-9a-fA-F]+\\b" },
+        { token : "constant.numeric", regex: "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b" },
+        { token : "keyword.operator", regex : "!|%|\\\\|/|\\*|\\-|\\+|~=|==|<>|!=|<=|>=|=|<|>|&&|\\|\\|" },
+        { token : "punctuation.operator", regex : "\\?|\\:|\\,|\\;|\\." },
+        { token : "paren.lparen", regex : "[[({]" },
+        { token : "paren.rparen", regex : "[\\])}]" },
+        { token : "text", regex : "\\s+" },
+        { token: keywordMapper, regex: "[a-zA-Z_$][a-zA-Z0-9_$]*\\b" }
+        ]
+        };
+        };
+        oop.inherits(MyHighlightRules, TextHighlightRules);
+        
+        var MyMode = function() {
+        this.HighlightRules = MyHighlightRules;
+        };
+        oop.inherits(MyMode, TextMode);
+        
+        (function() {
+        
+        this.$id = "ace/mode/my-mode";
+        
+        }).call(MyMode.prototype);
+        
+        exports.Mode = MyMode;
+        });
+        Now if you store the above in a file called "my-mode.js", setting the ACE Editor becomes straightforward:
+        <script src="../js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../js/my-mode.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+    var editor = ace.edit("editor");
+    editor.getSession().setMode("ace/mode/my-mode");
+</script>
+        </iframe>
+    </body>
+    
+</html>

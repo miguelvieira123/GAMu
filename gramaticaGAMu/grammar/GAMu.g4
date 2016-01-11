@@ -37,6 +37,9 @@ grammar GAMu;
         import java.sql.SQLException;
         import java.sql.ResultSet;
         import java.sql.Statement;
+        import java.sql.Time;
+        import java.time.Instant;
+        
         }
 @members{
             // JDBC driver name and database URL
@@ -45,13 +48,17 @@ grammar GAMu;
             // Database credentials
             String USER = "usrPRI";
             String PASS = "popo";
-            
+            // Database connection
             Connection conn = null;
             Statement stmt = null;
             
+            // grammar variables 
+            static final long ONE_MINUTE_IN_MILLIS=60000;
+            long total_audition_time = (long)0.0;
+            float max_audition_time = (float)0.0;
+            
         }
 audicao     @init{
-                   
                    try{
                       //STEP 2: Register JDBC driver
                       Class.forName("com.mysql.jdbc.Driver");
@@ -72,6 +79,8 @@ audicao     @init{
                    
                    }
             @after{
+                   Time aaa = new Time(total_audition_time * 1000);
+                   System.out.println("tempo total audicao: "+ aaa.toString());
                     try{
                         if(stmt!=null)
                             stmt.close();
@@ -92,26 +101,81 @@ metaAud     :	'titulo:' STRING
                 'hora:' hora 
                 'local:' STRING 
                 'organizador:' idProf
-                'duracao-maxima:' hora
+                'duracao-maxima:' hora {max_audition_time = $hora.mili_seconds;}
             ;
 
 data        :   INT'-'INT'-'INT 
             ;
 
-hora        :   INT':'INT
+hora        returns[float mili_seconds]:   
+                horas=INT':'minutos=INT {$mili_seconds = ($horas.int*60*60000+$minutos.int*60000);}
             ;
 
-atuacoes    :   'atuacoes:' atuacao '#' (atuacao '#')*
+atuacoes    returns[long tempo]
+            :   'atuacoes:' atuacao[$tempo] {
+                                                $tempo+=$atuacao.tempo;
+                                                Time aaa = new Time($tempo*1000);
+                                                System.out.println("tempo total atuacoes: "+ aaa.toString());
+                                            } '#' 
+                (atuacao[$tempo]    {
+                                        $tempo+=$atuacao.tempo;
+                                        aaa.setTime($tempo*1000);
+                                        System.out.println("tempo total atuacoes: "+ aaa.toString());
+                                    } '#')* {total_audition_time = $tempo;}
             ;
 
-atuacao     :   (grupo|solo) 
+atuacao     [long tempoIn]
+            returns[long tempo]
+            :   grupo[$tempoIn]{$tempo=$grupo.tempo;}
+            |   solo[$tempoIn] {$tempo=$solo.tempo;}
             ;
 
-grupo       :   'grupo:' STRING 'elementos:' elementos 'obras:' obras
+grupo       [long tempoIn]
+            returns[long tempo]
+            :   'grupo:' STRING 'elementos:' elementos 'obras:' obras[$tempoIn]{$tempo = $obras.tempo;}
             ;
-solo        :   'solo:' musico 'obras:' obras
+solo        [long tempoIn]
+            returns[long tempo]
+            :   'solo:' musico 'obras:' obras[$tempoIn]{$tempo = $obras.tempo;}
             ;
-obras       :   idObra (','idObra)*
+obras       [long tempoIn]
+            returns[long tempo] // falta verificar a existencia da obra 
+            :   idObra {
+                            System.out.println("obra: "+ $idObra.id);
+                            try{
+                                String sql = "SELECT  duracao FROM obra WHERE id='"+$idObra.id+"'";
+                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+                                if(rs.next()){
+                                    
+                                    System.out.print(" duracao: " + rs.getTime("duracao"));
+                                    $tempo += (int)rs.getTime("duracao").toLocalTime().toSecondOfDay();
+                                    //$tempo += $tempoIn;
+                                    Time aaa = new Time($tempo*1000);
+                                    System.out.println(" \t tempo total: "+ aaa.toString());
+                                }
+                                rs.close();
+                            }catch(SQLException se){
+                                se.printStackTrace();
+                            }
+                        }
+                (','idObra  {
+                                System.out.println("obra: "+ $idObra.id);
+                                try{
+                                    String sql = "SELECT  duracao FROM obra WHERE id='"+$idObra.id+"'";
+                                    ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+                                    if(rs.next()){
+                                        
+                                        System.out.print(" duracao: " + rs.getTime("duracao"));
+                                        $tempo += (int)rs.getTime("duracao").toLocalTime().toSecondOfDay();
+                                        Time aaa = new Time($tempo*1000);
+                                        System.out.println(" \t tempo total: "+ aaa.toString());
+                                    }
+                                    rs.close();
+                                }catch(SQLException se){
+                                    se.printStackTrace();
+                                }
+                            }
+                )* 
             ;
 elementos   :   musicos
             ;
@@ -125,7 +189,7 @@ musico      :   idAluno {
                                 if(rs.next()){
                                     //System.out.println(" existe?: " + rs.getInt("existe"));
                                     if(rs.getInt("existe") != 1){
-                                        System.out.println(" aluno: "+$idAluno.id+"  no existe");
+                                        System.out.println("<font color=\"red\">aluno: "+$idAluno.id+" nao existe</font>");
                                     }
                                 }
                                 rs.close();
@@ -140,7 +204,7 @@ musico      :   idAluno {
                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                 if(rs.next()){
                                     if(rs.getInt("existe") != 1){
-                                        System.out.println(" professor: "+$idProf.id+"  no existe");
+                                        System.out.println("<font color=\"red\">professor: "+$idProf.id+" nao existe</font>");
                                     }
                                 }
                                 rs.close();

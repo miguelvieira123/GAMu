@@ -6,6 +6,9 @@
         import java.sql.SQLException;
         import java.sql.ResultSet;
         import java.sql.Statement;
+        import java.sql.Time;
+        import java.time.Instant;
+        
         
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -51,9 +54,14 @@ public class GAMuLexer extends Lexer {
 	            // Database credentials
 	            String USER = "usrPRI";
 	            String PASS = "popo";
-	            
+	            // Database connection
 	            Connection conn = null;
 	            Statement stmt = null;
+	            
+	            // grammar variables 
+	            static final long ONE_MINUTE_IN_MILLIS=60000;
+	            long total_audition_time = (long)0.0;
+	            float max_audition_time = (float)0.0;
 	            
 	        
 

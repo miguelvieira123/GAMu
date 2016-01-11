@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="17.0">
+    <meta>
+        <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
+        <options/>
+    </meta>
+    <projectTree name="GAMu.xpr">
+        <folder name="exemplos">
+            <file name="editor.html"/>
+            <file name="exerJAR.php"/>
+        </folder>
+        <file name="executar_gramatica.php"/>
+        <file name="new_audicao_form.html"/>
+        <file name="new_audicao_form.js"/>
+    </projectTree>
+</project>

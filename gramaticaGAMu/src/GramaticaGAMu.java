@@ -1,4 +1,10 @@
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -30,7 +36,7 @@ public class GramaticaGAMu {
                                                     "\n" +
                                                     "        atuacoes:\n" +
                                                     "            grupo: \"nome da banda\" \n" +
-                                                    "            elementos: A1510,P11,A20021,a0000,p123\n" +
+                                                    "            elementos: A1510,P11,A20021\n" +
                                                     "            obras: O1,O2,O3,O4,O32\n" +
                                                     "            #\n" +
                                                     "            solo: A1510 \n" +
@@ -41,24 +47,24 @@ public class GramaticaGAMu {
         
         StringBuilder frase = new StringBuilder();
         for( String frag : args ){
-            frase.append(" "+frag);
+            frase.append(" " + frag );
         }
         System.out.println("frase: "+frase);
         
         
         ANTLRInputStream in2 = new ANTLRInputStream( frase.toString() );
         
-        GAMuLexer lexer = new GAMuLexer( (CharStream) in2);
+        GAMuLexer lexer = new GAMuLexer( (CharStream) in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         GAMuParser parser = new GAMuParser(tokens);
         
         System.out.println(parser.audicao()); 
         
         
-        
-        
-        
-        
+//       Time ttt = new Time((long) 55.66);
+//       ttt.toLocalTime().toSecondOfDay();
+//       Calendar cal =Calendar.getInstance();
+//       cal.
         
     }
     
