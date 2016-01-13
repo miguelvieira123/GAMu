@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<audicoes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="file:/C:/xampp/htdocs/GAMu/audicoes.xsd">
+    <audicao>
+        <metainfo>
+            <titulo>titulo0</titulo>
+            <subtitulo>subtitulo</subtitulo>
+            <tema>tema da audicao</tema>
+            <data>22/01/2016</data>
+            <hora_inicio>12:30</hora_inicio>
+            <hora_fim>14:30</hora_fim>
+            <local>local0</local>
+            <organizador>P1</organizador>
+            <duracao>2:00</duracao>
+        </metainfo>
+        <atuacoes>
+            <atuacao tipo="grupo">
+                <nome_grupo>nome do grupo musical</nome_grupo>
+                <hora_inicio>12:30</hora_inicio>
+                <obras>
+                    <obra id="O1">
+                        <nome>nome0</nome>
+                        <duracao>0:20</duracao>
+                    </obra>
+                    <obra id="O23">
+                        <nome>nome1</nome>
+                        <duracao>0:47</duracao>
+                    </obra>
+                </obras>
+                <musicos>
+                    <musico tipo="professor" id="P1">
+                        <nome>nome2</nome>
+                        <instrumento>I22</instrumento>
+                    </musico>
+                    <musico tipo="aluno" id="A1510">
+                        <nome>nome3</nome>
+                        <instrumento>I2</instrumento>
+                    </musico>
+                </musicos>
+            </atuacao>
+            <atuacao tipo="solo">
+                <hora_inicio>12:30</hora_inicio>
+                <obras>
+                    <obra id="O1">
+                        <nome>nome0</nome>
+                        <duracao>0:20</duracao>
+                    </obra>
+                    <obra id="O23">
+                        <nome>nome1</nome>
+                        <duracao>0:47</duracao>
+                    </obra>
+                </obras>
+                <musicos>
+                    <musico tipo="aluno" id="A1510">
+                        <nome>nome2</nome>
+                        <instrumento>I22</instrumento>
+                    </musico>
+                </musicos>
+            </atuacao>
+        </atuacoes>
+    </audicao>
+</audicoes>

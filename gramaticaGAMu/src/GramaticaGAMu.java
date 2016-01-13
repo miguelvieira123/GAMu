@@ -21,8 +21,8 @@ public class GramaticaGAMu {
      */
     public static void main(String[] args) {
         
-        
-        System.out.println("versao ANTLR: "+ RuntimeMetaData.getRuntimeVersion());
+        System.setErr(System.out);
+        //System.out.println("versao ANTLR: "+ RuntimeMetaData.getRuntimeVersion());
         
         
         ANTLRInputStream in = new ANTLRInputStream( "titulo: \"titulo\"\n" +
@@ -32,12 +32,12 @@ public class GramaticaGAMu {
                                                     "        hora: 15:30\n" +
                                                     "        local: \"local da audicao\"\n" +
                                                     "        organizador: P13\n" +
-                                                    "        duracao-maxima: 02:00\n" +
+                                                    "        duracao-maxima: 13:00\n" +
                                                     "\n" +
                                                     "        atuacoes:\n" +
                                                     "            grupo: \"nome da banda\" \n" +
                                                     "            elementos: A1510,P11,A20021\n" +
-                                                    "            obras: O1,O2,O3,O4,O32\n" +
+                                                    "            obras: O891,O2,O3,O4,O32\n" +
                                                     "            #\n" +
                                                     "            solo: A1510 \n" +
                                                     "            obras: O22,O23\n" +
@@ -48,11 +48,13 @@ public class GramaticaGAMu {
         StringBuilder frase = new StringBuilder();
         for( String frag : args ){
             frase.append(" " + frag );
+            if(frag.contains("\\n")){
+                frase.append(System.getProperty("line.separator"));
+            }
         }
-        System.out.println("frase: "+frase);
+        String temp = frase.toString();
         
-        
-        ANTLRInputStream in2 = new ANTLRInputStream( frase.toString() );
+        ANTLRInputStream in2 = new ANTLRInputStream( temp );
         
         GAMuLexer lexer = new GAMuLexer( (CharStream) in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);

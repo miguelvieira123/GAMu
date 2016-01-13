@@ -4,16 +4,20 @@
         <meta charset="UTF-8"/>
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="jquery-linedtextarea.js"></script>
+        <link href="jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
         <script type="text/javascript" src="./new_audicao_form.js" charset="UTF-8"></script>
+        
         <title>valida audicao</title>
     </head>
     <body>
         <h2>Validar Audição</h2>
+        <h3>atenção dar creditos aos criadores do jQuery - LINED_TEXTAREA</h3>
         <form accept-charset="UTF-8">
             <fieldset>
                 <legend>Nova Audição</legend>
                 texto: 
-                <textarea id="texto" rows="25" cols="45" >
+                <textarea id="texto" rows="25" cols="55" class="lined">
  titulo: "titulo"
  subtitulo: "subtitulo" 
  tema: "tema da audicao" 
@@ -21,13 +25,13 @@
  hora: 15:30
  local: "local da audicao"
  organizador: P13
- duracao-maxima: 02:00
+ duracao-maxima: 10:00
  atuacoes:
      grupo: "nome da banda" 
-     elementos: A1510,P11,A20021
+     elementos: A1510,P11,A20021,A89
      obras: O1,O2,O3,O4,O32
      #
-     solo: A1510 
+     solo: A89 
      obras: O22,O23
      #    
                 </textarea>
@@ -38,5 +42,10 @@
                 <legend>mensagens do servidor</legend>
             </fieldset>
         </form>
+        
+        
+        
+        
+        
     </body>
 </html>

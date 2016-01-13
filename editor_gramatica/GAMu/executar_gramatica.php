@@ -3,11 +3,11 @@
     
     
     //limpar a string que vai ser passada como argumento.
-    $texto = str_replace( "\n", "", $vars["phrase"] );
-    $texto = str_replace( "\"", "\\\"", $texto );
+    //$texto = str_replace( "\n", "\\n", $vars["phrase"] );
+    //$texto = str_replace( "\"", "\\\"", $texto );
     
     // tornar a string segura
-    //mysql_real_escape_string( $vars["phrase"] );
+    $texto = mysql_real_escape_string( $vars["phrase"] );
     
     //executar gramatica
     exec("java -jar gramaticaGAMu.jar ". $texto, $out); 

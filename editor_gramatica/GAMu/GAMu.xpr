@@ -9,7 +9,15 @@
             <file name="editor.html"/>
             <file name="exerJAR.php"/>
         </folder>
+        <folder name="lined textarea">
+            <file name="jquery-linedtextarea.css"/>
+            <file name="jquery-linedtextarea.js"/>
+        </folder>
+        <folder name="xml">
+            <file name="audicoes.xsd"/>
+        </folder>
         <file name="executar_gramatica.php"/>
+        <file name="instance1.xml"/>
         <file name="new_audicao_form.html"/>
         <file name="new_audicao_form.js"/>
     </projectTree>

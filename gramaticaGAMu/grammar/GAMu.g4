@@ -52,10 +52,11 @@ grammar GAMu;
             Connection conn = null;
             Statement stmt = null;
             
-            // grammar variables 
+            // Grammar variables 
             static final long ONE_MINUTE_IN_MILLIS=60000;
-            long total_audition_time = (long)0.0;
-            float max_audition_time = (float)0.0;
+            long total_audition_time = 0;
+            int max_audition_time = 0;
+            StringBuilder audicao_xml = new StringBuilder();
             
         }
 audicao     @init{
@@ -78,9 +79,17 @@ audicao     @init{
                    }
                    
                    }
-            @after{
-                   Time aaa = new Time(total_audition_time * 1000);
-                   System.out.println("tempo total audicao: "+ aaa.toString());
+            @after{ //imprimir JSON: {linhas_erros:[1,4,3,2]}
+                   Time audicao = new Time(total_audition_time * 1000);
+                   System.out.println("tempo total audicao: "+ audicao.toString());
+                   Time max = new Time(max_audition_time*1000);
+                   System.out.println("duracao-maxima: "+ max.toString());
+                   
+                    if(max_audition_time < total_audition_time){
+                        long dif = total_audition_time - max_audition_time - 3600;
+                        Time time = new Time(dif * 1000);
+                        System.out.println("tempo total ultrapasssa duracao estimada:<font color=\"red\"> +"+time.toString()+"</font>");
+                    }
                     try{
                         if(stmt!=null)
                             stmt.close();
@@ -95,32 +104,42 @@ audicao     @init{
             ;
 
 metaAud     :	'titulo:' STRING 
-                'subtitulo:' STRING 
-                'tema:' STRING 
+                ('subtitulo:' STRING)? 
+                ('tema:' STRING)?
                 'data:' data 
                 'hora:' hora 
                 'local:' STRING 
-                'organizador:' idProf
-                'duracao-maxima:' hora {max_audition_time = $hora.mili_seconds;}
+                'organizador:' idProf {
+                                         try{
+                                                String sql = "SELECT COUNT(1) AS existe FROM professor WHERE id='"+$idProf.id+"'";
+                                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+                                                if(rs.next()){
+                                                    if(rs.getInt("existe") != 1){
+                                                        System.out.print("line "+$idProf.linha+" coluna: "+ $idProf.coluna);
+                                                        System.out.println("  professor: "+$idProf.id+" nao existe");
+                                                    }
+                                                }
+                                                rs.close();
+                                            }catch(SQLException se){
+                                                se.printStackTrace();
+                                            }
+                                      }
+                'duracao-maxima:' hora {max_audition_time = $hora.seconds-3600;}
             ;
 
 data        :   INT'-'INT'-'INT 
             ;
 
-hora        returns[float mili_seconds]:   
-                horas=INT':'minutos=INT {$mili_seconds = ($horas.int*60*60000+$minutos.int*60000);}
+hora        returns[int seconds]:   
+                horas=INT':'minutos=INT {$seconds = ($horas.int*60*60 + $minutos.int*60);}
             ;
 
 atuacoes    returns[long tempo]
-            :   'atuacoes:' atuacao[$tempo] {
-                                                $tempo+=$atuacao.tempo;
-                                                Time aaa = new Time($tempo*1000);
-                                                System.out.println("tempo total atuacoes: "+ aaa.toString());
-                                            } '#' 
+            :   'atuacoes:' atuacao[$tempo-3600] {
+                                            $tempo = $atuacao.tempo;
+                                        } '#' 
                 (atuacao[$tempo]    {
-                                        $tempo+=$atuacao.tempo;
-                                        aaa.setTime($tempo*1000);
-                                        System.out.println("tempo total atuacoes: "+ aaa.toString());
+                                        $tempo = $atuacao.tempo;
                                     } '#')* {total_audition_time = $tempo;}
             ;
 
@@ -139,38 +158,50 @@ solo        [long tempoIn]
             :   'solo:' musico 'obras:' obras[$tempoIn]{$tempo = $obras.tempo;}
             ;
 obras       [long tempoIn]
-            returns[long tempo] // falta verificar a existencia da obra 
-            :   idObra {
-                            System.out.println("obra: "+ $idObra.id);
+            returns[long tempo] 
+            :   idObra { 
                             try{
-                                String sql = "SELECT  duracao FROM obra WHERE id='"+$idObra.id+"'";
+                                String sql = "SELECT COUNT(1) AS existe FROM obra WHERE id='"+$idObra.id+"'";
                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
-                                if(rs.next()){
-                                    
-                                    System.out.print(" duracao: " + rs.getTime("duracao"));
-                                    $tempo += (int)rs.getTime("duracao").toLocalTime().toSecondOfDay();
-                                    //$tempo += $tempoIn;
-                                    Time aaa = new Time($tempo*1000);
-                                    System.out.println(" \t tempo total: "+ aaa.toString());
-                                }
-                                rs.close();
+                                    if(rs.next()){
+                                        if(rs.getInt("existe") == 1){
+                                            sql = "SELECT  duracao FROM obra WHERE id='"+$idObra.id+"';";
+                                            rs = (ResultSet) stmt.executeQuery(sql);
+                                            if(rs.next()){
+                                                $tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
+                                                $tempo += $tempoIn;
+                                                if($tempo>max_audition_time){
+                                                    System.out.println("obra: "+$idObra.id+" tempo _max ultrapassado");
+                                                }
+                                            }
+                                        }else{
+                                            System.out.println("obra: "+$idObra.id+" nao existe");
+                                        }
+                                        rs.close();
+                                    }
                             }catch(SQLException se){
                                 se.printStackTrace();
                             }
                         }
                 (','idObra  {
-                                System.out.println("obra: "+ $idObra.id);
                                 try{
-                                    String sql = "SELECT  duracao FROM obra WHERE id='"+$idObra.id+"'";
+                                    String sql = "SELECT COUNT(1) AS existe FROM obra WHERE id='"+$idObra.id+"'";
                                     ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                     if(rs.next()){
-                                        
-                                        System.out.print(" duracao: " + rs.getTime("duracao"));
-                                        $tempo += (int)rs.getTime("duracao").toLocalTime().toSecondOfDay();
-                                        Time aaa = new Time($tempo*1000);
-                                        System.out.println(" \t tempo total: "+ aaa.toString());
-                                    }
-                                    rs.close();
+                                        if(rs.getInt("existe") == 1){
+                                            sql = "SELECT  duracao FROM obra WHERE id='"+$idObra.id+"'";
+                                            rs = (ResultSet) stmt.executeQuery(sql);
+                                            if(rs.next()){
+                                                $tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
+                                                if($tempo>max_audition_time){
+                                                    System.out.println("obra: "+$idObra.id+" tempo _max ultrapassado");
+                                                }
+                                            }
+                                        }else{
+                                            System.out.println("obra: "+$idObra.id+" nao existe");
+                                        }
+                                        rs.close();
+                                    }      
                                 }catch(SQLException se){
                                     se.printStackTrace();
                                 }
@@ -183,13 +214,12 @@ musicos     :   musico (',' musico)*
             ;
 musico      :   idAluno {
                             try{
-                                //System.out.println("aluno: "+ $idAluno.id);
                                 String sql = "SELECT COUNT(1) AS existe FROM aluno WHERE id='"+$idAluno.id+"'";
                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                 if(rs.next()){
-                                    //System.out.println(" existe?: " + rs.getInt("existe"));
                                     if(rs.getInt("existe") != 1){
-                                        System.out.println("<font color=\"red\">aluno: "+$idAluno.id+" nao existe</font>");
+                                        System.out.print("line "+$idAluno.linha);
+                                        System.out.println("  aluno: "+$idAluno.id+" nao existe");
                                     }
                                 }
                                 rs.close();
@@ -199,12 +229,12 @@ musico      :   idAluno {
                          } 
             |   idProf  {
                          try{
-                                //System.out.println("professor: "+ $idProf.id);
                                 String sql = "SELECT COUNT(1) AS existe FROM professor WHERE id='"+$idProf.id+"'";
                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                 if(rs.next()){
                                     if(rs.getInt("existe") != 1){
-                                        System.out.println("<font color=\"red\">professor: "+$idProf.id+" nao existe</font>");
+                                        System.out.print("line "+$idProf.linha);
+                                        System.out.println("  professor: "+$idProf.id+" nao existe");
                                     }
                                 }
                                 rs.close();
@@ -217,13 +247,33 @@ musico      :   idAluno {
 
 
 
-idObra	returns[String id]:   IDO{$id = $IDO.text;};
-idProf 	returns[String id]:   IDP{$id = $IDP.text;};
-idAluno	returns[String id]:   IDA{$id = $IDA.text;};
+idObra	returns[String id, int linha, int coluna]:   IDO{   $id = $IDO.text;
+                                                            $linha = $IDO.getLine();
+                                                            $coluna = $IDO.getCharPositionInLine();
+                                                        };
+idProf 	returns[String id, int linha, int coluna]:   IDP{   $id = $IDP.text;
+                                                            $linha = $IDP.getLine();
+                                                            $coluna = $IDP.getCharPositionInLine();
+                                                        };
+idAluno	returns[String id, int linha, int coluna]:   IDA{   $id = $IDA.text;
+                                                            $linha = $IDA.getLine();
+                                                            $coluna = $IDA.getCharPositionInLine();
+                                                        };
 
 
       
 /*--------------- Lexer ---------------------------------------*/
+
+
+COMMENT
+    :   ( '//' ~[\r\n]* '\r'? '\n'
+        | '/*' .*? '*/'
+        | '\\n'
+        | 'n'
+        ) -> skip
+    ;
+
+
 
 IDA  :	('a'|'A') ('0'..'9')*
      ;
