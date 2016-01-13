@@ -10,7 +10,7 @@
 		$res = $dbh->query($sql);
 		$row_count = $res->rowCount();
 		if ($row_count>0) {
-			if(setUserCookie($_REQUEST['login'],$dbh)==false)header("Location:index.php");
+			if(setUserCookie($_REQUEST['login'],$dbh)==-2)header("Location:index.php");
         		foreach($res as $row){
         			switch($row['tipo_perfil']){
         				case "1":

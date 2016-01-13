@@ -2,7 +2,10 @@
 	include_once 'connectBD.php';
 	include_once './classes/cookie.php';
 	$user = getInfoByCookie($dbh);
-	if($user==false)header("Location:index.php");
+	if($user==-1||$user==-2||$user==-3){
+		header("Location:index.php");
+		die();
+	}
 	if($user['type']!=1)header("Location:deny.php");
 	include_once './classes/student.php';
 	$st = new Students();

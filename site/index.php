@@ -2,7 +2,7 @@
 	include_once './classes/cookie.php';
 	include_once 'connectBD.php';
 	$session = getTypeByCookie($dbh);
-	if($session!=false){
+	if($session!=-1||$session!=-2||$session!=-3){
 		if($session==1)	header("Location:./students.php");
 		else if($session==6)header("Location:./professor.php");
 	}
