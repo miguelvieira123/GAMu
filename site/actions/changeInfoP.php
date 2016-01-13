@@ -3,6 +3,7 @@
 	include_once '../connectBD.php';
 	$st = new Students();
 	$status = $st->changeInfoP($_REQUEST['id'],$dbh,$_REQUEST['name'],$_REQUEST['birthday'],$_REQUEST['mail']);
+	$status2 = $st->changeMobile($_REQUEST['id'],$dbh,$_REQUEST['mobile']);
 	switch($status){
 		case 1:
 			echo "<script>setHtml('./html/infoP.php','Inormação Pessoal','".$_REQUEST['id']."');</script>";
@@ -20,5 +21,6 @@
 			echo "<a onclick=\"setHtml('./html/changeInfoP.php','Alteração do password','".$_REQUEST['id']."')\" title=\"Alterar\">Tentar outra vez</a>";
 			break;
 	}
+
 ?>
 

@@ -14,6 +14,16 @@
 		echo $st->getBirthday($_REQUEST['id'],$dbh);
 	?>
 </h2>
+<h2>
+	<?php
+		echo $st->getMail($_REQUEST['id'],$dbh);
+	?>
+</h2>
+<h2>
+	<?php
+		echo $st->getMobile($_REQUEST['id'],$dbh);
+	?>
+</h2>
 <ul>
 	<?php
 		$instrs = $st->getInstruments($_REQUEST['id'],$dbh);
