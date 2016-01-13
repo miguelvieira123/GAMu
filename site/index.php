@@ -1,5 +1,21 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<?php
+	include_once './classes/cookie.php';
+	include_once 'connectBD.php';
+	$res = checkCookieBD($dbh);
+	if($res==false);
+	else{
+		if($res['type']==1){
+			$link = "Location:./students.php?id=".$res['id'];
+			header($link);
+		}
+		else if($res['type']==6){
+			$link = "Location:./professor.php?id=".$res['id'];
+			header($link);
+		}
+	}
+?>
+<DOCTYPE html>
+<html>
 <head>
 	<title></title>
 	<meta charset="UTF-8" />
@@ -16,7 +32,7 @@
 	</div>
 
 	<div class="field">
-		<label>Palavra-passe:</label>
+		<label>Palavra-passa:</label>
 		<div class="input"><input type="password" name="passwd" value="" id="pass" /></div>
 	</div>
 

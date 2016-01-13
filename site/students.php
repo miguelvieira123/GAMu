@@ -1,8 +1,13 @@
 <?php
+	$stID = array_key_exists("id", $_REQUEST)?$_REQUEST['id']:"";
+	//$status = array_key_exists($stID, $_COOKIE)?true:false;
+	//if($status==false)header("Location:index.php");
 	include_once 'connectBD.php';
+	include_once './classes/cookie.php';
+	if(checkCookie($stID,$dbh)==false)header("Location:index.php");
 	include_once './classes/student.php';
 	$st = new Students();
-	$stID = array_key_exists("id", $_REQUEST)?$_REQUEST['id']:"";
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -24,7 +29,7 @@
 				echo $st->getBirthday($stID,$dbh);
 			?>
 		</span>
-		<a class="exit" href="index.html">Sair</a>
+		<a class="exit" href="delSession.php?id=<?php echo $stID?>">Sair</a>
 	</div>
 	<div id="right-menu">
 		<div id="all-heads">
