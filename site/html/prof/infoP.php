@@ -1,7 +1,7 @@
 <?php
-	include_once '../connectBD.php';
-	include_once '../classes/student.php';
-	$st= new Students();
+	include_once '../../connectBD.php';
+	include_once '../../classes/professor.php';
+	$st= new Professor();
 
 ?>
 <h1>

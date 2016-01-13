@@ -1,17 +1,10 @@
 <?php
 	include_once './classes/cookie.php';
 	include_once 'connectBD.php';
-	$res = checkCookieBD($dbh);
-	if($res==false);
-	else{
-		if($res['type']==1){
-			$link = "Location:./students.php?id=".$res['id'];
-			header($link);
-		}
-		else if($res['type']==6){
-			$link = "Location:./professor.php?id=".$res['id'];
-			header($link);
-		}
+	$session = getTypeByCookie($dbh);
+	if($session!=false){
+		if($session==1)	header("Location:./students.php");
+		else if($session==6)header("Location:./professor.php");
 	}
 ?>
 <DOCTYPE html>

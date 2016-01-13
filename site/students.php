@@ -1,16 +1,15 @@
 <?php
-	$stID = array_key_exists("id", $_REQUEST)?$_REQUEST['id']:"";
-	//$status = array_key_exists($stID, $_COOKIE)?true:false;
-	//if($status==false)header("Location:index.php");
 	include_once 'connectBD.php';
 	include_once './classes/cookie.php';
-	if(checkCookie($stID,$dbh)==false)header("Location:index.php");
+	$user = getInfoByCookie($dbh);
+	if($user==false)header("Location:index.php");
+	if($user['type']!=1)header("Location:deny.php");
 	include_once './classes/student.php';
 	$st = new Students();
 
 ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 	<title></title>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -24,12 +23,12 @@
 	<div id="top">
 		<span>
 			<?php
-				echo $st->getName($stID,$dbh);
+				echo $st->getName($user['id'],$dbh);
 				echo "::";
-				echo $st->getBirthday($stID,$dbh);
+				echo $st->getBirthday($user['id'],$dbh);
 			?>
 		</span>
-		<a class="exit" href="delSession.php?id=<?php echo $stID?>">Sair</a>
+		<a class="exit" href="delSession.php">Sair</a>
 	</div>
 	<div id="right-menu">
 		<div id="all-heads">
@@ -45,7 +44,7 @@
 		</div>
 		<div id="center-body">
 		<?php
-			include_once './html/mainPage.php';
+			include_once './html/student/mainPage.php';
 		?>
 		</div>
 	</div>

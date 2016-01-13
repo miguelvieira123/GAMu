@@ -1,7 +1,7 @@
-function setHtml(file,disc,id)
+function setHtml(file,disc)
 {
 
-   $.get(file,{id:id}, function onAjaxSuccess(data) {
+   $.get(file, function onAjaxSuccess(data) {
    	$('#center-heads').html("<span>"+disc+"</span>");
    	$('#center-body').html(data);
    });

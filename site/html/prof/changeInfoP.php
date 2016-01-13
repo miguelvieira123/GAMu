@@ -1,6 +1,6 @@
 <?php
-	include_once '../connectBD.php';
-	include_once '../classes/student.php';
+	include_once '../../connectBD.php';
+	include_once '../../classes/professor.php';
 	//include_once '../classes/cookie.php';
 	$ID = array_key_exists("id", $_REQUEST)?$_REQUEST['id']:"";
 	//if(checkCookie($stID,$dbh)==false)header("Location:index.php");
