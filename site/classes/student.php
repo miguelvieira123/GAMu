@@ -110,6 +110,16 @@ class Students{
     			 return "Error!: " . $e->getMessage();
 		}
 	}
+	function getAllStudent(){
+		$sql = "SELECT * FROM  aluno";
+		try{
+			if($dbh->query($sql)==false)return -2;
+			else return 1;
+		}
+		catch (PDOException $e) {
+    			 return "Error!: " . $e->getMessage();
+		}
+	}
 
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 
-	include_once '../connectBD.php';
-	include_once '../classes/cookie.php';
+	include_once '../../connectBD.php';
+	include_once '../../classes/cookie.php';
 	$user = getIdByCookie($dbh);
 	if($user==false){
 		echo "sessão é blokiada";
@@ -9,9 +9,10 @@
 	}
 	//print_r($_REQUEST);
 	//die();
-	include_once '../classes/student.php';
+	include_once '../../classes/student.php';
 	$st = new Students();
-	$status = $st->changeInfoP($user,$dbh,$_REQUEST['name'],$_REQUEST['birthday'],$_REQUEST['mail']);
+	$birthday = $_REQUEST['year']."-".$_REQUEST['month']."-".$_REQUEST['day'];
+	$status = $st->changeInfoP($user,$dbh,$_REQUEST['name'],$birthday,$_REQUEST['mail']);
 	$status2 = $st->changeMobile($user,$dbh,$_REQUEST['mobile']);
 	switch($status){
 		case 1:

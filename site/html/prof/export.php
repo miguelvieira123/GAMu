@@ -1,0 +1,37 @@
+<?php
+	include_once '../../connectBD.php';
+	include_once '../../classes/cookie.php';
+	$user = getIdByCookie($dbh);
+	if($user==false){
+		echo "sessão é bloqueada";
+		die();
+	}
+
+?>
+	<fieldset class="export">
+		<legend>Export</legend>
+		<table>
+			<tr>
+				<td>Alunos</td>
+				<td><input type="button" value="Exportar" onclick="getFile('./actions/prof/export.php?type=1')"></td>
+			</tr>
+			<tr>
+				<td>Professores</td>
+				<td><input type="button" value="Exportar"></td>
+			</tr>
+			<tr>
+				<td>Audiações</td>
+				<td><input type="button" value="Exportar"></td>
+			</tr>
+			<tr>
+				<td>Cursos</td>
+				<td><input type="button" value="Exportar"></td>
+
+			</tr>
+			<tr>
+				<td>Obras</td>
+				<td><input type="button" value="Exportar"></td>
+
+			</tr>
+		</table>
+	</fieldset>

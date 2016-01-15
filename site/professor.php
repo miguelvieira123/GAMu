@@ -38,8 +38,8 @@
 			<span>Menu</span>
 		</div>
 		<?php
-				include_once 'menuP.php';
-			?>
+			include_once 'menuP.php';
+		?>
 	</div>
 	<div id="center">
 		<div id="center-heads">
@@ -47,7 +47,7 @@
 		</div>
 		<div id="center-body">
 		<?php
-			include_once './html/mainPage.php';
+			include_once './html/prof/mainPage.php';
 		?>
 		</div>
 	</div>

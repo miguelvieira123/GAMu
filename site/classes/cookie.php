@@ -5,7 +5,7 @@
 		$res = $dbh->query($sql);
 		if($res==false)return -2;
 		else {
-			setcookie("KEY",MD5($value),time()+600);
+			setcookie("KEY",MD5($value),time()+36000);
 			return true;
 		}
 	}
