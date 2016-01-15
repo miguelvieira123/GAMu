@@ -14,10 +14,16 @@
             <file name="jquery-linedtextarea.js"/>
         </folder>
         <folder name="xml">
+            <file name="Alunos.xml"/>
+            <file name="alunos.xsd"/>
+            <file name="audicoes.xml"/>
             <file name="audicoes.xsd"/>
+            <file name="Cursos.xml"/>
+            <file name="cursos.xsd"/>
+            <file name="Professores.xml"/>
+            <file name="professores.xsd"/>
         </folder>
         <file name="executar_gramatica.php"/>
-        <file name="instance1.xml"/>
         <file name="new_audicao_form.html"/>
         <file name="new_audicao_form.js"/>
     </projectTree>

@@ -39,6 +39,10 @@ grammar GAMu;
         import java.sql.Statement;
         import java.sql.Time;
         import java.time.Instant;
+        import java.io.PrintWriter;
+        import java.io.FileNotFoundException;
+        import java.util.logging.Level;
+        import java.util.logging.Logger;
         
         }
 @members{
@@ -53,7 +57,7 @@ grammar GAMu;
             Statement stmt = null;
             
             // Grammar variables 
-            static final long ONE_MINUTE_IN_MILLIS=60000;
+            long hora_de_inicio = 0;
             long total_audition_time = 0;
             int max_audition_time = 0;
             StringBuilder audicao_xml = new StringBuilder();
@@ -64,10 +68,8 @@ audicao     @init{
                       //STEP 2: Register JDBC driver
                       Class.forName("com.mysql.jdbc.Driver");
                       //STEP 3: Open a connection
-                      System.out.println("Connecting to database...");
                       conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
                       //STEP 4: Execute a query
-                      System.out.println("Creating statement...");
                       stmt = (Statement) conn.createStatement();
                       
                    }catch(SQLException se){
@@ -77,9 +79,10 @@ audicao     @init{
                       //Handle errors for Class.forName
                       e.printStackTrace();
                    }
-                   
+                   //iniciar a construcao do XML
+                   audicao_xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
                    }
-            @after{ //imprimir JSON: {linhas_erros:[1,4,3,2]}
+            @after{ 
                    Time audicao = new Time(total_audition_time * 1000);
                    System.out.println("tempo total audicao: "+ audicao.toString());
                    Time max = new Time(max_audition_time*1000);
@@ -99,149 +102,245 @@ audicao     @init{
                       //Handle errors for JDBC
                       se.printStackTrace();
                     }
+                    PrintWriter xml_file;
+                    try{
+                        xml_file = new PrintWriter("audicao.xml");
+                        xml_file.print(audicao_xml.toString());
+                        xml_file.close();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(GramaticaGAMu.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    //System.out.println(audicao_xml.toString());
                   }
-            :	metaAud atuacoes 
+            :	metaAud 
+                {audicao_xml.append("</metainfo><atuacoes>");} atuacoes 
+                {audicao_xml.append("</atuacoes></audicao>");}
             ;
 
-metaAud     :	'titulo:' STRING 
-                ('subtitulo:' STRING)? 
-                ('tema:' STRING)?
+metaAud     :	'titulo:' STRING  {
+                                    audicao_xml.append("<audicao id="+$STRING.text+">");
+                                    audicao_xml.append("<metainfo>");
+                                  }
+                ('subtitulo:' STRING{audicao_xml.append("<subtitulo>"+$STRING.text+"</subtitulo>");})? 
+                ('tema:' STRING{audicao_xml.append("<tema>"+$STRING.text+"</tema>");})?
                 'data:' data 
-                'hora:' hora 
-                'local:' STRING 
+                'hora:' hora { hora_de_inicio = $hora.seconds-3600;}
+                'local:' STRING {audicao_xml.append("<local>"+$STRING.text+"</local>");}
                 'organizador:' idProf {
                                          try{
-                                                String sql = "SELECT COUNT(1) AS existe FROM professor WHERE id='"+$idProf.id+"'";
+                                                String sql = "SELECT * FROM professor WHERE id='"+$idProf.id+"'";
                                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                                 if(rs.next()){
-                                                    if(rs.getInt("existe") != 1){
-                                                        System.out.print("line "+$idProf.linha+" coluna: "+ $idProf.coluna);
-                                                        System.out.println("  professor: "+$idProf.id+" nao existe");
-                                                    }
+                                                    audicao_xml.append("<organizador>"+rs.getString("nome")+"</organizador>");
+                                                }else{
+                                                    System.out.print("line "+$idProf.linha+" coluna: "+ $idProf.coluna);
+                                                    System.out.println("  professor: "+$idProf.id+" nao existe");
                                                 }
                                                 rs.close();
                                             }catch(SQLException se){
                                                 se.printStackTrace();
                                             }
                                       }
-                'duracao-maxima:' hora {max_audition_time = $hora.seconds-3600;}
+                'duracao-maxima:' duracao {
+                                            max_audition_time = $duracao.seconds-3600;
+                                          }
             ;
 
-data        :   INT'-'INT'-'INT 
+data        :   dia=INT'-'mes=INT'-'ano=INT {audicao_xml.append("<data>"+$dia.int+"/"+$mes.int+"/"+$ano.int+"</data>");}
             ;
 
 hora        returns[int seconds]:   
-                horas=INT':'minutos=INT {$seconds = ($horas.int*60*60 + $minutos.int*60);}
+                horas=INT':'minutos=INT {
+                                            $seconds = ($horas.int*60*60 + $minutos.int*60);
+                                            audicao_xml.append("<hora>"+$horas.int+":"+$minutos.int+"</hora>");
+                                        }
             ;
-
+duracao        returns[int seconds]:   
+                horas=INT':'minutos=INT {
+                                            $seconds = ($horas.int*60*60 + $minutos.int*60);
+                                            audicao_xml.append("<duracao>"+$horas.int+":"+$minutos.int+"</duracao>");
+                                        }
+            ;
 atuacoes    returns[long tempo]
-            :   'atuacoes:' atuacao[$tempo-3600] {
-                                            $tempo = $atuacao.tempo;
-                                        } '#' 
-                (atuacao[$tempo]    {
-                                        $tempo = $atuacao.tempo;
-                                    } '#')* {total_audition_time = $tempo;}
+            :   'atuacoes:' atuacao[$tempo-3600]{$tempo = $atuacao.tempo;} '#' 
+                (atuacao[$tempo]{$tempo = $atuacao.tempo;} '#')* {total_audition_time = $tempo;}
             ;
 
 atuacao     [long tempoIn]
             returns[long tempo]
-            :   grupo[$tempoIn]{$tempo=$grupo.tempo;}
-            |   solo[$tempoIn] {$tempo=$solo.tempo;}
+            :   {audicao_xml.append("<atuacao tipo=\"grupo\">");}
+                grupo[$tempoIn] {
+                                    $tempo=$grupo.tempo;
+                                    audicao_xml.append("</atuacao>");
+                                }
+            |   {audicao_xml.append("<atuacao tipo=\"solo\">");}
+                solo[$tempoIn]  {
+                                    $tempo=$solo.tempo;
+                                    audicao_xml.append("</atuacao>");
+                                }
             ;
 
 grupo       [long tempoIn]
             returns[long tempo]
-            :   'grupo:' STRING 'elementos:' elementos 'obras:' obras[$tempoIn]{$tempo = $obras.tempo;}
+            :   'grupo:' STRING {
+                                    audicao_xml.append("<nome_grupo>"+$STRING.text+"</nome_grupo>");
+                                    Time hora_ini = new Time( (hora_de_inicio +$tempoIn ) * 1000);
+                                    audicao_xml.append("<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
+                                }
+                'elementos:'    {audicao_xml.append("<musicos>");} 
+                                    musicos 
+                                {audicao_xml.append("</musicos>");} 
+                'obras:'    {audicao_xml.append("<obras>");}  
+                                obras[$tempoIn]
+                            {audicao_xml.append("</obras>");$tempo = $obras.tempo;}
             ;
 solo        [long tempoIn]
             returns[long tempo]
-            :   'solo:' musico 'obras:' obras[$tempoIn]{$tempo = $obras.tempo;}
+            :   {
+                    Time hora_ini = new Time( (hora_de_inicio +$tempoIn) * 1000);
+                    audicao_xml.append("<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
+                }
+                'solo:' {audicao_xml.append("<musicos>");} 
+                            musico  
+                        {audicao_xml.append("</musicos>");}
+                'obras:'{audicao_xml.append("<obras>");} 
+                            obras[$tempoIn]
+                        {audicao_xml.append("</obras>");$tempo = $obras.tempo;}
             ;
 obras       [long tempoIn]
             returns[long tempo] 
             :   idObra { 
                             try{
-                                String sql = "SELECT COUNT(1) AS existe FROM obra WHERE id='"+$idObra.id+"'";
+                                String sql = "SELECT * FROM obra WHERE id='"+$idObra.id+"'";
                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
-                                    if(rs.next()){
-                                        if(rs.getInt("existe") == 1){
-                                            sql = "SELECT  duracao FROM obra WHERE id='"+$idObra.id+"';";
-                                            rs = (ResultSet) stmt.executeQuery(sql);
-                                            if(rs.next()){
-                                                $tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
-                                                $tempo += $tempoIn;
-                                                if($tempo>max_audition_time){
-                                                    System.out.println("obra: "+$idObra.id+" tempo _max ultrapassado");
-                                                }
-                                            }
-                                        }else{
-                                            System.out.println("obra: "+$idObra.id+" nao existe");
-                                        }
-                                        rs.close();
+                                if(rs.next()){
+                                    $tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
+                                    $tempo += $tempoIn;
+                                    if($tempo>max_audition_time){
+                                        System.out.println(" obra: "+$idObra.id+" tempo _max ultrapassado");
+                                    }else{
+                                        audicao_xml.append("<obra id=\""+$idObra.id+"\">");
+                                        audicao_xml.append("<nome>"+rs.getString("nome")+"</nome>");
+                                        audicao_xml.append("<duracao>"+rs.getString("duracao")+"</duracao>");
+                                        audicao_xml.append("</obra>");
                                     }
+                                }else{
+                                    System.out.print("line "+$idObra.linha);
+                                    System.out.println(" obra: "+$idObra.id+" nao existe");
+                                }
+                                rs.close();
                             }catch(SQLException se){
                                 se.printStackTrace();
                             }
                         }
                 (','idObra  {
                                 try{
-                                    String sql = "SELECT COUNT(1) AS existe FROM obra WHERE id='"+$idObra.id+"'";
+                                    String sql = "SELECT * FROM obra WHERE id='"+$idObra.id+"'";
                                     ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                     if(rs.next()){
-                                        if(rs.getInt("existe") == 1){
-                                            sql = "SELECT  duracao FROM obra WHERE id='"+$idObra.id+"'";
-                                            rs = (ResultSet) stmt.executeQuery(sql);
-                                            if(rs.next()){
-                                                $tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
-                                                if($tempo>max_audition_time){
-                                                    System.out.println("obra: "+$idObra.id+" tempo _max ultrapassado");
-                                                }
-                                            }
+                                        $tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
+                                        if($tempo>max_audition_time){
+                                            System.out.println(" obra: "+$idObra.id+" tempo _max ultrapassado");
                                         }else{
-                                            System.out.println("obra: "+$idObra.id+" nao existe");
+                                            audicao_xml.append("<obra id=\""+$idObra.id+"\">");
+                                            audicao_xml.append("<nome>"+rs.getString("nome")+"</nome>");
+                                            audicao_xml.append("<duracao>"+rs.getString("duracao")+"</duracao>");
+                                            audicao_xml.append("</obra>");
                                         }
-                                        rs.close();
-                                    }      
+                                    }else{
+                                        System.out.print("line "+$idObra.linha);
+                                        System.out.println(" obra: "+$idObra.id+" nao existe");
+                                    }
+                                    rs.close();
                                 }catch(SQLException se){
                                     se.printStackTrace();
                                 }
                             }
                 )* 
             ;
-elementos   :   musicos
+
+musicos     :   musico (musico)*
             ;
-musicos     :   musico (',' musico)*
-            ;
-musico      :   idAluno {
-                            try{
-                                String sql = "SELECT COUNT(1) AS existe FROM aluno WHERE id='"+$idAluno.id+"'";
-                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
-                                if(rs.next()){
-                                    if(rs.getInt("existe") != 1){
-                                        System.out.print("line "+$idAluno.linha);
-                                        System.out.println("  aluno: "+$idAluno.id+" nao existe");
-                                    }
-                                }
-                                rs.close();
-                            }catch(SQLException se){
-                                se.printStackTrace();
-                            }
-                         } 
-            |   idProf  {
-                         try{
-                                String sql = "SELECT COUNT(1) AS existe FROM professor WHERE id='"+$idProf.id+"'";
-                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
-                                if(rs.next()){
-                                    if(rs.getInt("existe") != 1){
-                                        System.out.print("line "+$idProf.linha);
-                                        System.out.println("  professor: "+$idProf.id+" nao existe");
-                                    }
-                                }
-                                rs.close();
-                            }catch(SQLException se){
-                                se.printStackTrace();
-                            }
-                         }
+musico      :    idAluno ',' idInstrumento {
+                                            audicao_xml.append("<musico tipo=\"aluno\" id=\""+$idAluno.id+"\">");
+                                            try{
+                                                String sql = "SELECT * FROM aluno WHERE id='"+$idAluno.id+"'";
+                                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+                                                if(rs.next()){
+                                                    String nome_aluno = rs.getString("nome");
+                                                    sql = "SELECT * FROM instrumento WHERE id='"+$idInstrumento.id+"'";
+                                                    rs = (ResultSet) stmt.executeQuery(sql);
+                                                    if(rs.next()){
+                                                        //aluno sabe tocar instrumento?
+                                                        String designacao_instrumento = rs.getString("designacao");
+                                                        sql = "SELECT * FROM aluno_instrumento WHERE id_aluno='"+$idAluno.id+"' AND id_instrumento='"+$idInstrumento.id+"'";
+                                                        rs = (ResultSet) stmt.executeQuery(sql);
+                                                        if(rs.next()){
+                                                            //OK
+                                                            audicao_xml.append("<nome>"+nome_aluno+"</nome>");
+                                                            audicao_xml.append("<instrumento>"+designacao_instrumento+"</instrumento>");
+                                                        }else{
+                                                            System.out.print("line "+$idAluno.linha);
+                                                            System.out.print(" (aluno: "+$idAluno.id+" - "+ nome_aluno+")" );
+                                                            System.out.println(" nao tem habilitacoes para ("+$idInstrumento.id+" - "+ designacao_instrumento+")");
+                                                        }
+                                                        //posso guardar as informações do instrumento
+                                                    }else{
+                                                        System.out.print("line "+$idInstrumento.linha);
+                                                        System.out.println("  instrumento: "+$idInstrumento.id+" nao existe");   
+                                                    }
+                                                    //posso guardar as informações do aluno
+                                                    //guardar info do aluno
+                                                }else{
+                                                    System.out.print("line "+$idAluno.linha);
+                                                    System.out.println("  aluno: "+$idAluno.id+" nao existe");   
+                                                }
+                                                rs.close();
+                                            }catch(SQLException se){
+                                                se.printStackTrace();
+                                            }
+                                            audicao_xml.append("</musico>");
+                                         } 
+            |   idProf ',' idInstrumento {
+                                            audicao_xml.append("<musico tipo=\"professor\" id=\""+$idProf.id+"\">");
+                                            try{
+                                                String sql = "SELECT * FROM professor WHERE id='"+$idProf.id+"'";
+                                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+                                                if(rs.next()){
+                                                    String nome_prof = rs.getString("nome");
+                                                    sql = "SELECT * FROM instrumento WHERE id='"+$idInstrumento.id+"'";
+                                                    rs = (ResultSet) stmt.executeQuery(sql);
+                                                    if(rs.next()){
+                                                        //professor sabe tocar instrumento?
+                                                        String designacao_instrumento = rs.getString("designacao");
+                                                        sql = "SELECT * FROM professor INNER JOIN professor_habilitacao ON professor.id=professor_habilitacao.id_professor INNER JOIN habilitacao ON professor_habilitacao.id_habilitacao=habilitacao.id WHERE professor.id = '"+$idProf.id+"'AND id_instrumento='"+$idInstrumento.id+"'";                  
+                                                        rs = (ResultSet) stmt.executeQuery(sql);
+                                                        if(rs.next()){
+                                                            //OK
+                                                            audicao_xml.append("<nome>"+nome_prof+"</nome>");
+                                                            audicao_xml.append("<instrumento>"+designacao_instrumento+"</instrumento>");
+                                                        }else{
+                                                            System.out.print("line "+$idProf.linha);
+                                                            System.out.print(" (professor: "+$idProf.id+" - "+ nome_prof+")" );
+                                                            System.out.println(" nao tem habilitacoes para ("+$idInstrumento.id+" - "+ designacao_instrumento+")");
+                                                        }
+                                                        //posso guardar as informações do instrumento
+                                                    }else{
+                                                        System.out.print("line "+$idInstrumento.linha);
+                                                        System.out.println("  instrumento: "+$idInstrumento.id+" nao existe");   
+                                                    }
+                                                    //posso guardar as informações do aluno
+                                                    //guardar info do aluno
+                                                }else{
+                                                    System.out.print("line "+$idProf.linha);
+                                                    System.out.println("  professor: "+$idProf.id+" nao existe");   
+                                                }
+                                                rs.close();
+                                            }catch(SQLException se){
+                                                se.printStackTrace();
+                                            }
+                                            audicao_xml.append("</musico>");
+                                         }
             ;
 
 
@@ -259,7 +358,10 @@ idAluno	returns[String id, int linha, int coluna]:   IDA{   $id = $IDA.text;
                                                             $linha = $IDA.getLine();
                                                             $coluna = $IDA.getCharPositionInLine();
                                                         };
-
+idInstrumento	returns[String id, int linha, int coluna]:   IDI{   $id = $IDI.text;
+                                                                    $linha = $IDI.getLine();
+                                                                    $coluna = $IDI.getCharPositionInLine();
+                                                                };
 
       
 /*--------------- Lexer ---------------------------------------*/
@@ -269,7 +371,6 @@ COMMENT
     :   ( '//' ~[\r\n]* '\r'? '\n'
         | '/*' .*? '*/'
         | '\\n'
-        | 'n'
         ) -> skip
     ;
 
@@ -281,7 +382,8 @@ IDP  :	('p'|'P') ('0'..'9')*
      ;
 IDO  :	('o'|'O') ('0'..'9')*
      ;
-
+IDI  :	('i'|'I') ('0'..'9')*
+     ;
 
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'-')*
     ;

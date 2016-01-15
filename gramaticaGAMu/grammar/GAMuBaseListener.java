@@ -8,6 +8,10 @@
         import java.sql.Statement;
         import java.sql.Time;
         import java.time.Instant;
+        import java.io.PrintWriter;
+        import java.io.FileNotFoundException;
+        import java.util.logging.Level;
+        import java.util.logging.Logger;
         
         
 
@@ -58,6 +62,18 @@ public class GAMuBaseListener implements GAMuListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitHora(@NotNull GAMuParser.HoraContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIdInstrumento(@NotNull GAMuParser.IdInstrumentoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdInstrumento(@NotNull GAMuParser.IdInstrumentoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -147,18 +163,6 @@ public class GAMuBaseListener implements GAMuListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterElementos(@NotNull GAMuParser.ElementosContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElementos(@NotNull GAMuParser.ElementosContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterMetaAud(@NotNull GAMuParser.MetaAudContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -166,6 +170,18 @@ public class GAMuBaseListener implements GAMuListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMetaAud(@NotNull GAMuParser.MetaAudContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDuracao(@NotNull GAMuParser.DuracaoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDuracao(@NotNull GAMuParser.DuracaoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

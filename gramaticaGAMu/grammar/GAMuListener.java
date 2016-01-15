@@ -8,6 +8,10 @@
         import java.sql.Statement;
         import java.sql.Time;
         import java.time.Instant;
+        import java.io.PrintWriter;
+        import java.io.FileNotFoundException;
+        import java.util.logging.Level;
+        import java.util.logging.Logger;
         
         
 import org.antlr.v4.runtime.misc.NotNull;
@@ -48,6 +52,16 @@ public interface GAMuListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitHora(@NotNull GAMuParser.HoraContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GAMuParser#idInstrumento}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdInstrumento(@NotNull GAMuParser.IdInstrumentoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GAMuParser#idInstrumento}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdInstrumento(@NotNull GAMuParser.IdInstrumentoContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GAMuParser#atuacoes}.
 	 * @param ctx the parse tree
@@ -119,16 +133,6 @@ public interface GAMuListener extends ParseTreeListener {
 	 */
 	void exitIdObra(@NotNull GAMuParser.IdObraContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GAMuParser#elementos}.
-	 * @param ctx the parse tree
-	 */
-	void enterElementos(@NotNull GAMuParser.ElementosContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link GAMuParser#elementos}.
-	 * @param ctx the parse tree
-	 */
-	void exitElementos(@NotNull GAMuParser.ElementosContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link GAMuParser#metaAud}.
 	 * @param ctx the parse tree
 	 */
@@ -138,6 +142,16 @@ public interface GAMuListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMetaAud(@NotNull GAMuParser.MetaAudContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GAMuParser#duracao}.
+	 * @param ctx the parse tree
+	 */
+	void enterDuracao(@NotNull GAMuParser.DuracaoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GAMuParser#duracao}.
+	 * @param ctx the parse tree
+	 */
+	void exitDuracao(@NotNull GAMuParser.DuracaoContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GAMuParser#obras}.
 	 * @param ctx the parse tree
