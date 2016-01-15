@@ -2,7 +2,7 @@
     $vars = $_POST;
     
     // tornar a string segura
-    $texto = mysql_real_escape_string( $vars["phrase"] );
+    $texto = mres( $vars["phrase"] );
     
     //executar gramatica
     exec("java -jar gramaticaGAMu.jar ". $texto, $out); 
@@ -22,6 +22,14 @@
     $vars["phrase"] = $texto;
     //enviar mensagens para o cliente
      echo json_encode($vars);
+    
+    
+    
+    function mres($value){
+        $search = array("\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a");
+        $replace = array("\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z");
+        return str_replace($search, $replace, $value);
+    }
     
     
 ?>

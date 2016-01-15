@@ -1,16 +1,8 @@
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuntimeMetaData;
+
 
 /**
  *
@@ -68,6 +60,13 @@ public class GramaticaGAMu {
         GAMuParser parser = new GAMuParser(tokens);
         
         System.out.println(parser.audicao()); 
+        
+        
+        //-----------------------------
+       
+        
+        
+        
         
         
         
