@@ -17,20 +17,20 @@
 			</tr>
 			<tr>
 				<td>Professores</td>
-				<td><input type="button" value="Exportar"></td>
+				<td><input type="button" value="Exportar" onclick="getFile('./actions/prof/export.php?type=2')"></td>
 			</tr>
 			<tr>
 				<td>Audiações</td>
-				<td><input type="button" value="Exportar"></td>
+				<td><input type="button" value="Exportar" onclick="getFile('./actions/prof/export.php?type=3')"></td>
 			</tr>
 			<tr>
 				<td>Cursos</td>
-				<td><input type="button" value="Exportar"></td>
+				<td><input type="button" value="Exportar" onclick="getFile('./actions/prof/export.php?type=4')"></td>
 
 			</tr>
 			<tr>
 				<td>Obras</td>
-				<td><input type="button" value="Exportar"></td>
+				<td><input type="button" value="Exportar" onclick="getFile('./actions/prof/export.php?type=5')"></td>
 
 			</tr>
 		</table>

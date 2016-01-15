@@ -10,23 +10,31 @@
 	header("Cache-Control: post-check=0, pre-check=0", false);
 	header("Pragma: no-cache");
 	header('Content-Type: application/xml');
-	header('Content-Disposition: attachment;filename="Alunos.xml"');
-	ob_end_clean();
 	switch($_REQUEST['type']){
 		case 1:
+			header('Content-Disposition: attachment;filename="Alunos.xml"');
+			ob_end_clean();
 			exportStudents($dbh);
 			break;
 		case 2:
-			exportStudents($dbh);
+			header('Content-Disposition: attachment;filename="Professores.xml"');
+			ob_end_clean();
+			exportProfessors($dbh);
 			break;
 		case 3:
-			exportStudents($dbh);
+			header('Content-Disposition: attachment;filename="Audiações.xml"');
+			ob_end_clean();
+			exportAditions("../../files/aditions/2015_2016.xml");
 			break;
 		case 4:
-			exportStudents($dbh);
+			header('Content-Disposition: attachment;filename="Cursos.xml"');
+			ob_end_clean();
+			exportCourses($dbh);
 			break;
 		case 5:
-			exportStudents($dbh);
+			header('Content-Disposition: attachment;filename="Obras.xml"');
+			ob_end_clean();
+			exportWorks($dbh);
 			break;
 		default:
 			break;

@@ -19,10 +19,8 @@
 			$student = checkStudentId($stId,$dbh);
 			switch($student){
 				case -1:
-					echo "-1<br>";
 					break;
 				case -2:
-					echo "-2<br>";
 					break;
 				case -3:// Este Estudante nao existe;
 					$sql_st = "INSERT INTO aluno VALUES('".$stId."','".$stName."','".$stDay."','".$stMail."','".$stMobile."');";
@@ -53,13 +51,53 @@
 		}
 	return $out;
 	}
+	function importCourses($file,$dbh){
+		$out="";
+		$sql = "INSERT INTO curso VALUES ";
+		$xml = new DomDocument();
+		$xml->load($file['tmp_name']);
+		$res = @$xml->schemaValidate("../../schemas/cursos.xsd");
+		if($res == false){
+			$error = error_get_last();
+			echo substr($error['message'],30,strlen($error['message']));
+		}
+		$xml = simplexml_load_file($file['tmp_name']);
+		$cursos = $xml->xpath("//curso");
+		foreach($cursos as $curso){
+			$cId =  (string)$curso['id'];
+			$cName =  (string)$curso['designacao'];
+			$cTime = (string)$curso['duracao'];
+			$cInstr = (string)$curso['idInstr'];
+			$course = checkCourseId($cId,$dbh);
+			switch($course){
+				case -1:
+					break;
+				case -2:
+					break;
+				case -3:
+					$sql.= "('".$cId."','".$cName."','".$cTime."','".$cInstr."'),";
+					break;
+				case 1:
+					$out.="O Curso com id ".$cId." já existe<br>";;
+					break;
+
+				default:
+					break;
+
+			}
+		}
+		$sql[strlen($sql)-1]=';';
+		$res = $dbh->query($sql);
+		if($res!=false) {
+			 $out .="Os outros cursos foram  inseridos<br>";
+		}
+		else $out .= "Ocurreu um erro no momemto de importação dos cursos <br>";
+	return $out;
+	}
 	function importProfessors($file,$dbh){
 		print_r($file);
 	}
 	function importAudition($file,$dbh){
-		print_r($file);
-	}
-	function importCourses($file,$dbh){
 		print_r($file);
 	}
 	function importWorks($file,$dbh){
@@ -91,6 +129,14 @@
 	}
 	function checkStudentId($ID,$dbh){
 		$sql = "SELECT id FROM aluno WHERE id='".$ID."'";
+		$res = $dbh->query($sql);
+		if($res == false)return -1;
+		if($res->rowCount()==1)return 1;
+		else if($res->rowCount()>1) return -2;
+		else return -3;
+	}
+	function checkCourseId($ID,$dbh){
+		$sql = "SELECT id FROM curso WHERE id='".$ID."'";
 		$res = $dbh->query($sql);
 		if($res == false)return -1;
 		if($res->rowCount()==1)return 1;

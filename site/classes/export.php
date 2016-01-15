@@ -24,5 +24,68 @@
 		$new_xml->LoadXML($strFULL);
 		$new_xml->save('php://output');
 	}
+	function exportProfessors($dbh){
+		$new_xml = new DomDocument();
+		$sql = "SELECT * from professor ORDER BY id";
+		$res = $dbh->query($sql);
+		$str="";
+		foreach($res as $prof){
+			$str.="&#10;&#9;<professor id='".$prof['id']."' nome='".$prof['nome']."' dataNsc='".$prof['dataNsc']."' mail='".$prof['mail']."' telemovel='".$prof['mobile']."'>";
+			$sql = "SELECT id_curso FROM professor_curso WHERE id_professor='".$prof['id']."';";
+			$courses = $dbh->query($sql);
+			$str_course="";
+			foreach($courses as $course){
+				$str_course.= "&#10;&#9;&#9;&#9;<curso id='".$course['id_curso']."'></curso>";
+			}
+			$str.="&#10;&#9;&#9;<cursos>".$str_course."&#10;&#9;&#9;</cursos>&#10;&#9;</professor>";
+		}
+		$strFULL="<professores>".$str."&#10;</professores>";
+		$new_xml->LoadXML($strFULL);
+		$new_xml->save('php://output');
+	}
+	
+	function exportCourses($dbh){
+		$new_xml = new DomDocument();
+		$sql = "SELECT * from curso ORDER BY id";
+		$res = $dbh->query($sql);
+		$str="";
+		foreach($res as $course){
+			$str.="&#10;&#9;<curso id='".$course['id']."' designacao='".$course['designacao']."' duracao='".$course['duracao']."' idInstr='".$course['id_instrumento']."'></curso>";
+		}
+		$strFULL="<cursos>".$str."&#10;</cursos>";
+		$new_xml->LoadXML($strFULL);
+		$new_xml->save('php://output');
+	}
 
+	function exportWorks($dbh){
+		$new_xml = new DomDocument();
+		//$sql = "SELECT * from curso ORDER BY id";
+		//$res = $dbh->query($sql);
+		//$str="";
+		//foreach($res as $course){
+			//$str.="&#10;&#9;<curso id='".$course['id']."' designacao='".$course['designacao']."' duracao='".$course['duracao']."' idInstr='".$course['id_instrumento']."'></curso>";
+			//$sql = "SELECT id_curso FROM professor_curso WHERE id_professor='".$prof['id']."';";
+			//$courses = $dbh->query($sql);
+			//$str_course="";
+			//$str_instr="";
+			//foreach($courses as $course){
+			//	$str_course.= "&#10;&#9;&#9;&#9;<curso id='".$course['id_curso']."'></curso>";
+			//}
+			//$sql = "SELECT id_instrumento as idI from aluno_instrumento where id_aluno='".$student['id']."'";
+			//$instrs = $dbh->query($sql);
+			//foreach($instrs as $instr){
+			//	$str_instr.= "&#10;&#9;&#9;&#9;<instrumento id='".$instr['idI']."'></instrumento>";
+			//}
+			//$str.="&#10;&#9;&#9;<cursos>".$str_course."&#10;&#9;&#9;</cursos>&#10;&#9;&#9;<instrumentos>".$str_instr."&#10;&#9;&#9;</instrumentos>&#10;&#9;</aluno>";
+			//$str.="&#10;&#9;&#9;<cursos>".$str_course."&#10;&#9;&#9;</cursos>&#10;&#9;</professor>";
+		//}
+		//$strFULL="<cursos>".$str."&#10;</cursos>";
+		//$new_xml->LoadXML($strFULL);
+		$new_xml->save('php://output');
+	}
+	function exportAditions($file){
+		$new_xml = new DomDocument();
+		$new_xml->load($file);
+		$new_xml->save('php://output');
+	}
 ?>

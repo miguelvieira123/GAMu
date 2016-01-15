@@ -33,6 +33,7 @@
 			echo "ERROR:".$_FILES['f_course']['error']."<br/>" ;
 		}
 		else if(substr(strrchr($_FILES['f_course']['name'], '.'), 1)!="xml") echo "O formato do ficheiro tem que ser xml";
+		else echo importCourses($_FILES['f_course'],$dbh);
 	}
 	if(array_key_exists("f_work",$_FILES)==true){
 		if($_FILES['f_work']['error']>0){
