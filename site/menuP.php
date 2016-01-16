@@ -8,7 +8,7 @@
 			</div>
 		<li class="l1" onclick="ShowHide('l22')"><a href="#" title="Audiações">Audiações</a></li>
 		<div id="l22">
-			<li class="l2" onclick="setHtml('./html/prof/infoP.php','Criar')"><a href="#" title="Criar">Criar</a></li>
+			<li class="l2" onclick="setHtml('./html/prof/newAudition.php','Criar')"><a href="#" title="Criar">Criar</a></li>
 			<li class="l2" onclick="setHtml('./html/prof/changeInfoP.php','Alterar')"><a href="#" title="Alterar">Alterar Dados</a></li>
 			<li class="l2" onclick="setHtml('./html/changePassword.php','Consultar')"><a href="#" title="Consultar">Consultar</a></li>
 		</div>
