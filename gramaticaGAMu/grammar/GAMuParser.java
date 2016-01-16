@@ -13,6 +13,29 @@
         import java.util.logging.Level;
         import java.util.logging.Logger;
         
+        import java.io.ByteArrayInputStream;
+        import java.io.File;
+        import java.io.IOException;
+        import java.io.PrintStream;
+        import javax.xml.parsers.DocumentBuilder;
+        import javax.xml.parsers.DocumentBuilderFactory;
+        import javax.xml.parsers.ParserConfigurationException;
+        import javax.xml.transform.Transformer;
+        import javax.xml.transform.TransformerException;
+        import javax.xml.transform.TransformerFactory;
+        import javax.xml.transform.dom.DOMSource;
+        import javax.xml.transform.stream.StreamResult;
+        import javax.xml.xpath.XPath;
+        import javax.xml.xpath.XPathConstants;
+        import javax.xml.xpath.XPathExpression;
+        import javax.xml.xpath.XPathExpressionException;
+        import javax.xml.xpath.XPathFactory;
+        import org.w3c.dom.Document;
+        import org.w3c.dom.Element;
+        import org.w3c.dom.Node;
+        import org.xml.sax.InputSource;
+        import org.xml.sax.SAXException;
+
         
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -83,6 +106,7 @@ public class GAMuParser extends Parser {
 	            long total_audition_time = 0;
 	            int max_audition_time = 0;
 	            StringBuilder audicao_xml = new StringBuilder();
+	            String titulo;
 	            
 	        
 	public GAMuParser(TokenStream input) {
@@ -169,6 +193,45 @@ public class GAMuParser extends Parser {
 			                        Logger.getLogger(GramaticaGAMu.class.getName()).log(Level.SEVERE, null, ex);
 			                    }
 			                    //System.out.println(audicao_xml.toString());
+			                    
+			                    //--------------XML---------------
+			                    try {
+			                        String filepath = "audicoes.xml";
+			                        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			                        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			                        Document doc = docBuilder.parse(filepath);
+
+			                        String xml = audicao_xml.toString();
+			                        Document audi_xml = docBuilder.parse( new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8")))); 
+
+			                        Element basket = (Element) doc.getFirstChild();
+			                        Element fruit = (Element) audi_xml.getFirstChild();
+
+			                        // remover Nodo antigo
+			                        XPathFactory xpf = XPathFactory.newInstance();
+			                        XPath xpath = xpf.newXPath();
+			                        XPathExpression expression = xpath.compile("//audicao[@id="+titulo+"]");
+			                        Node audicao_antiga = (Node) expression.evaluate(doc, XPathConstants.NODE);
+			                        if(audicao_antiga != null){
+			                            audicao_antiga.getParentNode().removeChild(audicao_antiga);
+			                        }
+
+			                        // Adicionar novo novo
+			                        Node imported = doc.importNode(fruit,true);
+			                        basket.appendChild(imported);
+
+			                        // write the content into xml file
+			                        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			                        Transformer transformer = transformerFactory.newTransformer();
+			                        DOMSource source = new DOMSource(doc);
+			                        StreamResult result = new StreamResult(new File(filepath));
+			                        transformer.transform(source, result);
+
+
+			                   } catch (ParserConfigurationException | TransformerException | IOException |XPathExpressionException | SAXException pce) {
+			                        pce.printStackTrace();
+			                   }
+			                    
 			                  
 		}
 		catch (RecognitionException re) {
@@ -227,6 +290,7 @@ public class GAMuParser extends Parser {
 			setState(37); match(T__12);
 			setState(38); ((MetaAudContext)_localctx).STRING = match(STRING);
 
+			                                    titulo = (((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null);
 			                                    audicao_xml.append("<audicao id="+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+">");
 			                                    audicao_xml.append("<metainfo>");
 			                                  
