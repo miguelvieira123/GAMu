@@ -7,8 +7,15 @@
 		die();
 	}
 ?>
-	<h3>Validar Audição</h3>
-	<h4>atenção dar creditos aos criadores do jQuery - LINED_TEXTAREA</h4>
+<html>
+	<head>
+		<script src="./js/jquery-linedtextarea.js"></script>
+        <link href="./css/jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
+        <script type="text/javascript" src="./js/new_audicao_form.js" charset="UTF-8"></script>
+	</head>
+	<body>
+		<h3>Validar Audição</h3>
+		<h4>atenção dar creditos aos criadores do jQuery - LINED_TEXTAREA</h4>
 		<form accept-charset="UTF-8">
 			<fieldset class="GA">
                 		<legend>Nova Audição</legend>

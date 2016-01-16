@@ -5,6 +5,11 @@ $(document).ready(function () {
 
 	// Gramatica
 	$(document).on('click',"#send_phrase", function () {
+		
+		//$(function () {
+		//	$(".lined").linedtextarea({});
+		//});
+		
 		t = $('#texto').val();
 		$("#msg").empty();
 		//alert(t);
