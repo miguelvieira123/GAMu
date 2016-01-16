@@ -14,5 +14,12 @@
 		</div>
 		<li class="l1" onclick="setHtml('./html/prof/export.php','Exportar')"><a href="#" title="Exportar">Exportar</a></li>
 		<li class="l1" onclick="setHtml('./html/prof/import.php','Importar')"><a href="#" title="Importar">Importar</a></li>
-		<li class="l1" onclick="setHtml('./html/prof/createNews.php','Criar aviso')"><a href="#" title="Aviso">Aviso</a></li>
+		
+		<li class="l1" onclick="ShowHide('l23')"><a href="#" title="Avisos">Avisos</a></li>
+		<div id="l23">
+			<li class="l2" onclick="setHtml('./html/prof/createNews.php','Criar aviso')"><a href="#" title="Criar">Criar</a></li>
+			<li class="l2" onclick="setHtml('./html/prof/deleteNews.php','Eleminar')"><a href="#" title="Eleminar">Eleminar</a></li>
+		</div>
+
+		
 	</ul>

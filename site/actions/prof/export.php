@@ -24,7 +24,7 @@
 		case 3:
 			header('Content-Disposition: attachment;filename="Audiações.xml"');
 			ob_end_clean();
-			exportAditions("../../files/aditions/2015_2016.xml");
+			exportAditions("../../files/auditions/2015_2016.xml");
 			break;
 		case 4:
 			header('Content-Disposition: attachment;filename="Cursos.xml"');

@@ -93,6 +93,29 @@ class Professor{
     			 return "Error!: " . $e->getMessage();
 		}
 	}
+	
+	function getCourses($ID,$dbh){
+		if($ID==NULL)return -1;
+		$out = array();
+		$i = 0;
+		$sql = "SELECT  id_curso FROM professor_curso WHERE id_professor='".$ID."'";
+		try{
+			$res = $dbh->query($sql);
+			if($res==false)return -2;
+			if($res->rowCount()>0){
+				foreach($res as $row){
+					$out[$i] = $row['id_curso'];
+					$i++;
+				}
+				return $out;
+			}
+			else return -3;
+			
+		}
+		catch (PDOException $e) {
+    			 return "Error!: " . $e->getMessage();
+		}
+	}
 
 }
 ?>

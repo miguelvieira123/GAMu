@@ -50,9 +50,6 @@
 	background-color: #999999;
 }
 
-#l21{
-	display: none;
-}
-#l22{
+#l21, #l22, #l23{
 	display: none;
 }

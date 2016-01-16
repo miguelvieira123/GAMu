@@ -59,11 +59,12 @@
 
 	function exportWorks($dbh){
 		$new_xml = new DomDocument();
-		//$sql = "SELECT * from curso ORDER BY id";
-		//$res = $dbh->query($sql);
-		//$str="";
-		//foreach($res as $course){
-			//$str.="&#10;&#9;<curso id='".$course['id']."' designacao='".$course['designacao']."' duracao='".$course['duracao']."' idInstr='".$course['id_instrumento']."'></curso>";
+		$sql = "SELECT * from obra ORDER BY id";
+		$res = $dbh->query($sql);
+		$str="";
+		foreach($res as $obra){
+			//$str.="&#10;&#9;<obra id='".$obra['id']."' nome='".$obra['nome']."'  duracao='".$obra['duracao']."' ano='".$obra['anoCriacao']."' idPeriodo='".$obra['id_periodo']."'></obra>";
+			$str .="&#10;&#9;<obra>&#10;&#9;</obra>";
 			//$sql = "SELECT id_curso FROM professor_curso WHERE id_professor='".$prof['id']."';";
 			//$courses = $dbh->query($sql);
 			//$str_course="";
@@ -78,9 +79,9 @@
 			//}
 			//$str.="&#10;&#9;&#9;<cursos>".$str_course."&#10;&#9;&#9;</cursos>&#10;&#9;&#9;<instrumentos>".$str_instr."&#10;&#9;&#9;</instrumentos>&#10;&#9;</aluno>";
 			//$str.="&#10;&#9;&#9;<cursos>".$str_course."&#10;&#9;&#9;</cursos>&#10;&#9;</professor>";
-		//}
-		//$strFULL="<cursos>".$str."&#10;</cursos>";
-		//$new_xml->LoadXML($strFULL);
+		}
+		$strFULL="<obras>".$str."&#10;</obras>";
+		$new_xml->LoadXML($strFULL);
 		$new_xml->save('php://output');
 	}
 	function exportAditions($file){

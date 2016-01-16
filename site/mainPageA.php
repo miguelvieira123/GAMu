@@ -1,13 +1,13 @@
 <?php
-	include_once '../../connectBD.php';
-	include_once '../../classes/cookie.php';
+	include_once './connectBD.php';
+	include_once './classes/cookie.php';
 	$user = getIdByCookie($dbh);
 	if($user==false){
 		echo "sessão é blokiada";
 		die();
 	}
-	include_once '../../classes/student.php';
-	include_once '../../classes/other.php';
+	include_once './classes/student.php';
+	include_once './classes/other.php';
 	$st= new Students();
 	$usr= new Users();
 	$avisos = $usr->getNewsByIDA($user,$dbh);

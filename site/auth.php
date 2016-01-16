@@ -21,6 +21,11 @@
         					$link = "Location:professor.php";
         					header($link);
         					break;
+					case "10":
+        					$link = "Location:./admin/admin.php";
+        					header($link);
+        					break;
+
         				default:
         					header("Location:index.php");
         			}

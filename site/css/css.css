@@ -148,8 +148,8 @@ body{
 	text-shadow: 0 -1px rgba(0,0,0,0.15);
 }
 
-#center-body .export input,#center-body .import .in,#center-body .import .in1,#center-body .aviso input[type=button]  {
-	float:right;
+#center-body .export input,#center-body .import .in,#center-body .import .in1,#center-body .aviso input[type=button],#center-body .delNews input[type=button] {
+
 	padding: 6px 20px;
 	height: 30px;
   border-top: 1px solid #98CCE7;
@@ -170,6 +170,14 @@ body{
 	cursor: pointer;
 	text-shadow: 0 -1px rgba(0,0,0,0.15);
 	outline: none;
+}
+#center-body .delNews input[type=button] {
+	padding: 0;
+	margin:10px;
+	height: 25px;
+}
+#center-body .export input,#center-body .import .in,#center-body .import .in1,#center-body .aviso input[type=button]  {
+	float:right;
 }
 #center-body .export input::-moz-focus-inner{border:0}
 #center-body .import .in::-moz-focus-inner{border:0}

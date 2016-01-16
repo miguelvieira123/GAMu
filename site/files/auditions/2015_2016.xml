@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<audicoes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:/C:/xampp/htdocs/GAMu/audicoes.xsd">
+
+
+    <audicao id="natal">
+        <metainfo>
+            <subtitulo>"subtitulo"</subtitulo>
+            <tema>"o migutUUUUU"</tema>
+            <data>20/12/2015</data>
+            <hora>15:30</hora>
+            <local>"local da audicao"</local>
+            <organizador id="P13">Tiago Machado Silva</organizador>
+            <duracao>13:0</duracao>
+        </metainfo>
+        <atuacoes>
+            <atuacao tipo="grupo">
+                <nome_grupo>"nome da banda"</nome_grupo>
+                <hora_inicio>14:30:00</hora_inicio>
+                <musicos>
+                    <musico id="A1510" tipo="aluno">
+                        <nome>Ademar Fontes De Magalhaes Goncalves</nome>
+                        <instrumento id="I6">Flauta</instrumento>
+                    </musico>
+                    <musico id="P11" tipo="professor">
+                        <nome>Rui Manuel Afonso Rodrigues Silva Guerra</nome>
+                        <instrumento id="I15">Trombone</instrumento>
+                    </musico>
+                    <musico id="A20021" tipo="aluno">
+                        <nome>Carlos Jose Da Cunha Ribeiro</nome>
+                        <instrumento id="I7">Fliscorne</instrumento>
+                    </musico>
+                </musicos>
+                <obras>
+                    <obra id="O1">
+                        <nome>Polonaise-Fantasie</nome>
+                        <duracao>01:50:24</duracao>
+                    </obra>
+                    <obra id="O2">
+                        <nome>Rage Over a Lost Penny</nome>
+                        <duracao>01:00:26</duracao>
+                    </obra>
+                    <obra id="O3">
+                        <nome>Transcendental Ãƒâ€°tudes</nome>
+                        <duracao>01:54:53</duracao>
+                    </obra>
+                    <obra id="O4">
+                        <nome>Transcendental Ãƒâ€°tudes</nome>
+                        <duracao>01:49:53</duracao>
+                    </obra>
+                    <obra id="O32">
+                        <nome>Preludes Op. 11</nome>
+                        <duracao>00:19:29</duracao>
+                    </obra>
+                </obras>
+            </atuacao>
+            <atuacao tipo="solo">
+                <hora_inicio>21:25:05</hora_inicio>
+                <musicos>
+                    <musico id="A1510" tipo="aluno">
+                        <nome>Ademar Fontes De Magalhaes Goncalves</nome>
+                        <instrumento id="I6">Flauta</instrumento>
+                    </musico>
+                </musicos>
+                <obras>
+                    <obra id="O22">
+                        <nome>Serenade for Strings</nome>
+                        <duracao>01:12:01</duracao>
+                    </obra>
+                    <obra id="O23">
+                        <nome>Rhapsodies, Op. 79</nome>
+                        <duracao>01:55:12</duracao>
+                    </obra>
+                </obras>
+            </atuacao>
+        </atuacoes>
+    </audicao>
+    
+    <audicao id="pascoa">
+        <metainfo>
+            <subtitulo>"subtitulo"</subtitulo>
+            <tema>"o migutUUUUU"</tema>
+            <data>20/12/2015</data>
+            <hora>15:30</hora>
+            <local>"local da audicao"</local>
+            <organizador id="P13">Tiago Machado Silva</organizador>
+            <duracao>13:0</duracao>
+        </metainfo>
+        <atuacoes>
+            <atuacao tipo="grupo">
+                <nome_grupo>"nome da banda"</nome_grupo>
+                <hora_inicio>14:30:00</hora_inicio>
+                <musicos>
+                    <musico id="A1510" tipo="aluno">
+                        <nome>Ademar Fontes De Magalhaes Goncalves</nome>
+                        <instrumento id="I6">Flauta</instrumento>
+                    </musico>
+                    <musico id="P11" tipo="professor">
+                        <nome>Rui Manuel Afonso Rodrigues Silva Guerra</nome>
+                        <instrumento id="I15">Trombone</instrumento>
+                    </musico>
+                    <musico id="A20021" tipo="aluno">
+                        <nome>Carlos Jose Da Cunha Ribeiro</nome>
+                        <instrumento id="I7">Fliscorne</instrumento>
+                    </musico>
+                </musicos>
+                <obras>
+                    <obra id="O1">
+                        <nome>Polonaise-Fantasie</nome>
+                        <duracao>01:50:24</duracao>
+                    </obra>
+                    <obra id="O2">
+                        <nome>Rage Over a Lost Penny</nome>
+                        <duracao>01:00:26</duracao>
+                    </obra>
+                    <obra id="O3">
+                        <nome>Transcendental Ãƒâ€°tudes</nome>
+                        <duracao>01:54:53</duracao>
+                    </obra>
+                    <obra id="O4">
+                        <nome>Transcendental Ãƒâ€°tudes</nome>
+                        <duracao>01:49:53</duracao>
+                    </obra>
+                    <obra id="O32">
+                        <nome>Preludes Op. 11</nome>
+                        <duracao>00:19:29</duracao>
+                    </obra>
+                </obras>
+            </atuacao>
+            <atuacao tipo="solo">
+                <hora_inicio>21:25:05</hora_inicio>
+                <musicos>
+                    <musico id="A1510" tipo="aluno">
+                        <nome>Ademar Fontes De Magalhaes Goncalves</nome>
+                        <instrumento id="I6">Flauta</instrumento>
+                    </musico>
+                </musicos>
+                <obras>
+                    <obra id="O22">
+                        <nome>Serenade for Strings</nome>
+                        <duracao>01:12:01</duracao>
+                    </obra>
+                    <obra id="O23">
+                        <nome>Rhapsodies, Op. 79</nome>
+                        <duracao>01:55:12</duracao>
+                    </obra>
+                </obras>
+            </atuacao>
+        </atuacoes>
+    </audicao>
+<audicao id="natal11">
+        <metainfo>
+            <subtitulo>"subtitulo"</subtitulo>
+            <tema>"o migutUUUUU"</tema>
+            <data>20/12/2015</data>
+            <hora>15:30</hora>
+            <local>"local da audicao"</local>
+            <organizador id="P13">Tiago Machado Silva</organizador>
+            <duracao>13:0</duracao>
+        </metainfo>
+        <atuacoes>
+            <atuacao tipo="grupo">
+                <nome_grupo>"nome da banda"</nome_grupo>
+                <hora_inicio>14:30:00</hora_inicio>
+                <musicos>
+                    <musico id="A1510" tipo="aluno">
+                        <nome>Ademar Fontes De Magalhaes Goncalves</nome>
+                        <instrumento id="I6">Flauta</instrumento>
+                    </musico>
+                    <musico id="P11" tipo="professor">
+                        <nome>Rui Manuel Afonso Rodrigues Silva Guerra</nome>
+                        <instrumento id="I15">Trombone</instrumento>
+                    </musico>
+                    <musico id="A20021" tipo="aluno">
+                        <nome>Carlos Jose Da Cunha Ribeiro</nome>
+                        <instrumento id="I7">Fliscorne</instrumento>
+                    </musico>
+                </musicos>
+                <obras>
+                    <obra id="O1">
+                        <nome>Polonaise-Fantasie</nome>
+                        <duracao>01:50:24</duracao>
+                    </obra>
+                    <obra id="O2">
+                        <nome>Rage Over a Lost Penny</nome>
+                        <duracao>01:00:26</duracao>
+                    </obra>
+                    <obra id="O3">
+                        <nome>Transcendental Ãƒâ€°tudes</nome>
+                        <duracao>01:54:53</duracao>
+                    </obra>
+                    <obra id="O4">
+                        <nome>Transcendental Ãƒâ€°tudes</nome>
+                        <duracao>01:49:53</duracao>
+                    </obra>
+                    <obra id="O32">
+                        <nome>Preludes Op. 11</nome>
+                        <duracao>00:19:29</duracao>
+                    </obra>
+                </obras>
+            </atuacao>
+            <atuacao tipo="solo">
+                <hora_inicio>21:25:05</hora_inicio>
+                <musicos>
+                    <musico id="A1510" tipo="aluno">
+                        <nome>Ademar Fontes De Magalhaes Goncalves</nome>
+                        <instrumento id="I6">Flauta</instrumento>
+                    </musico>
+                </musicos>
+                <obras>
+                    <obra id="O22">
+                        <nome>Serenade for Strings</nome>
+                        <duracao>01:12:01</duracao>
+                    </obra>
+                    <obra id="O23">
+                        <nome>Rhapsodies, Op. 79</nome>
+                        <duracao>01:55:12</duracao>
+                    </obra>
+                </obras>
+            </atuacao>
+        </atuacoes>
+    </audicao><audicao id="11natal11">
+        <metainfo>
+            <subtitulo>"subtitulo"</subtitulo>
+            <tema>"o migutUUUUU"</tema>
+            <data>20/12/2015</data>
+            <hora>15:30</hora>
+            <local>"local da audicao"</local>
+            <organizador id="P13">Tiago Machado Silva</organizador>
+            <duracao>13:0</duracao>
+        </metainfo>
+        <atuacoes>
+            <atuacao tipo="grupo">
+                <nome_grupo>"nome da banda"</nome_grupo>
+                <hora_inicio>14:30:00</hora_inicio>
+                <musicos>
+                    <musico id="A1510" tipo="aluno">
+                        <nome>Ademar Fontes De Magalhaes Goncalves</nome>
+                        <instrumento id="I6">Flauta</instrumento>
+                    </musico>
+                    <musico id="P11" tipo="professor">
+                        <nome>Rui Manuel Afonso Rodrigues Silva Guerra</nome>
+                        <instrumento id="I15">Trombone</instrumento>
+                    </musico>
+                    <musico id="A20021" tipo="aluno">
+                        <nome>Carlos Jose Da Cunha Ribeiro</nome>
+                        <instrumento id="I7">Fliscorne</instrumento>
+                    </musico>
+                </musicos>
+                <obras>
+                    <obra id="O1">
+                        <nome>Polonaise-Fantasie</nome>
+                        <duracao>01:50:24</duracao>
+                    </obra>
+                    <obra id="O2">
+                        <nome>Rage Over a Lost Penny</nome>
+                        <duracao>01:00:26</duracao>
+                    </obra>
+                    <obra id="O3">
+                        <nome>Transcendental Ãƒâ€°tudes</nome>
+                        <duracao>01:54:53</duracao>
+                    </obra>
+                    <obra id="O4">
+                        <nome>Transcendental Ãƒâ€°tudes</nome>
+                        <duracao>01:49:53</duracao>
+                    </obra>
+                    <obra id="O32">
+                        <nome>Preludes Op. 11</nome>
+                        <duracao>00:19:29</duracao>
+                    </obra>
+                </obras>
+            </atuacao>
+            <atuacao tipo="solo">
+                <hora_inicio>21:25:05</hora_inicio>
+                <musicos>
+                    <musico id="A1510" tipo="aluno">
+                        <nome>Ademar Fontes De Magalhaes Goncalves</nome>
+                        <instrumento id="I6">Flauta</instrumento>
+                    </musico>
+                </musicos>
+                <obras>
+                    <obra id="O22">
+                        <nome>Serenade for Strings</nome>
+                        <duracao>01:12:01</duracao>
+                    </obra>
+                    <obra id="O23">
+                        <nome>Rhapsodies, Op. 79</nome>
+                        <duracao>01:55:12</duracao>
+                    </obra>
+                </obras>
+            </atuacao>
+        </atuacoes>
+    </audicao></audicoes>

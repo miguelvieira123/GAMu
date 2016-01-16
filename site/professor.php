@@ -18,11 +18,8 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<link href="./css/css.css" rel="stylesheet" />
 	<link href="./css/menu.css" rel="stylesheet" />
-	
 	<script src="./js/menu.js" language="JavaScript" type="text/JavaScript"></script>
 	<script src="./js/js.js" language="JavaScript" type="text/JavaScript"></script>
-	
-	
 </head>
 
 <body>

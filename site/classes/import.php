@@ -145,12 +145,47 @@
 	}
 //----------------------------------------------------------------------------------------------------------------------------------------------
 	function importAudition($file,$dbh){
-		print_r($file);
+		$out="";
+		$xmlD_new = new DomDocument();
+		$xmlD_new->load($file['tmp_name']);
+		$res = @$xmlD_new->schemaValidate("../../schemas/audicoes.xsd");
+		if($res == false){
+			$error = error_get_last();
+			echo substr($error['message'],30,strlen($error['message']));
+		}
+		$xmlD_old = new DomDocument();
+		$xmlD_old->load("../../files/auditions/2015_2016.xml");
+		$xmlS_new = simplexml_load_file($file['tmp_name']);
+		$xmlS_old = simplexml_load_file("../../files/auditions/2015_2016.xml");
+		$audNs = $xmlS_new->xpath("//audicao");
+		$audOs = $xmlS_old->xpath("//audicao");
+		foreach($audNs as $audition){
+			$check = false;
+			foreach($audOs as $audition2){
+				if((string)$audition['id']==(string)$audition2['id']){
+					$check = true;
+					break;
+				}
+			}
+			if($check==false){
+				$audN = $xmlS_new->xpath("//audicao[@id='".$audition['id']."']");
+				$xmlD_new->loadXML($audN[0]->asXML());
+				$node = $xmlD_new->getElementsByTagName('audicao');
+				$node = $xmlD_old->importNode($node[0],true);
+				$node2 = $xmlD_old->getElementsByTagName('audicoes');
+				$node2[0]->appendChild($node);
+				$out .= "Audicao '".$audition['id']."' foi importada<br>";
+			}
+
+		}
+		$xmlD_old->save("../../files/auditions/2015_2016.xml");
+		return $out;
 	}
+//----------------------------------------------------------------------------------------------------------------------------------------------
 	function importWorks($file,$dbh){
 		print_r($file);
 	}
-
+//----------------------------------------------------------------------------------------------------------------------------------------------
 	function getLastStudentId($dbh){
 		$sql = "SELECT id FROM aluno ORDER BY id DESC LIMIT 1";
 		$res = $dbh->query($sql);
