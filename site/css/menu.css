@@ -49,3 +49,10 @@
 #menu li:active{
 	background-color: #999999;
 }
+
+#l21{
+	display: none;
+}
+#l22{
+	display: none;
+}

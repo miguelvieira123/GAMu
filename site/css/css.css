@@ -41,8 +41,8 @@ body{
 }
 #right-menu {
 	position: absolute;
-	width: 20%;
-	height: 650px;
+	width: 15%;
+	height: 600px;
 	top: 75px;
 	left: 2%;
 	background:  #F9FdFd;
@@ -65,9 +65,9 @@ body{
 #center{
 	position: absolute;
 	top: 75px;
-	left: 24%;
-	width: 74%;
-	height: 650px;
+	left: 19%;
+	width: 79%;
+	height: 800px;
 	color: gray;
 	background:  #F9FdFd;
 	border: 1px solid #CAD8DE;
@@ -124,4 +124,65 @@ body{
 .normLink {
 	color:cadetblue;
 	text-decoration: underline;
+}
+
+#center-body fieldset{
+	border: 1px solid #badff3;
+}
+#top .exit {
+	border-top: 1px solid #98CCE7;
+	border-bottom: 1px solid #7DB0CC;
+	border-left: 1px solid #8CBFD9;
+	border-right: 1px solid #8CBFD9;
+	border-radius: 15px;
+	color:white;
+	box-shadow: inset 0 1px #D4EBF7, 0 1px 3px #B8BEBE;
+	background: -moz-linear-gradient(top,  #badff3 0%, #7acbed 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#badff3), color-stop(100%,#7acbed));
+	background: -webkit-linear-gradient(top,  #badff3 0%,#7acbed 100%);
+	background: -o-linear-gradient(top,  #badff3 0%,#7acbed 100%);
+	background: -ms-linear-gradient(top,  #badff3 0%,#7acbed 100%);
+	background: linear-gradient(top,  #badff3 0%,#7acbed 100%);
+	background-color: #9FD7F0;
+	cursor: pointer;
+	text-shadow: 0 -1px rgba(0,0,0,0.15);
+}
+
+#center-body .export input,#center-body .import .in,#center-body .import .in1,#center-body .aviso input[type=button]  {
+	float:right;
+	padding: 6px 20px;
+	height: 30px;
+  border-top: 1px solid #98CCE7;
+  border-bottom: 1px solid #7DB0CC;
+  border-left: 1px solid #8CBFD9;
+  border-right: 1px solid #8CBFD9;
+  border-radius: 15px;
+	color: #FFF;
+  font: bold 13px Arial, Tahoma, sans-serif;
+	box-shadow: inset 0 1px #D4EBF7, 0 1px 3px #B8BEBE;
+	background: -moz-linear-gradient(top,  #badff3 0%, #7acbed 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#badff3), color-stop(100%,#7acbed));
+	background: -webkit-linear-gradient(top,  #badff3 0%,#7acbed 100%);
+	background: -o-linear-gradient(top,  #badff3 0%,#7acbed 100%);
+	background: -ms-linear-gradient(top,  #badff3 0%,#7acbed 100%);
+	background: linear-gradient(top,  #badff3 0%,#7acbed 100%);
+	background-color: #9FD7F0;
+	cursor: pointer;
+	text-shadow: 0 -1px rgba(0,0,0,0.15);
+	outline: none;
+}
+#center-body .export input::-moz-focus-inner{border:0}
+#center-body .import .in::-moz-focus-inner{border:0}
+#center-body .import .in1, #center-body .aviso input[type=button] {
+	float:left;
+}
+
+#center-body .aviso textarea,#center-body .aviso input[type=text]{
+	background: white;
+	color:black;
+	border-top: 1px solid #98CCE7;
+	border-bottom: 1px solid #7DB0CC;
+	border-left: 1px solid #8CBFD9;
+	border-right: 1px solid #8CBFD9;
+	border-radius: 2px;
 }

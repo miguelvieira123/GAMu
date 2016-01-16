@@ -1,12 +1,7 @@
 $(document).ready(function () {
-    
-    
     $(function () {
         $(".lined").linedtextarea({});
     });
-    
-    
-    
     // Gramatica
     $("#send_phrase").click(function () {
         t = $('#texto').val();
@@ -26,7 +21,6 @@ $(document).ready(function () {
                 data = JSON.parse(data);
                 var linha_erro = 12;
                 for (var i = 0; i < data.msg.length; i++) {
-                    
                     // marcar linha com erro
                     var str = data["msg"][i];
                     var patt = new RegExp("line [0-9]+");
@@ -38,11 +32,7 @@ $(document).ready(function () {
                         $("#linha_"+num).addClass("lineselect");
                     }
                     $("#msg").append("<p>" + data["msg"][i] + "<p>");
-                    
-                    
-                    
                 }
-                
             }
         });
     });

@@ -19,6 +19,7 @@
 			echo "ERROR:".$_FILES['f_prof']['error']."<br/>" ;
 		}
 		else if(substr(strrchr($_FILES['f_prof']['name'], '.'), 1)!="xml") echo "O formato do ficheiro tem que ser xml";
+		else echo importProfessors($_FILES['f_prof'],$dbh);
 	}
 	if(array_key_exists("f_audition",$_FILES)==true){
 		if($_FILES['f_audition']['error']>0){

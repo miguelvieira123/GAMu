@@ -20,7 +20,14 @@ class Users{
 		}
 
 	}
-
+	function createNewUser($id,$pass,$dbh){
+		if($id==NULL||$pass==NULL)return -1;
+		$sql = "INSERT INTO utilizador values(MD5('".$pass."'),'1','".$id."','');";
+		//return $sql;
+		$res = $dbh->query($sql);
+		if($res==false)return -2;
+		else return 1;
+	}
 }
 
 ?>

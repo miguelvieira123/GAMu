@@ -51,6 +51,7 @@
 		}
 	return $out;
 	}
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 	function importCourses($file,$dbh){
 		$out="";
 		$sql = "INSERT INTO curso VALUES ";
@@ -94,9 +95,55 @@
 		else $out .= "Ocurreu um erro no momemto de importação dos cursos <br>";
 	return $out;
 	}
+//-------------------------------------------------------------------------------------------------------------------------------------------
 	function importProfessors($file,$dbh){
-		print_r($file);
+		$out = "";
+		$xml = new DomDocument();
+		$xml->load($file['tmp_name']);
+		$res = @$xml->schemaValidate("../../schemas/professores.xsd");
+		if($res == false){
+			$error = error_get_last();
+			echo substr($error['message'],30,strlen($error['message']));
+		}
+		$xml = simplexml_load_file($file['tmp_name']);
+		$profs = $xml->xpath("//professor");
+		foreach($profs as $prof){
+			$prId =  (string)$prof['id'];
+			$prName =  (string)$prof['nome'];
+			$prDay = (string)$prof['dataNsc'];
+			$prMail = (string)$prof['mail'];
+			$prMobile = (string)$prof['telemovel'];
+			$professor = checkProfessorId($prId,$dbh);
+			switch($professor){
+				case -1:
+					break;
+				case -2:
+					break;
+				case -3:// Este Professor nao existe;
+					$sql_pr = "INSERT INTO professor VALUES('".$prId."','".$prName."','".$prDay."','".$prMail."','".$prMobile."');";
+					$sql_c = "";
+					foreach($prof->cursos->curso as $curso){
+						$sql_c = "INSERT INTO professor_curso VALUES('".$prId."','".(string)$curso['id']."');";
+						$res = $dbh->query($sql_c);
+					}
+					$res = $dbh->query($sql_pr);
+					if($res!=false) {
+						 $out .="O Professor  ".$prId." foi inserido<br>";
+					}
+					else $out .= "O Professor  ".$prId." NAO foi inserido<br>";
+					break;
+				case 1:
+					$out .=  "O professor com id ".$prId." já existe<br>";
+					break;
+
+				default:
+					break;
+
+			}
+		}
+	return $out;
 	}
+//----------------------------------------------------------------------------------------------------------------------------------------------
 	function importAudition($file,$dbh){
 		print_r($file);
 	}
@@ -137,6 +184,14 @@
 	}
 	function checkCourseId($ID,$dbh){
 		$sql = "SELECT id FROM curso WHERE id='".$ID."'";
+		$res = $dbh->query($sql);
+		if($res == false)return -1;
+		if($res->rowCount()==1)return 1;
+		else if($res->rowCount()>1) return -2;
+		else return -3;
+	}
+	function checkProfessorId($ID,$dbh){
+		$sql = "SELECT id FROM professor WHERE id='".$ID."'";
 		$res = $dbh->query($sql);
 		if($res == false)return -1;
 		if($res->rowCount()==1)return 1;

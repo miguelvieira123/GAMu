@@ -1,9 +1,9 @@
 <?php
 	include_once '../../connectBD.php';
 	include_once '../../classes/cookie.php';
-	$user = getIdByCookie($dbh);
-	if($user==false){
-		echo "sessão é bloqueada";
+	$user = getTypeByCookie($dbh);
+	if($user!=6){
+		header("Location:../../deny.php");
 		die();
 	}
 
