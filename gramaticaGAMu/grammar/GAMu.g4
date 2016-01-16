@@ -6,26 +6,6 @@
  *        pg30469  - Oleskii Gylytskyy
  *      ---------------------------------------------
  *
-     EXEMPLO:
-
-        titulo: "titulo"
-        subtitulo: "subtitulo" 
-        tema: "tema da audicao" 
-        data: 5-1-2016 
-        hora: 15:30
-        local: "local da audicao"
-        organizador: P13
-        duracao-maxima: 02:00
-
-        atuacoes:
-            grupo: "nome da banda" 
-            elementos: A1510,P11,A20021
-            obras: O1,O2,O3,O4,O32
-            #
-            solo: A1510 
-            obras: O22,O23
-            #
- 
  */
 
 grammar GAMu;
@@ -85,6 +65,7 @@ grammar GAMu;
             int max_audition_time = 0;
             StringBuilder audicao_xml = new StringBuilder();
             String titulo;
+            String anoLetivo;
             
         }
 audicao     @init{
@@ -126,19 +107,11 @@ audicao     @init{
                       //Handle errors for JDBC
                       se.printStackTrace();
                     }
-                    PrintWriter xml_file;
-                    try{
-                        xml_file = new PrintWriter("audicao.xml");
-                        xml_file.print(audicao_xml.toString());
-                        xml_file.close();
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(GramaticaGAMu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    //System.out.println(audicao_xml.toString());
+                    
                     
                     //--------------XML---------------
                     try {
-                        String filepath = "audicoes.xml";
+                        String filepath = "audition/"+anoLetivo +".xml";
                         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
                         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
                         Document doc = docBuilder.parse(filepath);
@@ -180,7 +153,8 @@ audicao     @init{
                 {audicao_xml.append("</atuacoes></audicao>");}
             ;
 
-metaAud     :	'titulo:' STRING  {
+metaAud     :	'ano-letivo:' a1=INT'/'a2=INT {anoLetivo = $a1.text+"_"+$a2.text;}
+                'titulo:' STRING  {
                                     titulo = $STRING.text;
                                     audicao_xml.append("<audicao id="+$STRING.text+">");
                                     audicao_xml.append("<metainfo>");
@@ -195,7 +169,7 @@ metaAud     :	'titulo:' STRING  {
                                                 String sql = "SELECT * FROM professor WHERE id='"+$idProf.id+"'";
                                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                                 if(rs.next()){
-                                                    audicao_xml.append("<organizador>"+rs.getString("nome")+"</organizador>");
+                                                    audicao_xml.append("<organizador id=\""+$idProf.id+"\">"+rs.getString("nome")+"</organizador>");
                                                 }else{
                                                     System.out.print("line "+$idProf.linha+" coluna: "+ $idProf.coluna);
                                                     System.out.println("  professor: "+$idProf.id+" nao existe");
@@ -342,7 +316,7 @@ musico      :    idAluno ',' idInstrumento {
                                                         if(rs.next()){
                                                             //OK
                                                             audicao_xml.append("<nome>"+nome_aluno+"</nome>");
-                                                            audicao_xml.append("<instrumento>"+designacao_instrumento+"</instrumento>");
+                                                            audicao_xml.append("<instrumento id=\""+$idInstrumento.id+"\">"+designacao_instrumento+"</instrumento>");
                                                         }else{
                                                             System.out.print("line "+$idAluno.linha);
                                                             System.out.print(" (aluno: "+$idAluno.id+" - "+ nome_aluno+")" );
@@ -382,7 +356,7 @@ musico      :    idAluno ',' idInstrumento {
                                                         if(rs.next()){
                                                             //OK
                                                             audicao_xml.append("<nome>"+nome_prof+"</nome>");
-                                                            audicao_xml.append("<instrumento>"+designacao_instrumento+"</instrumento>");
+                                                            audicao_xml.append("<instrumento id=\""+$idInstrumento.id+"\">"+designacao_instrumento+"</instrumento>");
                                                         }else{
                                                             System.out.print("line "+$idProf.linha);
                                                             System.out.print(" (professor: "+$idProf.id+" - "+ nome_prof+")" );

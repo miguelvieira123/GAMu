@@ -13,13 +13,13 @@
         $vars["msg"][$i] = $line;
         $i++;
     }
-
+    
     // abrir ficheiro com 1 audicao apenas    
     // escrever no ficheiro XML audicoes.xml 
-
-
     
-    $vars["phrase"] = $texto;
+    
+    //$vars["phrase"] = $texto;
+    
     //enviar mensagens para o cliente
      echo json_encode($vars);
     

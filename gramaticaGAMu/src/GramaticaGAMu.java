@@ -43,10 +43,11 @@ public class GramaticaGAMu {
         
         //System.out.println("versao ANTLR: "+ RuntimeMetaData.getRuntimeVersion());
         
-        ANTLRInputStream in = new ANTLRInputStream( " titulo: \"titulo_2\"\n" +
+        ANTLRInputStream in = new ANTLRInputStream( " ano-letivo: 2015/2016\n" +
+                                                    " titulo: \"pascoa2 o regresso\"\n" +
                                                     " subtitulo: \"subtitulo\" \n" +
                                                     " tema: \"o migutUUUUU\" \n" +
-                                                    " data: 5-1-2016 \n" +
+                                                    " data: 20-12-2015\n" +
                                                     " hora: 15:30\n" +
                                                     " local: \"local da audicao\"\n" +
                                                     " organizador: P13\n" +
@@ -80,7 +81,7 @@ public class GramaticaGAMu {
         
         ANTLRInputStream in2 = new ANTLRInputStream( temp );
         
-        GAMuLexer lexer = new GAMuLexer( (CharStream) in);
+        GAMuLexer lexer = new GAMuLexer( (CharStream) in2);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         GAMuParser parser = new GAMuParser(tokens);
         
@@ -91,12 +92,6 @@ public class GramaticaGAMu {
         System.setErr(orig_err);
         
         
-        
-        
-        
-        //------------- XML ----------------
-        
-	
         
         
     }

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<cursos xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:/C:/xampp/htdocs/GAMu/cursos.xsd">
+	<curso id="CB1" designacao="Curso B&#xC3;&#xA1;sico de Clarinete" duracao="5" idInstr="I1"/>
+	<curso id="CB10" designacao="Curso B&#xC3;&#xA1;sico de Obo&#xC3;&#xA9;" duracao="5" idInstr="I10"/>
+	<curso id="CB11" designacao="Curso B&#xC3;&#xA1;sico de Org&#xC3;&#xA3;o" duracao="5" idInstr="I11"/>
+	<curso id="CB12" designacao="Curso B&#xC3;&#xA1;sico de Percuss&#xC3;&#xA3;o" duracao="5" idInstr="I12"/>
+	<curso id="CB13" designacao="Curso B&#xC3;&#xA1;sico de Piano" duracao="5" idInstr="I13"/>
+	<curso id="CB14" designacao="Curso B&#xC3;&#xA1;sico de Saxofone" duracao="5" idInstr="I14"/>
+	<curso id="CB15" designacao="Curso B&#xC3;&#xA1;sico de Trombone" duracao="5" idInstr="I15"/>
+	<curso id="CB16" designacao="Curso B&#xC3;&#xA1;sico de Trompa" duracao="5" idInstr="I16"/>
+	<curso id="CB17" designacao="Curso B&#xC3;&#xA1;sico de Trompete" duracao="5" idInstr="I17"/>
+	<curso id="CB18" designacao="Curso B&#xC3;&#xA1;sico de Tuba" duracao="5" idInstr="I18"/>
+	<curso id="CB19" designacao="Curso B&#xC3;&#xA1;sico de Violoncelo" duracao="5" idInstr="I19"/>
+	<curso id="CB2" designacao="Curso B&#xC3;&#xA1;sico de Contrabaixo" duracao="5" idInstr="I2"/>
+	<curso id="CB20" designacao="Curso B&#xC3;&#xA1;sico de Violino" duracao="5" idInstr="I20"/>
+	<curso id="CB21" designacao="Curso B&#xC3;&#xA1;sico de Viola de Arco" duracao="5" idInstr="I21"/>
+	<curso id="CB22" designacao="Curso B&#xC3;&#xA1;sico de Bandolim" duracao="5" idInstr="I22"/>
+	<curso id="CB3" designacao="Curso B&#xC3;&#xA1;sico de Corne Ingl&#xC3;&#xAA;s" duracao="5" idInstr="I3"/>
+	<curso id="CB4" designacao="Curso B&#xC3;&#xA1;sico de Euf&#xC3;&#xB3;nio" duracao="5" idInstr="I4"/>
+	<curso id="CB5" designacao="Curso B&#xC3;&#xA1;sico de Fagote" duracao="5" idInstr="I5"/>
+	<curso id="CB6" designacao="Curso B&#xC3;&#xA1;sico de Flauta" duracao="5" idInstr="I6"/>
+	<curso id="CB7" designacao="Curso B&#xC3;&#xA1;sico de Fliscorne" duracao="5" idInstr="I7"/>
+	<curso id="CB8" designacao="Curso B&#xC3;&#xA1;sico de Guitarra" duracao="5" idInstr="I8"/>
+	<curso id="CB9" designacao="Curso B&#xC3;&#xA1;sico de Harpa" duracao="5" idInstr="I9"/>
+	<curso id="CS1" designacao="Curso Supletivo de Clarinete" duracao="3" idInstr="I1"/>
+	<curso id="CS10" designacao="Curso Supletivo de Obo&#xC3;&#xA9;" duracao="3" idInstr="I10"/>
+	<curso id="CS11" designacao="Curso Supletivo de Org&#xC3;&#xA3;o" duracao="3" idInstr="I11"/>
+	<curso id="CS12" designacao="Curso Supletivo de Percuss&#xC3;&#xA3;o" duracao="3" idInstr="I12"/>
+	<curso id="CS13" designacao="Curso Supletivo de Piano" duracao="3" idInstr="I13"/>
+	<curso id="CS14" designacao="Curso Supletivo de Saxofone" duracao="3" idInstr="I14"/>
+	<curso id="CS15" designacao="Curso Supletivo de Trombone" duracao="3" idInstr="I15"/>
+	<curso id="CS16" designacao="Curso Supletivo de Trompa" duracao="3" idInstr="I16"/>
+	<curso id="CS17" designacao="Curso Supletivo de Trompete" duracao="3" idInstr="I17"/>
+	<curso id="CS18" designacao="Curso Supletivo de Tuba" duracao="3" idInstr="I18"/>
+	<curso id="CS19" designacao="Curso Supletivo de Violoncelo" duracao="3" idInstr="I19"/>
+	<curso id="CS2" designacao="Curso Supletivo de Contrabaixo" duracao="3" idInstr="I2"/>
+	<curso id="CS20" designacao="Curso Supletivo de Violino" duracao="3" idInstr="I20"/>
+	<curso id="CS21" designacao="Curso Supletivo de Viola de Arco" duracao="3" idInstr="I21"/>
+	<curso id="CS22" designacao="Curso Supletivo de Bandolim" duracao="3" idInstr="I22"/>
+	<curso id="CS3" designacao="Curso Supletivo de Corne Ingl&#xC3;&#xAA;s" duracao="3" idInstr="I3"/>
+	<curso id="CS4" designacao="Curso Supletivo de Euf&#xC3;&#xB3;nio" duracao="3" idInstr="I4"/>
+	<curso id="CS5" designacao="Curso Supletivo de Fagote" duracao="3" idInstr="I5"/>
+	<curso id="CS6" designacao="Curso Supletivo de Flauta" duracao="3" idInstr="I6"/>
+	<curso id="CS7" designacao="Curso Supletivo de Fliscorne" duracao="3" idInstr="I7"/>
+	<curso id="CS8" designacao="Curso Supletivo de Guitarra" duracao="3" idInstr="I8"/>
+	<curso id="CS9" designacao="Curso Supletivo de Harpa" duracao="3" idInstr="I9"/>
+</cursos>
