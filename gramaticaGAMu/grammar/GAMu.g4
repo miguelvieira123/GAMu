@@ -110,6 +110,7 @@ audicao     @init{
                     
                     
                     //--------------XML---------------
+                    //audicao valida?
                     try {
                         String filepath = "audition/"+anoLetivo +".xml";
                         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
