@@ -1,0 +1,480 @@
+<?xml version="1.0"?>
+<professores xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="file:/C:/xampp/htdocs/GAMu/professores.xsd">
+
+	<professor id="P1" nome="Alvaro Jose De Castro Moreira Da Silva" dataNsc="1963-08-27" mail="P1@gamu.pt" telemovel="+351934534235">
+		<cursos>
+			<curso id="CS20"/>
+		</cursos>
+	</professor>
+	<professor id="P10" nome="Pedro Manuel Vieira Santos Pinto" dataNsc="1956-11-13" mail="" telemovel="">
+		<cursos>
+			<curso id="CS3"/>
+		</cursos>
+	</professor>
+	<professor id="P11" nome="Rui Manuel Afonso Rodrigues Silva Guerra" dataNsc="1967-10-13" mail="" telemovel="">
+		<cursos>
+			<curso id="CB15"/>
+		</cursos>
+	</professor>
+	<professor id="P12" nome="Sergio Miguel Valente De Almeida" dataNsc="1954-06-28" mail="" telemovel="">
+		<cursos>
+			<curso id="CS18"/>
+		</cursos>
+	</professor>
+	<professor id="P13" nome="Tiago Machado Silva" dataNsc="1946-08-21" mail="" telemovel="">
+		<cursos>
+			<curso id="CB15"/>
+		</cursos>
+	</professor>
+	<professor id="P14" nome="Vasco Duarte Almeida Dias De Castro" dataNsc="1947-10-04" mail="" telemovel="">
+		<cursos>
+			<curso id="CS21"/>
+		</cursos>
+	</professor>
+	<professor id="P15" nome="Antonio Jose Oliveira Faria" dataNsc="1946-12-21" mail="" telemovel="">
+		<cursos>
+			<curso id="CB19"/>
+		</cursos>
+	</professor>
+	<professor id="P16" nome="Carla Maria Mendes De Castro" dataNsc="1953-01-27" mail="" telemovel="">
+		<cursos>
+			<curso id="CS11"/>
+		</cursos>
+	</professor>
+	<professor id="P17" nome="Marlene Azevedo Da Silva" dataNsc="1954-06-11" mail="" telemovel="">
+		<cursos>
+			<curso id="CB20"/>
+		</cursos>
+	</professor>
+	<professor id="P18" nome="Paulo Alexandre Marques De Oliveira Serafim" dataNsc="1961-11-20" mail="" telemovel="">
+		<cursos>
+			<curso id="CB21"/>
+		</cursos>
+	</professor>
+	<professor id="P19" nome="David Filipe Oliveira Costa" dataNsc="1959-10-01" mail="" telemovel="">
+		<cursos>
+			<curso id="CS19"/>
+		</cursos>
+	</professor>
+	<professor id="P2" nome="Andre Filipe Azevedo Sousa" dataNsc="1968-03-15" mail="" telemovel="">
+		<cursos>
+			<curso id="CB9"/>
+		</cursos>
+	</professor>
+	<professor id="P20" nome="Ricardo Miguel Carvalho Ferreira" dataNsc="1950-06-21" mail="" telemovel="">
+		<cursos>
+			<curso id="CS11"/>
+		</cursos>
+	</professor>
+	<professor id="P21" nome="Jose Alves De Castro" dataNsc="1973-09-16" mail="" telemovel="">
+		<cursos>
+			<curso id="CB17"/>
+		</cursos>
+	</professor>
+	<professor id="P22" nome="Mario Bento Brito Nobrega Ramos De Azevedo" dataNsc="1969-03-06" mail="" telemovel="">
+		<cursos>
+			<curso id="CS16"/>
+		</cursos>
+	</professor>
+	<professor id="P23" nome="Paulo Cesar Rodrigues Gomes" dataNsc="1949-08-26" mail="" telemovel="">
+		<cursos>
+			<curso id="CS7"/>
+		</cursos>
+	</professor>
+	<professor id="P24" nome="Susana Pereira" dataNsc="1989-08-23" mail="" telemovel="">
+		<cursos>
+			<curso id="CS13"/>
+		</cursos>
+	</professor>
+	<professor id="P25" nome="Gabriel Reis" dataNsc="1980-09-04" mail="" telemovel="">
+		<cursos>
+			<curso id="CB13"/>
+		</cursos>
+	</professor>
+	<professor id="P26" nome="Ars&#xC3;&#xA9;nio" dataNsc="1973-03-05" mail="" telemovel="">
+		<cursos>
+			<curso id="CB17"/>
+		</cursos>
+	</professor>
+	<professor id="P27" nome="Frederico Pinto" dataNsc="1988-01-07" mail="" telemovel="">
+		<cursos>
+			<curso id="CB7"/>
+		</cursos>
+	</professor>
+	<professor id="P28" nome="Gon&#xC3;&#xA7;alo Hermenegildo" dataNsc="1965-02-28" mail="" telemovel="">
+		<cursos>
+			<curso id="CS6"/>
+		</cursos>
+	</professor>
+	<professor id="P29" nome="Luis" dataNsc="1987-03-26" mail="" telemovel="">
+		<cursos>
+			<curso id="CB4"/>
+		</cursos>
+	</professor>
+	<professor id="P3" nome="Bruno Miguel Pereira Pinto" dataNsc="1977-05-06" mail="" telemovel="">
+		<cursos>
+			<curso id="CB4"/>
+		</cursos>
+	</professor>
+	<professor id="P30" nome="Miguel Pinto" dataNsc="1977-01-02" mail="" telemovel="">
+		<cursos>
+			<curso id="CB19"/>
+		</cursos>
+	</professor>
+	<professor id="P31" nome="Pedro Lopes" dataNsc="1979-06-09" mail="" telemovel="">
+		<cursos>
+			<curso id="CB1"/>
+		</cursos>
+	</professor>
+	<professor id="P32" nome="Ant&#xC3;&#xB3;nio Jos&#xC3;&#xA9; Coutinho Barbosa" dataNsc="1969-05-11" mail="" telemovel="">
+		<cursos>
+			<curso id="CB7"/>
+		</cursos>
+	</professor>
+	<professor id="P33" nome="Ricardo Paz" dataNsc="1966-06-21" mail="" telemovel="">
+		<cursos>
+			<curso id="CS21"/>
+		</cursos>
+	</professor>
+	<professor id="P34" nome="Sandrina Maciel" dataNsc="1980-11-04" mail="" telemovel="">
+		<cursos>
+			<curso id="CB18"/>
+		</cursos>
+	</professor>
+	<professor id="P35" nome="Bruno Martins" dataNsc="1962-04-19" mail="" telemovel="">
+		<cursos>
+			<curso id="CB17"/>
+		</cursos>
+	</professor>
+	<professor id="P36" nome="Filipe Froufe" dataNsc="1960-07-22" mail="" telemovel="">
+		<cursos>
+			<curso id="CB9"/>
+		</cursos>
+	</professor>
+	<professor id="P37" nome="Jo&#xC3;&#xA3;o Brites" dataNsc="1950-09-21" mail="" telemovel="">
+		<cursos>
+			<curso id="CS1"/>
+		</cursos>
+	</professor>
+	<professor id="P38" nome="Leandro Morgado" dataNsc="1952-07-14" mail="" telemovel="">
+		<cursos>
+			<curso id="CB22"/>
+		</cursos>
+	</professor>
+	<professor id="P39" nome="Manuel Sousa" dataNsc="1992-03-21" mail="" telemovel="">
+		<cursos>
+			<curso id="CB3"/>
+		</cursos>
+	</professor>
+	<professor id="P4" nome="Filipe Alexandre Da Silva Martins" dataNsc="1988-12-10" mail="" telemovel="">
+		<cursos>
+			<curso id="CB19"/>
+		</cursos>
+	</professor>
+	<professor id="P40" nome="Pedro Resende" dataNsc="1983-03-24" mail="" telemovel="">
+		<cursos>
+			<curso id="CB13"/>
+		</cursos>
+	</professor>
+	<professor id="P41" nome="Ricardo" dataNsc="1955-02-24" mail="" telemovel="">
+		<cursos>
+			<curso id="CS15"/>
+		</cursos>
+	</professor>
+	<professor id="P42" nome="Fernanda Barroso" dataNsc="1954-01-03" mail="" telemovel="">
+		<cursos>
+			<curso id="CB18"/>
+		</cursos>
+	</professor>
+	<professor id="P43" nome="Marta Silva" dataNsc="1985-06-01" mail="" telemovel="">
+		<cursos>
+			<curso id="CS22"/>
+		</cursos>
+	</professor>
+	<professor id="P44" nome="Paulo Alexandre Afonso Dias" dataNsc="1966-12-15" mail="" telemovel="">
+		<cursos>
+			<curso id="CB16"/>
+		</cursos>
+	</professor>
+	<professor id="P45" nome="Susana Pacheco" dataNsc="1982-02-06" mail="" telemovel="">
+		<cursos>
+			<curso id="CB22"/>
+		</cursos>
+	</professor>
+	<professor id="P46" nome="Almeno" dataNsc="1982-08-02" mail="" telemovel="">
+		<cursos>
+			<curso id="CS16"/>
+		</cursos>
+	</professor>
+	<professor id="P47" nome="Carlos Durana" dataNsc="1970-05-14" mail="" telemovel="">
+		<cursos>
+			<curso id="CS10"/>
+		</cursos>
+	</professor>
+	<professor id="P48" nome="Hernani Silva" dataNsc="1945-03-13" mail="" telemovel="">
+		<cursos>
+			<curso id="CS8"/>
+		</cursos>
+	</professor>
+	<professor id="P49" nome="Sofia Paiva" dataNsc="1965-06-22" mail="" telemovel="">
+		<cursos>
+			<curso id="CB9"/>
+		</cursos>
+	</professor>
+	<professor id="P5" nome="Helder Ricardo Dias Ribeiro" dataNsc="1969-03-04" mail="" telemovel="">
+		<cursos>
+			<curso id="CS15"/>
+		</cursos>
+	</professor>
+	<professor id="P50" nome="Bruno Miguel Pereira Pinto" dataNsc="1971-01-20" mail="" telemovel="">
+		<cursos>
+			<curso id="CB5"/>
+		</cursos>
+	</professor>
+	<professor id="P51" nome="Cristiano Cunha" dataNsc="1987-05-06" mail="" telemovel="">
+		<cursos>
+			<curso id="CB21"/>
+		</cursos>
+	</professor>
+	<professor id="P52" nome="Daniel Pires" dataNsc="1976-08-05" mail="" telemovel="">
+		<cursos>
+			<curso id="CB1"/>
+		</cursos>
+	</professor>
+	<professor id="P53" nome="Ernesto Miranda Pedrosa Da Silva" dataNsc="1977-11-13" mail="" telemovel="">
+		<cursos>
+			<curso id="CB20"/>
+		</cursos>
+	</professor>
+	<professor id="P54" nome="Manuel Joao Salgado Da Costa Amaro" dataNsc="1977-09-11" mail="" telemovel="">
+		<cursos>
+			<curso id="CS3"/>
+		</cursos>
+	</professor>
+	<professor id="P55" nome="Pedro Nuno Tavares Da Silva " dataNsc="1978-12-06" mail="" telemovel="">
+		<cursos>
+			<curso id="CB12"/>
+		</cursos>
+	</professor>
+	<professor id="P56" nome="Rui Pedro Da Costa Barbosa" dataNsc="1977-11-14" mail="" telemovel="">
+		<cursos>
+			<curso id="CS5"/>
+		</cursos>
+	</professor>
+	<professor id="P57" nome="Carlos Guilherme Pelaio Macedo Costa " dataNsc="1955-03-28" mail="" telemovel="">
+		<cursos>
+			<curso id="CB19"/>
+		</cursos>
+	</professor>
+	<professor id="P58" nome="Jorge Filipe Marcos Mota " dataNsc="1947-10-23" mail="" telemovel="">
+		<cursos>
+			<curso id="CS2"/>
+		</cursos>
+	</professor>
+	<professor id="P59" nome="Nuno Miguel Alves Peixoto" dataNsc="1986-12-22" mail="" telemovel="">
+		<cursos>
+			<curso id="CB20"/>
+		</cursos>
+	</professor>
+	<professor id="P6" nome="Hernani Rodrigues Da Silva" dataNsc="1971-11-21" mail="" telemovel="">
+		<cursos>
+			<curso id="CB7"/>
+		</cursos>
+	</professor>
+	<professor id="P60" nome="V&#xC3;&#xA2;nia Sifia Carvalho" dataNsc="1986-01-17" mail="" telemovel="">
+		<cursos>
+			<curso id="CS5"/>
+		</cursos>
+	</professor>
+	<professor id="P61" nome="Maria Campos" dataNsc="1963-06-07" mail="" telemovel="">
+		<cursos>
+			<curso id="CB21"/>
+		</cursos>
+	</professor>
+	<professor id="P62" nome="Nuno Rodrigues" dataNsc="1983-06-17" mail="" telemovel="">
+		<cursos>
+			<curso id="CB15"/>
+		</cursos>
+	</professor>
+	<professor id="P63" nome="Ad&#xC3;&#xA9;lio Marco Da Costa Fernandes" dataNsc="1972-11-13" mail="" telemovel="">
+		<cursos>
+			<curso id="CB22"/>
+		</cursos>
+	</professor>
+	<professor id="P64" nome="Alexandre Gon&#xC3;&#xA7;alves" dataNsc="1970-12-16" mail="" telemovel="">
+		<cursos>
+			<curso id="CB18"/>
+		</cursos>
+	</professor>
+	<professor id="P65" nome="Am&#xC3;&#xA2;ndio Telmo Oliveira Teixeira" dataNsc="1961-12-11" mail="" telemovel="">
+		<cursos>
+			<curso id="CB22"/>
+		</cursos>
+	</professor>
+	<professor id="P66" nome="Carla Sofia De Almeida Coutinho " dataNsc="1989-01-06" mail="" telemovel="">
+		<cursos>
+			<curso id="CB10"/>
+		</cursos>
+	</professor>
+	<professor id="P67" nome="Edison Oliveira" dataNsc="1974-09-19" mail="" telemovel="">
+		<cursos>
+			<curso id="CB12"/>
+		</cursos>
+	</professor>
+	<professor id="P68" nome="Fernando Sousa" dataNsc="1951-07-22" mail="" telemovel="">
+		<cursos>
+			<curso id="CB11"/>
+		</cursos>
+	</professor>
+	<professor id="P69" nome="Filipe Manuel Alves Romano" dataNsc="1965-06-15" mail="" telemovel="">
+		<cursos>
+			<curso id="CB9"/>
+		</cursos>
+	</professor>
+	<professor id="P7" nome="Jorge Manuel Barros Nunes" dataNsc="1959-05-23" mail="" telemovel="">
+		<cursos>
+			<curso id="CS19"/>
+		</cursos>
+	</professor>
+	<professor id="P70" nome="Francisco Alexandre Aires Gon&#xC3;&#xA7;alves" dataNsc="1972-02-16" mail="" telemovel="">
+		<cursos>
+			<curso id="CS3"/>
+		</cursos>
+	</professor>
+	<professor id="P71" nome="M&#xC3;&#xA1;rio Andr&#xC3;&#xA9; De Castro Vila Cova" dataNsc="1950-02-24" mail="" telemovel="">
+		<cursos>
+			<curso id="CB7"/>
+		</cursos>
+	</professor>
+	<professor id="P72" nome="Nuno Santos" dataNsc="1961-07-26" mail="" telemovel="">
+		<cursos>
+			<curso id="CS9"/>
+		</cursos>
+	</professor>
+	<professor id="P73" nome="Nuno Miguel Dos Santos Nunes Rold&#xC3;&#xA3;o" dataNsc="1967-08-11" mail="" telemovel="">
+		<cursos>
+			<curso id="CB5"/>
+		</cursos>
+	</professor>
+	<professor id="P74" nome="Orlando Jorge Carvalho Ribeiro" dataNsc="1960-09-10" mail="" telemovel="">
+		<cursos>
+			<curso id="CS3"/>
+		</cursos>
+	</professor>
+	<professor id="P75" nome="Pedro Filipe Meira Morais" dataNsc="1979-06-26" mail="" telemovel="">
+		<cursos>
+			<curso id="CB14"/>
+		</cursos>
+	</professor>
+	<professor id="P76" nome="Renato Neves" dataNsc="1967-03-22" mail="" telemovel="">
+		<cursos>
+			<curso id="CB7"/>
+		</cursos>
+	</professor>
+	<professor id="P77" nome="Ricardo" dataNsc="1987-03-14" mail="" telemovel="">
+		<cursos>
+			<curso id="CB14"/>
+		</cursos>
+	</professor>
+	<professor id="P78" nome="Ricardo Manuel Da Silva Abreu" dataNsc="1946-02-19" mail="" telemovel="">
+		<cursos>
+			<curso id="CB13"/>
+		</cursos>
+	</professor>
+	<professor id="P79" nome="Rui Miguel Silva" dataNsc="1959-08-06" mail="" telemovel="">
+		<cursos>
+			<curso id="CB17"/>
+		</cursos>
+	</professor>
+	<professor id="P8" nome="Jose Miguel Araujo Ferreira" dataNsc="1947-01-10" mail="" telemovel="">
+		<cursos>
+			<curso id="CS11"/>
+		</cursos>
+	</professor>
+	<professor id="P80" nome="Sandro Miguel Vales De Freitas" dataNsc="1968-02-04" mail="" telemovel="">
+		<cursos>
+			<curso id="CB7"/>
+		</cursos>
+	</professor>
+	<professor id="P81" nome="Ana Lu&#xC3;&#xAD;sa Pinto Teixeira" dataNsc="1991-12-22" mail="" telemovel="">
+		<cursos>
+			<curso id="CS12"/>
+		</cursos>
+	</professor>
+	<professor id="P82" nome="C&#xC3;&#xA2;ndida" dataNsc="1962-06-05" mail="" telemovel="">
+		<cursos>
+			<curso id="CB17"/>
+		</cursos>
+	</professor>
+	<professor id="P83" nome="Carla Susana Teixeira" dataNsc="1945-03-07" mail="" telemovel="">
+		<cursos>
+			<curso id="CS14"/>
+		</cursos>
+	</professor>
+	<professor id="P84" nome="Daniel Edgar Pinto Soares" dataNsc="1958-07-27" mail="" telemovel="">
+		<cursos>
+			<curso id="CB4"/>
+		</cursos>
+	</professor>
+	<professor id="P85" nome="L&#xC3;&#xBA;cia Sofia Miranda" dataNsc="1948-12-18" mail="" telemovel="">
+		<cursos>
+			<curso id="CB1"/>
+		</cursos>
+	</professor>
+	<professor id="P86" nome="M&#xC3;&#xA1;rcio Ferreira" dataNsc="1987-06-01" mail="" telemovel="">
+		<cursos>
+			<curso id="CS6"/>
+		</cursos>
+	</professor>
+	<professor id="P87" nome="Maria Da Concei&#xC3;&#xA7;&#xC3;&#xA3;o Mota" dataNsc="1949-08-08" mail="" telemovel="">
+		<cursos>
+			<curso id="CB18"/>
+		</cursos>
+	</professor>
+	<professor id="P88" nome="Maria Jo&#xC3;&#xA3;o Fernandes Guerreiro Da Silva " dataNsc="1957-10-01" mail="" telemovel="">
+		<cursos>
+			<curso id="CB2"/>
+		</cursos>
+	</professor>
+	<professor id="P89" nome="Miguel Carreira" dataNsc="1975-09-13" mail="" telemovel="">
+		<cursos>
+			<curso id="CB6"/>
+		</cursos>
+	</professor>
+	<professor id="P9" nome="Pedro Gabriel Dias Ferreira" dataNsc="1950-08-13" mail="" telemovel="">
+		<cursos>
+			<curso id="CB22"/>
+		</cursos>
+	</professor>
+	<professor id="P90" nome="V&#xC3;&#xAD;tor Manuel Catarino" dataNsc="1967-05-15" mail="" telemovel="">
+		<cursos>
+			<curso id="CB8"/>
+		</cursos>
+	</professor>
+	<professor id="P91" nome="Vitor Gon&#xC3;&#xA7;alves" dataNsc="1981-05-01" mail="" telemovel="">
+		<cursos>
+			<curso id="CB9"/>
+		</cursos>
+	</professor>
+	<professor id="P92" nome="Fernando Jorge Ferreira La&#xC3;&#xBA;ndos Da Costa" dataNsc="1986-07-08" mail="" telemovel="">
+		<cursos>
+			<curso id="CS4"/>
+		</cursos>
+	</professor>
+	<professor id="P93" nome="Marco Paulo Martins Cruz" dataNsc="1968-12-16" mail="" telemovel="">
+		<cursos>
+			<curso id="CS17"/>
+		</cursos>
+	</professor>
+	<professor id="P94" nome="Miguel Pereira Mateus" dataNsc="1955-10-06" mail="" telemovel="">
+		<cursos>
+			<curso id="CB6"/>
+		</cursos>
+	</professor>
+	<professor id="P95" nome="Rodney Lopes Gomes" dataNsc="1955-08-16" mail="" telemovel="">
+		<cursos>
+			<curso id="CB4"/>
+		</cursos>
+	</professor>
+</professores>
