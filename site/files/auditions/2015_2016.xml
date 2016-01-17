@@ -6,10 +6,10 @@
         <metainfo>
             <subtitulo>"subtitulo"</subtitulo>
             <tema>"o migutUUUUU"</tema>
-            <data>20/12/2015</data>
+            <data>20/12/2016</data>
             <hora>15:30</hora>
             <local>"local da audicao"</local>
-            <organizador id="P13">Tiago Machado Silva</organizador>
+            <organizador id="P1">Tiago Machado Silva</organizador>
             <duracao>13:0</duracao>
         </metainfo>
         <atuacoes>
@@ -25,7 +25,7 @@
                         <nome>Rui Manuel Afonso Rodrigues Silva Guerra</nome>
                         <instrumento id="I15">Trombone</instrumento>
                     </musico>
-                    <musico id="A20021" tipo="aluno">
+                    <musico id="A20044" tipo="aluno">
                         <nome>Carlos Jose Da Cunha Ribeiro</nome>
                         <instrumento id="I7">Fliscorne</instrumento>
                     </musico>
@@ -56,7 +56,7 @@
             <atuacao tipo="solo">
                 <hora_inicio>21:25:05</hora_inicio>
                 <musicos>
-                    <musico id="A1510" tipo="aluno">
+                    <musico id="A20044" tipo="aluno">
                         <nome>Ademar Fontes De Magalhaes Goncalves</nome>
                         <instrumento id="I6">Flauta</instrumento>
                     </musico>
@@ -79,7 +79,7 @@
         <metainfo>
             <subtitulo>"subtitulo"</subtitulo>
             <tema>"o migutUUUUU"</tema>
-            <data>20/12/2015</data>
+            <data>20/05/2016</data>
             <hora>15:30</hora>
             <local>"local da audicao"</local>
             <organizador id="P13">Tiago Machado Silva</organizador>
@@ -98,7 +98,7 @@
                         <nome>Rui Manuel Afonso Rodrigues Silva Guerra</nome>
                         <instrumento id="I15">Trombone</instrumento>
                     </musico>
-                    <musico id="A20021" tipo="aluno">
+                    <musico id="A20044" tipo="aluno">
                         <nome>Carlos Jose Da Cunha Ribeiro</nome>
                         <instrumento id="I7">Fliscorne</instrumento>
                     </musico>

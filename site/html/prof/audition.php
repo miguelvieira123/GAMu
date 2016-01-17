@@ -1,13 +1,14 @@
 <?php
 	include_once '../../connectBD.php';
 	include_once '../../classes/cookie.php';
-	$type = getTypeByCookie($dbh);
-	if($type<0){
+	$type = getInfoByCookie($dbh);
+	if($type['type']<0){
 		header("Location:../../deny.php");
 		die();
 	}
 	include_once '../../classes/audition.php';
-	$xml = new DomDocument();
+	
+		$xml = new DomDocument();
 		$xml->load("../../files/auditions/2015_2016.xml");
 		$res = @$xml->schemaValidate("../../schemas/audicoes.xsd");
 		if($res == false){

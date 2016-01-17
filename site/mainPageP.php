@@ -14,11 +14,6 @@
 			$error = error_get_last();
 			echo substr($error['message'],30,strlen($error['message']));
 		}
-		//$xslt = new XSLTProcessor();
-  		//$xsl = new DOMDocument();
-  		//$xsl->load("../../schemas/audition.xsl", LIBXML_NOCDATA);
-  		//$xslt->importStylesheet($xsl);
- 		//echo $xslt->transformToXML($xml);
 
 		$xml = simplexml_load_file("./files/auditions/2015_2016.xml");
 		$audicoes = $xml->xpath("//audicao");

@@ -148,7 +148,7 @@ body{
 	text-shadow: 0 -1px rgba(0,0,0,0.15);
 }
 
-#center-body .export input,#center-body .import .in,#center-body .import .in1,#center-body .aviso input[type=button],#center-body .delNews input[type=button], #center-body #listAudition input[type=button] {
+#center-body .audicoes input[type=button], #center-body .export input,#center-body .import .in,#center-body .import .in1,#center-body .aviso input[type=button],#center-body .delNews input[type=button], #center-body #listAudition input[type=button] {
 
 	padding: 6px 20px;
 	height: 30px;

@@ -1,11 +1,12 @@
 <?php
 	include_once '../../connectBD.php';
 	include_once '../../classes/cookie.php';
-	$type = getTypeByCookie($dbh);
-	if($type!=6){
+	$user = getInfoByCookie($dbh);
+	if($user['type']!=6){
 		header("Location:../../deny.php");
 		die();
 	}
 	include_once '../../classes/audition.php';
-	getAuditions("../../files/auditions/2015_2016.xml",$dbh);
+	if(isset($_REQUEST['id']))delAudition($_REQUEST['id'],$user['id']);
+	getAuditions("../../files/auditions/2015_2016.xml",$user['id'],$dbh);
 ?>
