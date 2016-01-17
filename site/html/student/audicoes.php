@@ -2,7 +2,7 @@
 	include_once '../../connectBD.php';
 	include_once '../../classes/cookie.php';
 	$type = getTypeByCookie($dbh);
-	if($type!=6){
+	if($type<0){
 		header("Location:../../deny.php");
 		die();
 	}

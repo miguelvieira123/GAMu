@@ -1,15 +1,15 @@
 <?php
-	include_once '../../connectBD.php';
-	include_once '../../classes/cookie.php';
+	include_once './connectBD.php';
+	include_once './classes/cookie.php';
 	$type = getTypeByCookie($dbh);
 	if($type!=6){
-		header("Location:../../deny.php");
+		header("Location:./deny.php");
 		die();
 	}
 
 		$xml = new DomDocument();
-		$xml->load("../../files/auditions/2015_2016.xml");
-		$res = @$xml->schemaValidate("../../schemas/audicoes.xsd");
+		$xml->load("./files/auditions/2015_2016.xml");
+		$res = @$xml->schemaValidate("./schemas/audicoes.xsd");
 		if($res == false){
 			$error = error_get_last();
 			echo substr($error['message'],30,strlen($error['message']));
@@ -20,7 +20,7 @@
   		//$xslt->importStylesheet($xsl);
  		//echo $xslt->transformToXML($xml);
 
-		$xml = simplexml_load_file("../../files/auditions/2015_2016.xml");
+		$xml = simplexml_load_file("./files/auditions/2015_2016.xml");
 		$audicoes = $xml->xpath("//audicao");
 		foreach($audicoes as $audicao){
 			echo "<div id='listAudition'>";

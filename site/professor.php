@@ -47,7 +47,7 @@
 		</div>
 		<div id="center-body">
 		<?php
-			include_once './html/prof/mainPage.php';
+			include_once './mainPageP.php';
 		?>
 		</div>
 	</div>

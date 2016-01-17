@@ -22,7 +22,7 @@
 ?>
 	<fieldset class="aviso">
 		<legend>Criar novo aviso</legend>
-		<form id="changeNews" action="javascript:void(0);" onsubmit="ajax('#changeNews','./actions/prof/changeNews.php')" method="post">
+		<form id="changeNews" action="javascript:void(0);" onsubmit="ajaxC('#changeNews','./actions/prof/changeNews.php')" method="post">
 			<input type="hidden" name="id" value="<?php echo $aviso['id']?>">
 			Escolhe curso:
 			<select name="curso">
