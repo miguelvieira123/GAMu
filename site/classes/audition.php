@@ -28,10 +28,11 @@
 			echo "<tr><td>Duracao:</td><td>".(string)$audicao->metainfo->duracao."</td></tr>";
 			echo "</table>";
 			echo "<input type=\"button\" value=\"Ver mais\" onClick=\"setHtml('./html/prof/audition.php?id=".(string)$audicao['id']."','Audição')\" />";
-			if(data((string)$audicao->metainfo->data)==false)
+			if(data((string)$audicao->metainfo->data)==false&&(string)$audicao->metainfo->organizador['id']==$idP)
 			echo "<input type=\"button\" value=\"Alterar\" onClick=\"setHtml('./html/prof/changeAudition.php?id=".(string)$audicao['id']."','Audição')\" />";
 			if((string)$audicao->metainfo->organizador['id']==$idP)
 			echo "<input type=\"button\" value=\"Eliminar\" onClick=\"setHtmlC('./html/prof/consultAudition.php?id=".(string)$audicao['id']."','Audição')\" />";
+			echo "<input type=\"button\" value=\"Gerar PDF\" onClick=\"getFile('./html/prof/gerarPDF.php?id=".(string)$audicao['id']."','Audição')\" />";
 			echo "</fieldset>";
 			echo "</div>";
 		}
