@@ -53,8 +53,8 @@ grammar GAMu;
             String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
             String DB_URL = "jdbc:mysql://127.0.0.1:3306/gamu";
             // Database credentials
-            String USER = "usrPRI";
-            String PASS = "popo";
+            String USER = "root";
+            String PASS = "qweqwe";
             // Database connection
             Connection conn = null;
             Statement stmt = null;
@@ -66,6 +66,7 @@ grammar GAMu;
             StringBuilder audicao_xml = new StringBuilder();
             String titulo;
             String anoLetivo;
+            int flag = 0;
             
         }
 audicao     @init{
@@ -87,7 +88,9 @@ audicao     @init{
                    //iniciar a construcao do XML
                    audicao_xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
                    }
-            @after{ 
+            @after{
+                   
+                   
                    Time audicao = new Time(total_audition_time * 1000);
                    System.out.println("tempo total audicao: "+ audicao.toString());
                    Time max = new Time(max_audition_time*1000);
@@ -111,8 +114,10 @@ audicao     @init{
                     
                     //--------------XML---------------
                     //audicao valida?
+                    
+                    if(anoLetivo!=null){
                     try {
-                        String filepath = "audition/"+anoLetivo +".xml";
+                        String filepath = "C:\\xampp\\htdocs\\site\\files\\auditions\\"+anoLetivo+".xml";
                         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
                         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
                         Document doc = docBuilder.parse(filepath);
@@ -132,7 +137,7 @@ audicao     @init{
                             audicao_antiga.getParentNode().removeChild(audicao_antiga);
                         }
 
-                        // Adicionar novo novo
+                        // Adicionar nova audicao
                         Node imported = doc.importNode(fruit,true);
                         basket.appendChild(imported);
 
@@ -143,49 +148,54 @@ audicao     @init{
                         StreamResult result = new StreamResult(new File(filepath));
                         transformer.transform(source, result);
 
-
                    } catch (ParserConfigurationException | TransformerException | IOException |XPathExpressionException | SAXException pce) {
-                        pce.printStackTrace();
+                        //pce.printStackTrace();
+                        System.out.println("erro ao escrever em ficheiro, por favor verifique \"ano letivo\"");
                    }
-                    
+                    }
                   }
             :	metaAud 
-                {audicao_xml.append("</metainfo><atuacoes>");} atuacoes 
+                {
+                 titulo = $metaAud.titulo_aud;
+                 anoLetivo = $metaAud.ano_letivo;
+                 audicao_xml.append("</metainfo><atuacoes>");
+                } 
+                atuacoes 
                 {audicao_xml.append("</atuacoes></audicao>");}
             ;
 
-metaAud     :	'ano-letivo:' a1=INT'/'a2=INT {anoLetivo = $a1.text+"_"+$a2.text;}
-                'titulo:' STRING  {
-                                    titulo = $STRING.text;
+metaAud     returns[String titulo_aud, String ano_letivo]
+            :	'organizador:' id_prof=idProf 
+                'ano-letivo:' a1=INT'/'a2=INT {$ano_letivo = $a1.text+"_"+$a2.text;}
+                'titulo:' STRING  { 
+                                    $titulo_aud = $STRING.text;
                                     audicao_xml.append("<audicao id="+$STRING.text+">");
                                     audicao_xml.append("<metainfo>");
+                                    try{
+                                                String sql = "SELECT * FROM professor WHERE id='"+$id_prof.id+"'";
+                                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+                                                if(rs.next()){
+                                                    audicao_xml.append("<organizador id=\""+$id_prof.id+"\">"+rs.getString("nome")+"</organizador>");
+                                                }else{
+                                                    System.out.print("line "+$id_prof.linha+" coluna: "+ $id_prof.coluna);
+                                                    System.out.println("  professor: "+$id_prof.id+" nao existe");
+                                                }
+                                                rs.close();
+                                            }catch(SQLException se){
+                                                se.printStackTrace();
+                                            }
                                   }
                 ('subtitulo:' STRING{audicao_xml.append("<subtitulo>"+$STRING.text+"</subtitulo>");})? 
                 ('tema:' STRING{audicao_xml.append("<tema>"+$STRING.text+"</tema>");})?
                 'data:' data 
                 'hora:' hora { hora_de_inicio = $hora.seconds-3600;}
                 'local:' STRING {audicao_xml.append("<local>"+$STRING.text+"</local>");}
-                'organizador:' idProf {
-                                         try{
-                                                String sql = "SELECT * FROM professor WHERE id='"+$idProf.id+"'";
-                                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
-                                                if(rs.next()){
-                                                    audicao_xml.append("<organizador id=\""+$idProf.id+"\">"+rs.getString("nome")+"</organizador>");
-                                                }else{
-                                                    System.out.print("line "+$idProf.linha+" coluna: "+ $idProf.coluna);
-                                                    System.out.println("  professor: "+$idProf.id+" nao existe");
-                                                }
-                                                rs.close();
-                                            }catch(SQLException se){
-                                                se.printStackTrace();
-                                            }
-                                      }
                 'duracao-maxima:' duracao {
                                             max_audition_time = $duracao.seconds-3600;
                                           }
             ;
 
-data        :   dia=INT'-'mes=INT'-'ano=INT {audicao_xml.append("<data>"+$dia.int+"/"+$mes.int+"/"+$ano.int+"</data>");}
+data        :   dia=INT'/'mes=INT'/'ano=INT {audicao_xml.append("<data>"+$dia.int+"/"+$mes.int+"/"+$ano.int+"</data>");}
             ;
 
 hora        returns[int seconds]:   
@@ -415,13 +425,13 @@ COMMENT
 
 
 
-IDA  :	('a'|'A') ('0'..'9')*
+IDA  :	('A')('0'..'9')*
      ;
-IDP  :	('p'|'P') ('0'..'9')*
+IDP  :	('P')('0'..'9')*
      ;
-IDO  :	('o'|'O') ('0'..'9')*
+IDO  :	('O')('0'..'9')*
      ;
-IDI  :	('i'|'I') ('0'..'9')*
+IDI  :	('I')('0'..'9')*
      ;
 
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'-')*
