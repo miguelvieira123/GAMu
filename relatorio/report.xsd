@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:element name="relatorio">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="capa">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="titulo" type="xs:string"/>
+                            <xs:element name="autores">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element maxOccurs="unbounded" name="autor">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="nome" type="xs:string"/>
+                                                  <xs:element name="instituicao" type="xs:string"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="instituicao" type="xs:string"/>
+                            <xs:element name="data" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="resumo">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="texto" type="xs:string"/>
+                            <xs:element maxOccurs="unbounded" name="keywords" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="indice" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="refindice">
+                                <xs:complexType mixed="true">
+                                    <xs:attribute name="ref" type="xs:IDREF"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="lista_figuras" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="reffigura">
+                                <xs:complexType mixed="true">
+                                    <xs:attribute name="ref" type="xs:IDREF"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="lista_tabelas" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="reftabela">
+                                <xs:complexType mixed="true">
+                                    <xs:attribute name="ref" type="xs:IDREF"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="introducao">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="p"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="capitulos">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="capitulo">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="titulo" type="xs:string"/>
+                                        <xs:element maxOccurs="unbounded" ref="p"/>
+                                        <xs:element maxOccurs="unbounded" minOccurs="0"
+                                            name="seccao">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="titulo" type="xs:string"/>
+                                                  <xs:element maxOccurs="unbounded" ref="p"/>
+                                                  <xs:element maxOccurs="unbounded" minOccurs="0"
+                                                  name="subseccao">
+                                                  <xs:complexType>
+                                                  <xs:sequence>
+                                                  <xs:element name="titulo" type="xs:string"/>
+                                                  <xs:element maxOccurs="unbounded" ref="p"/>
+                                                  </xs:sequence>
+                                                  <xs:attribute name="id" type="xs:ID"/>
+                                                  </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                                <xs:attribute name="id" type="xs:ID"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="id" type="xs:ID"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="conclusao">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="p"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="anexos" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="anexo">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="p"/>
+                                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="figura"/>
+                                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="tabela"
+                                        />
+                                    </xs:sequence>
+                                    <xs:attribute name="id" type="xs:ID"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="referencias" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="referencia">
+                                <xs:complexType mixed="true">
+                                    <xs:attribute name="url" type="xs:anyURI"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="p">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element name="b" type="xs:string"/>
+                <xs:element name="i" type="xs:string"/>
+                <xs:element name="u" type="xs:string"/>
+                <xs:element ref="figura"/>
+                <xs:element ref="tabela"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="figura">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="legenda" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="tabela">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" name="tr">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="td" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

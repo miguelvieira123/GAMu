@@ -1,0 +1,324 @@
+<!DOCTYPE html SYSTEM "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Relatorio</title>
+    </head>
+    <body>
+        <div align="center" >
+            <h1>Um Gestor de Audições/Concertos Musicais</h1>
+            <h2>Projeto Final (1º semestre - perfil de PLC::MIEI::2015)</h2>
+            <h3>Grupo 9</h3>
+            <p>a62819   - Luís Miguel Fernandes Vieira</p>
+            <p> pg30469  - Oleskii Gylytskyy</p>
+        </div>
+        <table width="100%" cellpadding="10">
+            <tr>
+                <td width="25%" bgcolor="#E6E6FA" align="justify" valign="top"> 
+                    <h2>Indice</h2>
+                    <ul>
+                        <li>
+                            <a href="#indice_1">Introdução</a>
+                        </li>
+                        <li>
+                            <a href="#indice_2">Estrutura da Aplicação</a>
+                            <ul>
+                                <li>
+                                    <a href="#indice_21">Base de Dados</a>
+                                </li>
+                                <li>
+                                    <a href="#indice_22">Gramática</a>
+                                </li>
+                                <li>
+                                    <a href="#indice_23">Segurança</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#indice_3">Funcionalidades</a>
+                            <ul>
+                                <li>
+                                    <a href="#indice_31">Importar/Exportar Informação</a>
+                                </li>
+                                <li>
+                                    <a href="#indice_32">Criar Editar e Eliminar Audições</a>
+                                </li>
+                                <li>
+                                    <a href="#indice_33">Avisos</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#indice_4">Conclusão</a>
+                        </li>
+                        <li>
+                            <a href="#indice_5">Ficheiros</a>
+                        </li>
+                    </ul>
+                </td>
+                <td width="75%"  bgcolor="#E6F6FA">
+                    
+                    
+                    <h2 id="indice_1">Introdução</h2>
+                    
+                    <h2 id="indice_2">Estrutura da Aplicação</h2>
+                        <img src="arquitetura_aplicacao.PNG" alt="arqui" height="400pt" />
+                        <h3 id="indice_21">Base de Dados</h3>
+                            <p>Para armazenar a informação optamos por usar uma Base de Dados MySQL, 
+                                isto é uma Base de Dados Relacional o que permite manter a concistência dos dados.
+                            </p>
+                            <img src="GAMu_BD.PNG" alt="diagrama_da_BD" height="500pt" />
+                            <p>A imagem acima, mostra a estrutura da informação guardada na BD.</p>
+                            <p>As relações mais importantes desta estrutura são Aluno-Instrumento, Aluno-Curso, 
+                                Professor-Curso e Professor-Instrumento. A relação Aluno-Instrumento serve para validar
+                                os planeamentos das audições, podemos dizer o mesmo da relação Professor-Instrumento. A relação Aluno-Curso foi utilizada para mostrar avisos lançados
+                                pelos docentes do curso em questão, por sua vês a relação Professor-Curso serve o mesmo propósito. 
+                            </p>
+                        <h3 id="indice_22">Gramática</h3>
+                            <p>
+                                Foi desenvolvida uma gramática em ANTLR e criado um JAR para ser executado no momento em que 
+                                um utilizador submete uma nova audição. A gramática faz validações sintáticas e semânticas ao
+                                planeamento de uma audição, e devolve feedback informando o utilizador caso exista algum erro.
+                            </p>
+                            <p>De seguida mostra-se a estrutura básica de uma audição sem regras, condições e </p>
+<textarea rows="35" cols="90" wrap='off' readonly="readonly" style="resize: vertical;">
+    grammar GAMu;
+    
+    audicao     :	metaAud atuacoes 
+                ;
+    metaAud     :   'titulo:' STRING 
+                    'subtitulo:' STRING 
+                    'tema:' STRING 
+                    'data:' data 
+                    'hora:' hora 
+                    'local:' STRING 
+                    'organizador:' idProf
+                    'duracao-maxima:' hora 
+                ;
+    
+    data        :   INT'-'INT'-'INT 
+    ;
+    
+    hora        :   horas=INT':'minutos=INT
+    ;
+    
+    atuacoes    :   'atuacoes:' atuacao '#' (atuacao '#')* 
+    ;
+    
+    atuacao     :   grupo
+                |   solo
+                ;
+    grupo       :   'grupo:' STRING 'elementos:' elementos 'obras:' obras
+    ;
+    solo        :   'solo:' musico 'obras:' obra
+    ;
+    obras       :   idObra (','idObra)* 
+    ;
+    elementos   :   musicos
+    ;
+    musicos     :   musico (',' musico)*
+    ;
+    musico      :   idAluno  
+                |   idProf
+    ;
+    
+    idObra	returns[String id]:   IDO{$id = $IDO.text;};
+    idProf 	returns[String id]:   IDP{$id = $IDP.text;};
+    idAluno	returns[String id]:   IDA{$id = $IDA.text;};
+</textarea>
+                        <h3 id="indice_23">Segurança</h3>
+                            <p>
+                                Para tratar da segurança dos utilizadores do sistema, utilizamos uma tecnologia de Cookies
+                                que permite identificar únicamente um utilizador em cada sessão. Quando um utilizador 
+                                efetua o login, e caso seja bem sucedido, é gerada uma string que é enviada para o cliente,
+                                e simultaneamente guardada na base de dados, onde fica associada com o utilizador. Esta string serve 
+                                para identificar os utilizadores e controlar o acesso às funcionalidades do sistema.
+                            </p>
+                    
+                    <h2 id="indice_3">Funcionalidades</h2>
+                        <p>
+                            Existem três perfis de utilizador, o perfil de administrador, alunos e professor. O perfil 
+                             de administrador está limitado à funcionalidade de adicionar novos utilizadores ao sistema.
+                             O perfil de aluno apenas pode alterar os seus dados pessoais e de utilizador, e consultar 
+                             informação relativa a audições e avisos relativos aos cursos nos quai está matriculado. O perfil
+                              de professor tem permissão para consultar e editar as informações pessoais, informações de 
+                              utilizador, criar, eliminar e editar avisos lançados pelo próprio para um determinado curso que leciona. 
+                               Pode também importar e exportar audições, alunos professores, e cursos. Relativamente a 
+                               audições pode criar, alterar e eliminar audições.
+                        </p>
+                    
+                        <h3 id="indice_31">Importar/Exportar Informação</h3>
+                            <p>
+                                É possivel importar/exportar as informações relativas e <u>alunos</u>, <u>cursos</u>, <u>professores</u> e <u>audições</u>.
+                                De seguida mostramos um exemplo demonstrativo de validações que são realizadas na acção de importar qualquer um dos tipos de informação.
+                            </p>
+                            <p>
+                                
+                            </p>
+                    <img src="import.PNG" alt="import" height="200pt" />
+<textarea rows="35" cols="90" wrap='off' readonly="readonly" style="resize: vertical;">                                    
+	function importStudents($file,$dbh){
+		$out = "";
+		$xml = new DomDocument();
+		$xml->load($file['tmp_name']);
+		$res = @$xml->schemaValidate("../../schemas/alunos.xsd");
+		if($res == false){
+			$error = error_get_last();
+			echo substr($error['message'],30,strlen($error['message']));
+		}
+		$xml = simplexml_load_file($file['tmp_name']);
+		$alunos = $xml->xpath("//aluno");
+		foreach($alunos as $aluno){
+			$stId =  (string)$aluno['id'];
+			$stName =  (string)$aluno['nome'];
+			$stDay = (string)$aluno['dataNsc'];
+			$stMail = (string)$aluno['mail'];
+			$stMobile = (string)$aluno['telemovel'];
+			$student = checkStudentId($stId,$dbh);
+			switch($student){
+				case -1:
+					break;
+				case -2:
+					break;
+				case -3:// Este Estudante nao existe;
+					$sql_st = "INSERT INTO aluno VALUES('".$stId."','".$stName."','".$stDay."','".$stMail."','".$stMobile."');";
+					$sql_c = "";
+					$sql_instr = "";
+					foreach($aluno->cursos->curso as $curso){
+						$sql_c = "INSERT INTO matricula VALUES('".$stId."','".(string)$curso['id']."','".(string)$curso['anoLetivo']."','".(string)$curso['anoCurso']."');";
+						$res = $dbh->query($sql_c);
+					}
+					foreach($aluno->instrumentos->instrumento as $instr){
+						$sql_instr = "INSERT INTO aluno_instrumento VALUES('".$stId."','".(string)$instr['id']."');";
+						$res = $dbh->query($sql_instr);
+					}
+					$res = $dbh->query($sql_st);
+					if($res!=false) {
+						 $out .="O Aluno  ".$stId." foi inserido";
+					}
+					else $out .= "O Aluno  ".$stId." NAO foi inserido";
+					break;
+				case 1:
+					$out .=  "O Aluno com id ".$stId." já existe";
+					break;
+
+				default:
+					break;
+
+			}
+		}
+	return $out;
+	}          
+</textarea>
+                        <p>
+                           Primeiro o tipo do ficheiro é validado, só depois é que a função acima executa o seu código.
+                           A função <i>importStudents()</i> começa por validar a formatação do xml com auxilio do 
+                            XML Schema que está de acordo com o tipo de informação que estamos a importar, se for inválido lança
+                            um aviso para o utilizador, caso contrário avança para um ciclo onde verifica se esta informação já existe na 
+                            BD actual através da função <i>checkStudentId()</i>, que devolve um código de erro 
+                            (-1, $stId=null; -2, erro no SQL; -3, estudante não existe na BD; 1, aluno já existe)
+                        </p>
+                    <img src="export.PNG" alt="export" height="200pt" />
+                        <p>De seguida está a função para exportar informação relativa aos alunos que se encontram registados no sistema.</p>
+                        
+<textarea rows="35" cols="90" wrap='off' readonly="readonly" style="resize: vertical;">
+function exportStudents($dbh){
+    $new_xml = new DomDocument();
+    $sql = "SELECT * from aluno ORDER BY id";
+    $res = $dbh->query($sql);
+    $str="";
+    foreach($res as $student){
+    $str.="&#10;&#9;&lt;aluno id='".$student['id']."' nome='".$student['nome']."' dataNsc='".$student['dataNsc']."' mail='".$student['mail']."' telemovel='".$student['mobile']."'>";
+        $sql = "SELECT id, anoLetivo, anoCurso, id_instrumento FROM matricula, curso WHERE matricula.id_aluno='".$student['id']."' AND matricula.id_curso=curso.id;";
+        $courses = $dbh->query($sql);
+        $str_course="";
+        $str_instr="";
+        foreach($courses as $course){
+        $str_course.= "&#10;&#9;&#9;&#9;&lt;curso id='".$course['id']."'  id_instrumento='".$course['id_instrumento']."' anoLetivo='".$course['anoLetivo']."' anoCurso='".$course['anoCurso']."'&gt;&lt;/curso&gt;";
+        }
+        $sql = "SELECT id_instrumento as idI from aluno_instrumento where id_aluno='".$student['id']."'";
+        $instrs = $dbh->query($sql);
+        foreach($instrs as $instr){
+        $str_instr.= "&#10;&#9;&#9;&#9;&lt;instrumento id='".$instr['idI']."'&gt;&lt;/instrumento&gt;";
+        }
+        $str.="&#10;&#9;&#9;&lt;cursos&gt;".$str_course."&#10;&#9;&#9;&lt;/cursos&gt;&#10;&#9;&#9;&lt;instrumentos&gt;".$str_instr."&#10;&#9;&#9;&lt;/instrumentos&gt;&#10;&#9;&lt;/aluno&gt;";
+    }
+    $strFULL="&lt;alunos&gt;&#10;".$str."&#10;&lt;/alunos&gt;";
+    $new_xml->LoadXML($strFULL);
+    $res = @$new_xml->schemaValidate("../../schemas/alunos.xsd");
+    if($res == false){
+        $error = error_get_last();
+        echo substr($error['message'],30,strlen($error['message']));
+        die();
+    }
+    $new_xml->save('php://output');
+}
+    
+</textarea>
+                            <p>
+                                Um função para exportar informação em formato XML, começa por trazer da BD 
+                                 a informação da tabela 'aluno' (id, nome, dataNascimento, mail, mobile), com
+                                 o <i>id</i> de cada um dos alunos podemos conultar toda a informação que lhe diz
+                                 respeito e guardar no respectivo formato XML, concebido para este tipo de exportações,
+                                 momento em que é feita a verificação adicional com o respectivo XML Schema.
+                            </p>
+                    
+                    
+                        <h3 id="indice_32">Criar Editar e Eliminar Audições</h3>
+                            <p>
+                                Para Criar/Editar audições existe um editor de texto integrado que auxilia na correção
+                                 do planeamento de cada uma das audições. A correção deste planeamento (validação sintática e semântica)
+                                 é realizada por uma gramática desenvolvida em ANLTR que se encontra no servidor, e actualiza um ficheiro
+                                  XML que contém todas as audições que correspondem a um determinado ano letivo.
+                            </p>
+                    <img src="audicoes.PNG" alt="audicoes" height="600pt" />
+                            <p>
+                                Para audições que já tenham ocorrido é retirada a opção de editar, acontece o mesmo
+                                 para audições cujo organizador não é o professor que está a consultar a listagem. 
+                            </p>
+                    <h3 id="indice_33">Avisos</h3>
+                            <p>
+                                Está implementado também um sistema de avisos para os professores comunicarem com os alunos através de mensagens.
+                                 De seguida podemos ver a página inicial de um aluno com um aviso para o curso "CS18", que este frequenta.
+                            </p>
+                    <img src="avisos_aluno.PNG" alt="aviso_aluno" height="200pt" />
+                            <p>Estes avisos são criados pelos professores que lecionam os respectivos cursos, e estes
+                                têm ao seu dispor um conjunto de funcionalidades minimas para gerir estes avisos.
+                            </p>
+                    <img src="avisos.PNG" alt="func_avisos" height="300pt" />
+                            <p>
+                                A criação/edição destes avisos é feita através da interface que se mostra na imagem 
+                                que se segue.
+                            </p>
+                    <img src="avisos_criar.PNG" alt="avisos_criar" height="300pt"/>
+                    <h2 id="indice_4">Conclusão</h2>
+                        <p>
+                            O desenvolvimento deste sistema recorre a várias tecnologias, como por exemplo HTTP, MySQL, GIT, ANTLR, etc.
+                            Como tal a integração de todos estes componentes foi especialmente dificil. O sistema desenvolvido disponibiliza
+                            um conjunto de funcionalidades que facilitam a programação de audições e a comunicação entre os docentes e os alunos,
+                            para além disso permite também importar e exportar toda a informação relevante utilizada pelo sistema.
+                            Fica por implementar a geração de um anúncio para redes sociais e gerar um .pdf com recurso a bibliotecas PHP.
+                            
+                        </p>
+                    
+                    
+                    <h2 id="indice_5">Ficheiros</h2>
+                    <p>Dicionário de dados -<a href="BD_GAMu.pdf"> BD_GAMu.pdf </a></p>
+                    <p>Documentação da gramatica -<a href="grammar_javadoc/"> grammar_javadoc </a></p>
+                    
+                </td>
+            </tr>
+        </table>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </body>
+</html>

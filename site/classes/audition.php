@@ -6,6 +6,7 @@
 		if($res == false){
 			$error = error_get_last();
 			echo substr($error['message'],30,strlen($error['message']));
+			//die();
 		}
 		//$xslt = new XSLTProcessor();
   		//$xsl = new DOMDocument();
@@ -36,8 +37,66 @@
 			echo "</fieldset>";
 			echo "</div>";
 		}
-		
 
+	}
+	function getStrOfAdition($id,$xmlF,$xsdF){
+		$out = "";
+		$xml = new DomDocument();
+		$xml->load($xmlF);
+		$res = @$xml->schemaValidate($xsdF);
+		if($res == false){
+			$error = error_get_last();
+			echo substr($error['message'],30,strlen($error['message']));
+		}
+		$xml = simplexml_load_file($xmlF);
+		$audicoes = $xml->xpath("//audicao[@id='".$id."']");
+		foreach($audicoes as $audi){
+			$out.= "ano-letivo: 2015/2016\n";
+			$out .= "titulo: \"" .$id."\"\n";
+			$out .= "subtitulo: " .(string)$audi->metainfo->subtitulo."\n";
+			$out.= "tema: ".(string)$audi->metainfo->tema."\n";
+			$out.= "data: ".(string)$audi->metainfo->data."\n";
+			$out.= "hora: ".(string)$audi->metainfo->hora."\n";
+			$out.= "local: ".(string)$audi->metainfo->local."\n";
+			$out.= "duracao-maxima: ".(string)$audi->metainfo->duracao."\n";
+			$out.= "atuacoes:\n\t";
+			foreach($audi->atuacoes->atuacao as $atu){
+				if($atu['tipo']=="grupo"){
+					$out.="grupo: ".(string)$atu->nome_grupo."\n\t";
+					$x=0;
+					foreach($atu->musicos->musico as $elem){
+						if($x==0){
+							$out .= "elementos:". (string)$elem['id'].",". (string)$elem->instrumento['id'];
+							$x++;
+						}
+						else $out .= "\n\t\t  ".(string)$elem['id'].",". (string)$elem->instrumento['id'];
+					}
+					$x=0;
+					foreach($atu->obras->obra as $obra){
+						if($x==0){
+							$out.= "\n\tobras: ".$obra['id'];
+							$x++;
+						}
+						else $out.= ",\n\t\t".$obra['id'];
+					}
+				$out.= "\n\t#";
+				}
+				else if($atu['tipo']=="solo"){
+					$out .= "\n\tsolo:". (string)$atu->musicos->musico['id'].",". (string)$atu->musicos->musico->instrumento['id']."\n\t";
+					$x=0;
+					foreach($atu->obras->obra as $obra){
+						if($x==0){
+							$out.= "obras: ".$obra['id'];
+							$x++;
+						}
+						else $out.= ",\n\t\t".$obra['id'];
+					}
+				$out.= "\n\t#";
+				}
+			}
+		
+		}
+		return $out;
 	}
 
 	function data($str){

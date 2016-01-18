@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="2.0">
-
-
+    version="1.0">
+    
     <xsl:template match="/">
+        <fo:document-result href="audicao.pdf">
         <fo:root>
             <fo:layout-master-set>
                 <fo:simple-page-master master-name="lista" page-height="210mm" page-width="297mm">
@@ -12,7 +12,9 @@
                 </fo:simple-page-master>
             </fo:layout-master-set>
             <xsl:apply-templates/>
+            
         </fo:root>
+       </fo:document-result>
     </xsl:template>
 
 
@@ -24,7 +26,7 @@
                         <fo:table-row>
                             <fo:table-cell>
                                 <fo:block>
-                                    <fo:external-graphic src="New_Doritos_Logo.png"
+                                    <fo:external-graphic src="Logo_UM.jpg"
                                         content-height="scale-to-fit" height="5cm"
                                         content-width="5cm" scaling="non-uniform"/>
                                 </fo:block>

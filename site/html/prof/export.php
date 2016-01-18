@@ -28,10 +28,5 @@
 				<td><input type="button" value="Exportar" onclick="getFile('./actions/prof/export.php?type=4')"></td>
 
 			</tr>
-			<tr>
-				<td>Obras</td>
-				<td><input type="button" value="Exportar" onclick="getFile('./actions/prof/export.php?type=5')"></td>
-
-			</tr>
 		</table>
 	</fieldset>

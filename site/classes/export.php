@@ -22,6 +22,12 @@
 		}
 		$strFULL="<alunos>&#10;".$str."&#10;</alunos>";
 		$new_xml->LoadXML($strFULL);
+		$res = @$new_xml->schemaValidate("../../schemas/alunos.xsd");
+		if($res == false){
+			$error = error_get_last();
+			echo substr($error['message'],30,strlen($error['message']));
+			die();
+		}
 		$new_xml->save('php://output');
 	}
 	function exportProfessors($dbh){
@@ -41,6 +47,12 @@
 		}
 		$strFULL="<professores>".$str."&#10;</professores>";
 		$new_xml->LoadXML($strFULL);
+		$res = @$new_xml->schemaValidate("../../schemas/professores.xsd");
+		if($res == false){
+			$error = error_get_last();
+			echo substr($error['message'],30,strlen($error['message']));
+			die();
+		}
 		$new_xml->save('php://output');
 	}
 	
@@ -54,6 +66,12 @@
 		}
 		$strFULL="<cursos>".$str."&#10;</cursos>";
 		$new_xml->LoadXML($strFULL);
+		$res = @$new_xml->schemaValidate("../../schemas/cursos.xsd");
+		if($res == false){
+			$error = error_get_last();
+			echo substr($error['message'],30,strlen($error['message']));
+			die();
+		}
 		$new_xml->save('php://output');
 	}
 

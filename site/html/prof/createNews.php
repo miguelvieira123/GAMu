@@ -17,7 +17,7 @@
 		<form id="createNews" action="javascript:void(0);" onsubmit="ajax('#createNews','./actions/prof/createNews.php')" method="post">
 			Escolhe curso:
 			<select name="curso">
-				<option value="FF">Para todos</option>
+				
 				<?php
 					foreach ($courses as $course){
 						echo "<option value='".$course."'>".$course."</option>";

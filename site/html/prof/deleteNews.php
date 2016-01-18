@@ -18,8 +18,8 @@
 		<?php
 			$i = 1;
 			foreach($avisos as $aviso){
-				echo "<input type=\"button\" value=\"Alterar\" onClick=\"setHtml('./html/prof/changeNews.php?id=".$aviso['id']."','Eleminar')\">";
-				echo "<input type=\"button\" value=\"eleminar\" onClick=\"setHtmlC('./html/prof/deleteNews.php?id=".$aviso['id']."','Eleminar')\">";
+				echo "<input type=\"button\" value=\"Alterar\" onClick=\"setHtml('./html/prof/changeNews.php?id=".$aviso['id']."','Eliminar')\">";
+				echo "<input type=\"button\" value=\"eliminar\" onClick=\"setHtmlC('./html/prof/deleteNews.php?id=".$aviso['id']."','Eliminar')\">";
 				echo $i."-CURSO:".($aviso['idC']=="FF"?"Todos":$aviso['idC'])."(".$aviso['title'].")</br>";
 			$i++;
 			}

@@ -18,7 +18,23 @@
 	$aud = $xml->xpath("//audicao[@id='".$_REQUEST['id']."']");
 	$xml = new DOMDocument();
   	$xml->loadXML($aud[0]->asXML());
-  	$xslt = new XSLTProcessor();
+  	
+	header('Content-Type:application/xml');
+	header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+	header("Cache-Control: no-store, no-cache, must-revalidate");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
+	header('Content-Type: application/xml');
+	header('Content-Disposition: attachment;filename="Audicao.xml"');
+	ob_end_clean();
+ 	
+	$xml->save("php://output");
+	
+	
+	
+	
+	/*
+	$xslt = new XSLTProcessor();
   	$xsl = new DOMDocument();
   	$xsl->load("../../audicoes2PDF.xsl", LIBXML_NOCDATA);
   	$xslt->importStylesheet($xsl);
@@ -32,7 +48,21 @@
 	ob_end_clean();
  	//echo $xslt->transformToXML($xml);
  	$pdf = $xslt->transformToXML($xml);
- 	$pdf-save('php://output');
- 	
-
+	file_put_contents("./aa.pdf", $pdf);
+ 	//$pdf->save('php://output');
+ 	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 ?>

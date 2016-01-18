@@ -819,6 +819,7 @@ public class GAMuParser extends Parser {
 			                                }else{
 			                                    System.out.print("line "+((ObrasContext)_localctx).idObra.linha);
 			                                    System.out.println(" obra: "+((ObrasContext)_localctx).idObra.id+" nao existe");
+			                                    audicao_xml.append("<obra></obra>");
 			                                }
 			                                rs.close();
 			                            }catch(SQLException se){
@@ -850,6 +851,7 @@ public class GAMuParser extends Parser {
 				                                    }else{
 				                                        System.out.print("line "+((ObrasContext)_localctx).idObra.linha);
 				                                        System.out.println(" obra: "+((ObrasContext)_localctx).idObra.id+" nao existe");
+				                                        audicao_xml.append("<obra></obra>");
 				                                    }
 				                                    rs.close();
 				                                }catch(SQLException se){
@@ -991,17 +993,21 @@ public class GAMuParser extends Parser {
 				                                                            System.out.print("line "+((MusicoContext)_localctx).idAluno.linha);
 				                                                            System.out.print(" (aluno: "+((MusicoContext)_localctx).idAluno.id+" - "+ nome_aluno+")" );
 				                                                            System.out.println(" nao tem habilitacoes para ("+((MusicoContext)_localctx).idInstrumento.id+" - "+ designacao_instrumento+")");
+				                                                            audicao_xml.append("<nome></nome>");
+				                                                            audicao_xml.append("<instrumento></instrumento>");
 				                                                        }
-				                                                        //posso guardar as informações do instrumento
+				                                                        
 				                                                    }else{
 				                                                        System.out.print("line "+((MusicoContext)_localctx).idInstrumento.linha);
-				                                                        System.out.println("  instrumento: "+((MusicoContext)_localctx).idInstrumento.id+" nao existe");   
+				                                                        System.out.println("  instrumento: "+((MusicoContext)_localctx).idInstrumento.id+" nao existe");
+				                                                        audicao_xml.append("<nome></nome>");
+				                                                        audicao_xml.append("<instrumento></instrumento>");
 				                                                    }
-				                                                    //posso guardar as informações do aluno
-				                                                    //guardar info do aluno
 				                                                }else{
 				                                                    System.out.print("line "+((MusicoContext)_localctx).idAluno.linha);
-				                                                    System.out.println("  aluno: "+((MusicoContext)_localctx).idAluno.id+" nao existe");   
+				                                                    System.out.println("  aluno: "+((MusicoContext)_localctx).idAluno.id+" nao existe");
+				                                                    audicao_xml.append("<nome></nome>");
+				                                                    audicao_xml.append("<instrumento></instrumento>");
 				                                                }
 				                                                rs.close();
 				                                            }catch(SQLException se){
@@ -1039,17 +1045,23 @@ public class GAMuParser extends Parser {
 				                                                            System.out.print("line "+((MusicoContext)_localctx).idProf.linha);
 				                                                            System.out.print(" (professor: "+((MusicoContext)_localctx).idProf.id+" - "+ nome_prof+")" );
 				                                                            System.out.println(" nao tem habilitacoes para ("+((MusicoContext)_localctx).idInstrumento.id+" - "+ designacao_instrumento+")");
+				                                                            audicao_xml.append("<nome></nome>");
+				                                                            audicao_xml.append("<instrumento></instrumento>");
+				                                                            
+				                                                            
 				                                                        }
-				                                                        //posso guardar as informações do instrumento
+				                                                        
 				                                                    }else{
 				                                                        System.out.print("line "+((MusicoContext)_localctx).idInstrumento.linha);
-				                                                        System.out.println("  instrumento: "+((MusicoContext)_localctx).idInstrumento.id+" nao existe");   
+				                                                        System.out.println("  instrumento: "+((MusicoContext)_localctx).idInstrumento.id+" nao existe");
+				                                                        audicao_xml.append("<nome></nome>");
+				                                                        audicao_xml.append("<instrumento></instrumento>");
 				                                                    }
-				                                                    //posso guardar as informações do aluno
-				                                                    //guardar info do aluno
 				                                                }else{
 				                                                    System.out.print("line "+((MusicoContext)_localctx).idProf.linha);
-				                                                    System.out.println("  professor: "+((MusicoContext)_localctx).idProf.id+" nao existe");   
+				                                                    System.out.println("  professor: "+((MusicoContext)_localctx).idProf.id+" nao existe");
+				                                                    audicao_xml.append("<nome></nome>");
+				                                                    audicao_xml.append("<instrumento></instrumento>");
 				                                                }
 				                                                rs.close();
 				                                            }catch(SQLException se){

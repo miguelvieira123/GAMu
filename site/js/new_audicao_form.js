@@ -6,10 +6,6 @@ $(document).ready(function () {
 	// Gramatica
 	$(document).on('click',"#send_phrase", function () {
 		
-		//$(function () {
-		//	$(".lined").linedtextarea({});
-		//});
-		
 		t = $('#texto').val();
 		$("#msg").empty();
 		//alert(t);
@@ -18,9 +14,15 @@ $(document).ready(function () {
 			url: './actions/prof/executar_gramatica.php',
 			data: {msg: "", phrase: t},
 			success: function (data) {
+				/*
+				$("#msg").append(
+                "<p> JSON: " + data +" </p>" // ver 'raw' JSON
+                );
+				*/
+				
 				$(".lineno").removeClass("lineselect");
 				data = JSON.parse(data);
-				var linha_erro = 12;
+				var linha_erro = -1;
 				for (var i = 0; i < data.msg.length; i++) {
 					var str = data["msg"][i];
 					var patt = new RegExp("line [0-9]+");

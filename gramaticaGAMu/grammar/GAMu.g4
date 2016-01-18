@@ -276,6 +276,7 @@ obras       [long tempoIn]
                                 }else{
                                     System.out.print("line "+$idObra.linha);
                                     System.out.println(" obra: "+$idObra.id+" nao existe");
+                                    audicao_xml.append("<obra></obra>");
                                 }
                                 rs.close();
                             }catch(SQLException se){
@@ -299,6 +300,7 @@ obras       [long tempoIn]
                                     }else{
                                         System.out.print("line "+$idObra.linha);
                                         System.out.println(" obra: "+$idObra.id+" nao existe");
+                                        audicao_xml.append("<obra></obra>");
                                     }
                                     rs.close();
                                 }catch(SQLException se){
@@ -332,17 +334,21 @@ musico      :    idAluno ',' idInstrumento {
                                                             System.out.print("line "+$idAluno.linha);
                                                             System.out.print(" (aluno: "+$idAluno.id+" - "+ nome_aluno+")" );
                                                             System.out.println(" nao tem habilitacoes para ("+$idInstrumento.id+" - "+ designacao_instrumento+")");
+                                                            audicao_xml.append("<nome></nome>");
+                                                            audicao_xml.append("<instrumento></instrumento>");
                                                         }
-                                                        //posso guardar as informações do instrumento
+                                                        
                                                     }else{
                                                         System.out.print("line "+$idInstrumento.linha);
-                                                        System.out.println("  instrumento: "+$idInstrumento.id+" nao existe");   
+                                                        System.out.println("  instrumento: "+$idInstrumento.id+" nao existe");
+                                                        audicao_xml.append("<nome></nome>");
+                                                        audicao_xml.append("<instrumento></instrumento>");
                                                     }
-                                                    //posso guardar as informações do aluno
-                                                    //guardar info do aluno
                                                 }else{
                                                     System.out.print("line "+$idAluno.linha);
-                                                    System.out.println("  aluno: "+$idAluno.id+" nao existe");   
+                                                    System.out.println("  aluno: "+$idAluno.id+" nao existe");
+                                                    audicao_xml.append("<nome></nome>");
+                                                    audicao_xml.append("<instrumento></instrumento>");
                                                 }
                                                 rs.close();
                                             }catch(SQLException se){
@@ -372,17 +378,23 @@ musico      :    idAluno ',' idInstrumento {
                                                             System.out.print("line "+$idProf.linha);
                                                             System.out.print(" (professor: "+$idProf.id+" - "+ nome_prof+")" );
                                                             System.out.println(" nao tem habilitacoes para ("+$idInstrumento.id+" - "+ designacao_instrumento+")");
+                                                            audicao_xml.append("<nome></nome>");
+                                                            audicao_xml.append("<instrumento></instrumento>");
+                                                            
+                                                            
                                                         }
-                                                        //posso guardar as informações do instrumento
+                                                        
                                                     }else{
                                                         System.out.print("line "+$idInstrumento.linha);
-                                                        System.out.println("  instrumento: "+$idInstrumento.id+" nao existe");   
+                                                        System.out.println("  instrumento: "+$idInstrumento.id+" nao existe");
+                                                        audicao_xml.append("<nome></nome>");
+                                                        audicao_xml.append("<instrumento></instrumento>");
                                                     }
-                                                    //posso guardar as informações do aluno
-                                                    //guardar info do aluno
                                                 }else{
                                                     System.out.print("line "+$idProf.linha);
-                                                    System.out.println("  professor: "+$idProf.id+" nao existe");   
+                                                    System.out.println("  professor: "+$idProf.id+" nao existe");
+                                                    audicao_xml.append("<nome></nome>");
+                                                    audicao_xml.append("<instrumento></instrumento>");
                                                 }
                                                 rs.close();
                                             }catch(SQLException se){

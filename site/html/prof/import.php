@@ -44,15 +44,7 @@
 				</td>
 
 			</tr>
-			<tr>
-				<td>Obras</td>
-				<td>
-					<input class="in"  type="button" value="import" onClick="Upload('f_work','./actions/prof/import.php')">
-					<input  type="file" multiple="multiple" id="f_work">
-
-				</td>
-
-			</tr>
+			
 		</table>
 			<input  class="in1"  type="submit" value="Importar tudo">
 		</from>

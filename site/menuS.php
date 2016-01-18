@@ -6,9 +6,8 @@
 				<li class="l2" onclick="setHtml('./html/student/changeInfoP.php','Alteração Pessoal')"><a href="#" title="Alterar">Alterar Dados</a></li>
 				<li class="l2" onclick="setHtml('./html/changePassword.php','Alteração do password')"><a href="#" title="Alterar">Alterar password</a></li>
 			</div>
-		<li class="l1" onclick="ShowHide('l22')"><a href="#" title="Atuaçoẽs">Atuaçoẽs</a></li>
+		<li class="l1" onclick="ShowHide('l22')"><a href="#" title="Atuaçoẽs">Audições</a></li>
 			<div id="l22">
 				<li class="l2" onclick="setHtml('./html/student/audicoes.php','Atuaçoẽs')"><a href="#" title="Info Pessoal">Ver Tudo</a></li>
-				<li class="l2" onclick="setHtml('./html/student/perfomances.php','Atuaçoẽs')"><a href="#" title="Info Pessoal">Consulat</a></li>
 			</div>
 	</ul>

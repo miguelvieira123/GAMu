@@ -62,7 +62,7 @@ public class GramaticaGAMu {
         String temp = frase.toString();
         ANTLRInputStream in2 = new ANTLRInputStream( temp );
         
-        GAMuLexer lexer = new GAMuLexer( (CharStream) in);
+        GAMuLexer lexer = new GAMuLexer( (CharStream) in2);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         GAMuParser parser = new GAMuParser(tokens);
         

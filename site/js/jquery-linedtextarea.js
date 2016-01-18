@@ -79,7 +79,7 @@
 			/* Draw the number bar; filling it out where necessary */
 			linesDiv.append( "<div class='codelines'></div>" );
 			var codeLinesDiv	= linesDiv.find(".codelines");
-			lineNo = fillOutLines( codeLinesDiv, linesDiv.height(), 1 );
+			lineNo = fillOutLines( codeLinesDiv, linesDiv.height(), 2 );
 
 			/* Move the textarea to the selected line */ 
 			if ( opts.selectedLine != -1 && !isNaN(opts.selectedLine) ){

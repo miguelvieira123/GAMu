@@ -17,7 +17,7 @@
 		<li class="l1" onclick="ShowHide('l23')"><a href="#" title="Avisos">Avisos</a></li>
 		<div id="l23">
 			<li class="l2" onclick="setHtml('./html/prof/createNews.php','Criar aviso')"><a href="#" title="Criar">Criar</a></li>
-			<li class="l2" onclick="setHtml('./html/prof/deleteNews.php','Eleminar')"><a href="#" title="Eleminar">Eleminar</a></li>
+			<li class="l2" onclick="setHtml('./html/prof/deleteNews.php','Eleminar')"><a href="#" title="Eleminar">Eliminar</a></li>
 		</div>
 
 		
