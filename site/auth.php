@@ -8,6 +8,7 @@
 	$sql = "SELECT id_perfil, tipo_perfil from utilizador where id_perfil='".$_REQUEST['login']."' and pass='".md5($_REQUEST['passwd'])."' limit 1";
 	try{
 		$res = $dbh->query($sql);
+    /*! numero de linhas recebidas da BD */
 		$row_count = $res->rowCount();
 		if ($row_count>0) {
 			if(setUserCookie($_REQUEST['login'],$dbh)==-2)header("Location:index.php");
