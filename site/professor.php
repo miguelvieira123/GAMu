@@ -20,6 +20,11 @@
 	<link href="./css/menu.css" rel="stylesheet" />
 	<script src="./js/menu.js" language="JavaScript" type="text/JavaScript"></script>
 	<script src="./js/js.js" language="JavaScript" type="text/JavaScript"></script>
+
+	<script src="./js/jquery-linedtextarea.js"></script>
+	<link href="./css/jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="./js/new_audicao_form.js" charset="UTF-8"></script>
+	
 </head>
 
 <body>

@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
 	$(function () {
 		$(".lined").linedtextarea({});
@@ -5,7 +6,7 @@ $(document).ready(function () {
 
 	// Gramatica
 	$(document).on('click',"#send_phrase", function () {
-		
+
 		t = $('#texto').val();
 		$("#msg").empty();
 		//alert(t);
@@ -19,7 +20,7 @@ $(document).ready(function () {
                 "<p> JSON: " + data +" </p>" // ver 'raw' JSON
                 );
 				*/
-				
+
 				$(".lineno").removeClass("lineselect");
 				data = JSON.parse(data);
 				var linha_erro = -1;

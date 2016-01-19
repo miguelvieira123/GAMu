@@ -11,20 +11,17 @@
 ?>
 <html>
 	<head>
-		<script src="./js/jquery-linedtextarea.js"></script>
+		<!--
+				<script src="./js/jquery-linedtextarea.js"></script>
         <link href="./css/jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
-        <script type="text/javascript" src="./js/new_audicao_form.js" charset="UTF-8"></script>
+			-->
+        <script type="text/javascript" src="./js/load_lines.js" charset="UTF-8"></script>
 	</head>
 	<body>
 		<h3>Validar Audição</h3>
 		<form accept-charset="UTF-8">
 			<fieldset class="GA">
                 		<legend>Nova Audição</legend>
-				ano:
-				<select id="anoLetivo">
-					<option value="2015/2016">2015/2016</option>
-					<option value="2014/2015">2014/2015</option>
-				</select>
 				<br/>
 				texto:
 				<textarea id="texto" rows="33" cols="55" class="lined">
