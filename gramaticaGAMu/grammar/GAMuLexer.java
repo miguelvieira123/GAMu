@@ -56,8 +56,8 @@ public class GAMuLexer extends Lexer {
 	public static final int
 		T__17=1, T__16=2, T__15=3, T__14=4, T__13=5, T__12=6, T__11=7, T__10=8, 
 		T__9=9, T__8=10, T__7=11, T__6=12, T__5=13, T__4=14, T__3=15, T__2=16, 
-		T__1=17, T__0=18, COMMENT=19, IDA=20, IDP=21, IDO=22, IDI=23, ID=24, INT=25, 
-		WS=26, STRING=27;
+		T__1=17, T__0=18, COMMENT=19, ID_ALUNO=20, ID_PROFESSOR=21, ID_OBRA=22, 
+		ID_INSTRUMENTO=23, ID=24, INT=25, WS=26, STRING=27;
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
@@ -72,14 +72,14 @@ public class GAMuLexer extends Lexer {
 	public static final String[] ruleNames = {
 		"T__17", "T__16", "T__15", "T__14", "T__13", "T__12", "T__11", "T__10", 
 		"T__9", "T__8", "T__7", "T__6", "T__5", "T__4", "T__3", "T__2", "T__1", 
-		"T__0", "COMMENT", "IDA", "IDP", "IDO", "IDI", "ID", "INT", "WS", "STRING", 
-		"ESC_SEQ", "OCTAL_ESC", "UNICODE_ESC", "HEX_DIGIT"
+		"T__0", "COMMENT", "ID_ALUNO", "ID_PROFESSOR", "ID_OBRA", "ID_INSTRUMENTO", 
+		"ID", "INT", "WS", "STRING", "ESC_SEQ", "OCTAL_ESC", "UNICODE_ESC", "HEX_DIGIT"
 	};
 
 
 	            // JDBC driver name and database URL
 	            String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	            String DB_URL = "jdbc:mysql://127.0.0.1:3306/gamu";
+	            String DB_URL = "jdbc:mysql://127.0.0.1:3306/gamu??useUnicode=true&characterEncoding=UTF-8";
 	            // Database credentials
 	            String USER = "root";
 	            String PASS = "qweqwe";
@@ -88,13 +88,15 @@ public class GAMuLexer extends Lexer {
 	            Statement stmt = null;
 	            
 	            // Grammar variables 
-	            long hora_de_inicio = 0;
-	            long total_audition_time = 0;
-	            int max_audition_time = 0;
-	            StringBuilder audicao_xml = new StringBuilder();
-	            String titulo;
-	            String anoLetivo;
-	            int flag = 0;
+	            private int max_audition_time = 0;
+	            private String titulo;
+	            private String anoLetivo=null;
+	            /** flag!=0, ocorreu erro semantico.*/
+	            private int flag = 0;
+	            
+	            public int getFlag(){
+	                return this.flag;
+	            }
 	            
 	        
 

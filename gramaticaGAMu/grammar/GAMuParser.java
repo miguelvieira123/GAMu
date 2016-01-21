@@ -56,13 +56,14 @@ public class GAMuParser extends Parser {
 	public static final int
 		T__17=1, T__16=2, T__15=3, T__14=4, T__13=5, T__12=6, T__11=7, T__10=8, 
 		T__9=9, T__8=10, T__7=11, T__6=12, T__5=13, T__4=14, T__3=15, T__2=16, 
-		T__1=17, T__0=18, COMMENT=19, IDA=20, IDP=21, IDO=22, IDI=23, ID=24, INT=25, 
-		WS=26, STRING=27;
+		T__1=17, T__0=18, COMMENT=19, ID_ALUNO=20, ID_PROFESSOR=21, ID_OBRA=22, 
+		ID_INSTRUMENTO=23, ID=24, INT=25, WS=26, STRING=27;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'/'", "'tema:'", "'data:'", "'hora:'", "':'", "'titulo:'", 
 		"'grupo:'", "'organizador:'", "'solo:'", "'#'", "'duracao-maxima:'", "'ano-letivo:'", 
 		"'local:'", "'obras:'", "'subtitulo:'", "'atuacoes:'", "','", "'elementos:'", 
-		"COMMENT", "IDA", "IDP", "IDO", "IDI", "ID", "INT", "WS", "STRING"
+		"COMMENT", "ID_ALUNO", "ID_PROFESSOR", "ID_OBRA", "ID_INSTRUMENTO", "ID", 
+		"INT", "WS", "STRING"
 	};
 	public static final int
 		RULE_audicao = 0, RULE_metaAud = 1, RULE_data = 2, RULE_hora = 3, RULE_duracao = 4, 
@@ -93,7 +94,7 @@ public class GAMuParser extends Parser {
 
 	            // JDBC driver name and database URL
 	            String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	            String DB_URL = "jdbc:mysql://127.0.0.1:3306/gamu";
+	            String DB_URL = "jdbc:mysql://127.0.0.1:3306/gamu??useUnicode=true&characterEncoding=UTF-8";
 	            // Database credentials
 	            String USER = "root";
 	            String PASS = "qweqwe";
@@ -102,13 +103,15 @@ public class GAMuParser extends Parser {
 	            Statement stmt = null;
 	            
 	            // Grammar variables 
-	            long hora_de_inicio = 0;
-	            long total_audition_time = 0;
-	            int max_audition_time = 0;
-	            StringBuilder audicao_xml = new StringBuilder();
-	            String titulo;
-	            String anoLetivo;
-	            int flag = 0;
+	            private int max_audition_time = 0;
+	            private String titulo;
+	            private String anoLetivo=null;
+	            /** flag!=0, ocorreu erro semantico.*/
+	            private int flag = 0;
+	            
+	            public int getFlag(){
+	                return this.flag;
+	            }
 	            
 	        
 	public GAMuParser(TokenStream input) {
@@ -117,6 +120,7 @@ public class GAMuParser extends Parser {
 	}
 	public static class AudicaoContext extends ParserRuleContext {
 		public MetaAudContext metaAud;
+		public AtuacoesContext atuacoes;
 		public AtuacoesContext atuacoes() {
 			return getRuleContext(AtuacoesContext.class,0);
 		}
@@ -146,6 +150,7 @@ public class GAMuParser extends Parser {
 		                      Class.forName("com.mysql.jdbc.Driver");
 		                      //STEP 3: Open a connection
 		                      conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+		                      
 		                      //STEP 4: Execute a query
 		                      stmt = (Statement) conn.createStatement();
 		                      
@@ -157,48 +162,47 @@ public class GAMuParser extends Parser {
 		                      e.printStackTrace();
 		                   }
 		                   //iniciar a construcao do XML
+		                   StringBuilder audicao_xml = new StringBuilder();
 		                   audicao_xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		                   
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(32); ((AudicaoContext)_localctx).metaAud = metaAud();
+			setState(32); ((AudicaoContext)_localctx).metaAud = metaAud(audicao_xml);
 
 			                 titulo = ((AudicaoContext)_localctx).metaAud.titulo_aud;
 			                 anoLetivo = ((AudicaoContext)_localctx).metaAud.ano_letivo;
-			                 audicao_xml.append("</metainfo><atuacoes>");
+			                 audicao_xml = ((AudicaoContext)_localctx).metaAud.xmlOut;
+			                 if(audicao_xml != null){
+			                    audicao_xml.append("</metainfo><atuacoes>");
+			                 }else{
+			                    audicao_xml = new StringBuilder();
+			                 }
+			                 
 			                
-			setState(34); atuacoes();
-			audicao_xml.append("</atuacoes></audicao>");
-			}
+			setState(34); ((AudicaoContext)_localctx).atuacoes = atuacoes(audicao_xml, ((AudicaoContext)_localctx).metaAud.hora_inicio);
 
-			                   
-			                   
-			                   Time audicao = new Time(total_audition_time * 1000);
+			                   Time audicao = new Time(((AudicaoContext)_localctx).atuacoes.tempo * 1000);
 			                   System.out.println("tempo total audicao: "+ audicao.toString());
 			                   Time max = new Time(max_audition_time*1000);
 			                   System.out.println("duracao-maxima: "+ max.toString());
 			                   
-			                    if(max_audition_time < total_audition_time){
-			                        long dif = total_audition_time - max_audition_time - 3600;
+			                    if(max_audition_time < ((AudicaoContext)_localctx).atuacoes.tempo){
+			                        long dif = ((AudicaoContext)_localctx).atuacoes.tempo - max_audition_time - 3600;
 			                        Time time = new Time(dif * 1000);
 			                        System.out.println("tempo total ultrapasssa duracao estimada:<font color=\"red\"> +"+time.toString()+"</font>");
 			                    }
-			                    try{
-			                        if(stmt!=null)
-			                            stmt.close();
-			                        if(conn!=null)
-			                            conn.close();
-			                    }catch(SQLException se){
-			                      //Handle errors for JDBC
-			                      se.printStackTrace();
+			                    audicao_xml = ((AudicaoContext)_localctx).atuacoes.xmlOut;
+			                    if(audicao_xml != null){
+			                        audicao_xml.append("</atuacoes></audicao>");
+			                    }else{
+			                        audicao_xml = new StringBuilder();
 			                    }
-			                    
-			                    
+			                        
 			                    //--------------XML---------------
 			                    //audicao valida?
 			                    
-			                    if(anoLetivo!=null){
+			                    if(anoLetivo!=null && flag!=1){
 			                    try {
 			                        String filepath = "C:\\xampp\\htdocs\\site\\files\\auditions\\"+anoLetivo+".xml";
 			                        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -233,9 +237,26 @@ public class GAMuParser extends Parser {
 
 			                   } catch (ParserConfigurationException | TransformerException | IOException |XPathExpressionException | SAXException pce) {
 			                        //pce.printStackTrace();
-			                        System.out.println("erro ao escrever em ficheiro, por favor verifique \"ano letivo\"");
+			                        System.out.println("erro - nao foi possivel guardar audicao");
 			                   }
+			                    }else{
+			                        System.out.println("Planeamento da Audicao contem erros, alteracoes ignoradas.");
 			                    }
+			                
+			}
+
+			                    try{
+			                        if(stmt!=null)
+			                            stmt.close();
+			                        if(conn!=null)
+			                            conn.close();
+			                    }catch(SQLException se){
+			                      //Handle errors for JDBC
+			                      se.printStackTrace();
+			                    }
+			                    
+			                    
+			                    
 			                  
 		}
 		catch (RecognitionException re) {
@@ -250,8 +271,11 @@ public class GAMuParser extends Parser {
 	}
 
 	public static class MetaAudContext extends ParserRuleContext {
+		public StringBuilder xmlIn;
 		public String titulo_aud;
 		public String ano_letivo;
+		public StringBuilder xmlOut;
+		public long hora_inicio;
 		public IdProfContext id_prof;
 		public Token a1;
 		public Token a2;
@@ -278,8 +302,10 @@ public class GAMuParser extends Parser {
 		public HoraContext hora() {
 			return getRuleContext(HoraContext.class,0);
 		}
-		public MetaAudContext(ParserRuleContext parent, int invokingState) {
+		public MetaAudContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public MetaAudContext(ParserRuleContext parent, int invokingState, StringBuilder xmlIn) {
 			super(parent, invokingState);
+			this.xmlIn = xmlIn;
 		}
 		@Override public int getRuleIndex() { return RULE_metaAud; }
 		@Override
@@ -292,8 +318,8 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final MetaAudContext metaAud() throws RecognitionException {
-		MetaAudContext _localctx = new MetaAudContext(_ctx, getState());
+	public final MetaAudContext metaAud(StringBuilder xmlIn) throws RecognitionException {
+		MetaAudContext _localctx = new MetaAudContext(_ctx, getState(), xmlIn);
 		enterRule(_localctx, 2, RULE_metaAud);
 		int _la;
 		try {
@@ -310,21 +336,22 @@ public class GAMuParser extends Parser {
 			setState(45); ((MetaAudContext)_localctx).STRING = match(STRING);
 			 
 			                                    ((MetaAudContext)_localctx).titulo_aud =  (((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null);
-			                                    audicao_xml.append("<audicao id="+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+">");
-			                                    audicao_xml.append("<metainfo>");
+			                                    _localctx.xmlIn.append("<audicao id="+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+">");
+			                                    _localctx.xmlIn.append("<metainfo>");
 			                                    try{
-			                                                String sql = "SELECT * FROM professor WHERE id='"+((MetaAudContext)_localctx).id_prof.id+"'";
-			                                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
-			                                                if(rs.next()){
-			                                                    audicao_xml.append("<organizador id=\""+((MetaAudContext)_localctx).id_prof.id+"\">"+rs.getString("nome")+"</organizador>");
-			                                                }else{
-			                                                    System.out.print("line "+((MetaAudContext)_localctx).id_prof.linha+" coluna: "+ ((MetaAudContext)_localctx).id_prof.coluna);
-			                                                    System.out.println("  professor: "+((MetaAudContext)_localctx).id_prof.id+" nao existe");
-			                                                }
-			                                                rs.close();
-			                                            }catch(SQLException se){
-			                                                se.printStackTrace();
+			                                            String sql = "SELECT * FROM professor WHERE id='"+((MetaAudContext)_localctx).id_prof.id+"'";
+			                                            ResultSet rs = (ResultSet) stmt.executeQuery(sql);
+			                                            if(rs.next()){
+			                                                _localctx.xmlIn.append("<organizador id=\""+((MetaAudContext)_localctx).id_prof.id+"\">"+rs.getString("nome")+"</organizador>");
+			                                            }else{
+			                                                System.out.print("line "+((MetaAudContext)_localctx).id_prof.linha+" coluna: "+ ((MetaAudContext)_localctx).id_prof.coluna);
+			                                                System.out.println("  professor: "+((MetaAudContext)_localctx).id_prof.id+" nao existe");
+			                                                flag=1;
 			                                            }
+			                                            rs.close();
+			                                        }catch(SQLException se){
+			                                            se.printStackTrace();
+			                                        }
 			                                  
 			setState(50);
 			_la = _input.LA(1);
@@ -332,7 +359,7 @@ public class GAMuParser extends Parser {
 				{
 				setState(47); match(T__3);
 				setState(48); ((MetaAudContext)_localctx).STRING = match(STRING);
-				audicao_xml.append("<subtitulo>"+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+"</subtitulo>");
+				_localctx.xmlIn.append("<subtitulo>"+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+"</subtitulo>");
 				}
 			}
 
@@ -342,23 +369,24 @@ public class GAMuParser extends Parser {
 				{
 				setState(52); match(T__16);
 				setState(53); ((MetaAudContext)_localctx).STRING = match(STRING);
-				audicao_xml.append("<tema>"+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+"</tema>");
+				_localctx.xmlIn.append("<tema>"+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+"</tema>");
 				}
 			}
 
 			setState(57); match(T__15);
-			setState(58); data();
+			setState(58); data(_localctx.xmlIn);
 			setState(59); match(T__14);
-			setState(60); ((MetaAudContext)_localctx).hora = hora();
-			 hora_de_inicio = ((MetaAudContext)_localctx).hora.seconds-3600;
+			setState(60); ((MetaAudContext)_localctx).hora = hora(_localctx.xmlIn);
+			 ((MetaAudContext)_localctx).hora_inicio =  ((MetaAudContext)_localctx).hora.seconds-3600;
 			setState(62); match(T__5);
 			setState(63); ((MetaAudContext)_localctx).STRING = match(STRING);
-			audicao_xml.append("<local>"+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+"</local>");
+			_localctx.xmlIn.append("<local>"+(((MetaAudContext)_localctx).STRING!=null?((MetaAudContext)_localctx).STRING.getText():null)+"</local>");
 			setState(65); match(T__7);
-			setState(66); ((MetaAudContext)_localctx).duracao = duracao();
+			setState(66); ((MetaAudContext)_localctx).duracao = duracao(_localctx.xmlIn);
 
-			                                            max_audition_time = ((MetaAudContext)_localctx).duracao.seconds-3600;
-			                                          
+			                                                        max_audition_time = ((MetaAudContext)_localctx).duracao.seconds-3600;
+			                                                        ((MetaAudContext)_localctx).xmlOut =  _localctx.xmlIn;
+			                                                    
 			}
 		}
 		catch (RecognitionException re) {
@@ -373,6 +401,8 @@ public class GAMuParser extends Parser {
 	}
 
 	public static class DataContext extends ParserRuleContext {
+		public StringBuilder xmlIn;
+		public StringBuilder xmlOut;
 		public Token dia;
 		public Token mes;
 		public Token ano;
@@ -380,8 +410,10 @@ public class GAMuParser extends Parser {
 			return getToken(GAMuParser.INT, i);
 		}
 		public List<TerminalNode> INT() { return getTokens(GAMuParser.INT); }
-		public DataContext(ParserRuleContext parent, int invokingState) {
+		public DataContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public DataContext(ParserRuleContext parent, int invokingState, StringBuilder xmlIn) {
 			super(parent, invokingState);
+			this.xmlIn = xmlIn;
 		}
 		@Override public int getRuleIndex() { return RULE_data; }
 		@Override
@@ -394,8 +426,8 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final DataContext data() throws RecognitionException {
-		DataContext _localctx = new DataContext(_ctx, getState());
+	public final DataContext data(StringBuilder xmlIn) throws RecognitionException {
+		DataContext _localctx = new DataContext(_ctx, getState(), xmlIn);
 		enterRule(_localctx, 4, RULE_data);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -405,7 +437,10 @@ public class GAMuParser extends Parser {
 			setState(71); ((DataContext)_localctx).mes = match(INT);
 			setState(72); match(T__17);
 			setState(73); ((DataContext)_localctx).ano = match(INT);
-			audicao_xml.append("<data>"+(((DataContext)_localctx).dia!=null?Integer.valueOf(((DataContext)_localctx).dia.getText()):0)+"/"+(((DataContext)_localctx).mes!=null?Integer.valueOf(((DataContext)_localctx).mes.getText()):0)+"/"+(((DataContext)_localctx).ano!=null?Integer.valueOf(((DataContext)_localctx).ano.getText()):0)+"</data>");
+
+			                                            _localctx.xmlIn.append("<data>"+(((DataContext)_localctx).dia!=null?Integer.valueOf(((DataContext)_localctx).dia.getText()):0)+"/"+(((DataContext)_localctx).mes!=null?Integer.valueOf(((DataContext)_localctx).mes.getText()):0)+"/"+(((DataContext)_localctx).ano!=null?Integer.valueOf(((DataContext)_localctx).ano.getText()):0)+"</data>");
+			                                            ((DataContext)_localctx).xmlOut =  _localctx.xmlIn;
+			                                        
 			}
 		}
 		catch (RecognitionException re) {
@@ -420,15 +455,19 @@ public class GAMuParser extends Parser {
 	}
 
 	public static class HoraContext extends ParserRuleContext {
+		public StringBuilder xmlIn;
 		public int seconds;
+		public StringBuilder xmlOut;
 		public Token horas;
 		public Token minutos;
 		public TerminalNode INT(int i) {
 			return getToken(GAMuParser.INT, i);
 		}
 		public List<TerminalNode> INT() { return getTokens(GAMuParser.INT); }
-		public HoraContext(ParserRuleContext parent, int invokingState) {
+		public HoraContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public HoraContext(ParserRuleContext parent, int invokingState, StringBuilder xmlIn) {
 			super(parent, invokingState);
+			this.xmlIn = xmlIn;
 		}
 		@Override public int getRuleIndex() { return RULE_hora; }
 		@Override
@@ -441,8 +480,8 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final HoraContext hora() throws RecognitionException {
-		HoraContext _localctx = new HoraContext(_ctx, getState());
+	public final HoraContext hora(StringBuilder xmlIn) throws RecognitionException {
+		HoraContext _localctx = new HoraContext(_ctx, getState(), xmlIn);
 		enterRule(_localctx, 6, RULE_hora);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -451,9 +490,10 @@ public class GAMuParser extends Parser {
 			setState(77); match(T__13);
 			setState(78); ((HoraContext)_localctx).minutos = match(INT);
 
-			                                            ((HoraContext)_localctx).seconds =  ((((HoraContext)_localctx).horas!=null?Integer.valueOf(((HoraContext)_localctx).horas.getText()):0)*60*60 + (((HoraContext)_localctx).minutos!=null?Integer.valueOf(((HoraContext)_localctx).minutos.getText()):0)*60);
-			                                            audicao_xml.append("<hora>"+(((HoraContext)_localctx).horas!=null?Integer.valueOf(((HoraContext)_localctx).horas.getText()):0)+":"+(((HoraContext)_localctx).minutos!=null?Integer.valueOf(((HoraContext)_localctx).minutos.getText()):0)+"</hora>");
-			                                        
+			                                        ((HoraContext)_localctx).seconds =  ((((HoraContext)_localctx).horas!=null?Integer.valueOf(((HoraContext)_localctx).horas.getText()):0)*60*60 + (((HoraContext)_localctx).minutos!=null?Integer.valueOf(((HoraContext)_localctx).minutos.getText()):0)*60);
+			                                        _localctx.xmlIn.append("<hora>"+(((HoraContext)_localctx).horas!=null?Integer.valueOf(((HoraContext)_localctx).horas.getText()):0)+":"+(((HoraContext)_localctx).minutos!=null?Integer.valueOf(((HoraContext)_localctx).minutos.getText()):0)+"</hora>");
+			                                        ((HoraContext)_localctx).xmlOut =  _localctx.xmlIn;
+			                                    
 			}
 		}
 		catch (RecognitionException re) {
@@ -468,15 +508,19 @@ public class GAMuParser extends Parser {
 	}
 
 	public static class DuracaoContext extends ParserRuleContext {
+		public StringBuilder xmlIn;
 		public int seconds;
+		public StringBuilder xmlOut;
 		public Token horas;
 		public Token minutos;
 		public TerminalNode INT(int i) {
 			return getToken(GAMuParser.INT, i);
 		}
 		public List<TerminalNode> INT() { return getTokens(GAMuParser.INT); }
-		public DuracaoContext(ParserRuleContext parent, int invokingState) {
+		public DuracaoContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public DuracaoContext(ParserRuleContext parent, int invokingState, StringBuilder xmlIn) {
 			super(parent, invokingState);
+			this.xmlIn = xmlIn;
 		}
 		@Override public int getRuleIndex() { return RULE_duracao; }
 		@Override
@@ -489,8 +533,8 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final DuracaoContext duracao() throws RecognitionException {
-		DuracaoContext _localctx = new DuracaoContext(_ctx, getState());
+	public final DuracaoContext duracao(StringBuilder xmlIn) throws RecognitionException {
+		DuracaoContext _localctx = new DuracaoContext(_ctx, getState(), xmlIn);
 		enterRule(_localctx, 8, RULE_duracao);
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -499,9 +543,10 @@ public class GAMuParser extends Parser {
 			setState(82); match(T__13);
 			setState(83); ((DuracaoContext)_localctx).minutos = match(INT);
 
-			                                            ((DuracaoContext)_localctx).seconds =  ((((DuracaoContext)_localctx).horas!=null?Integer.valueOf(((DuracaoContext)_localctx).horas.getText()):0)*60*60 + (((DuracaoContext)_localctx).minutos!=null?Integer.valueOf(((DuracaoContext)_localctx).minutos.getText()):0)*60);
-			                                            audicao_xml.append("<duracao>"+(((DuracaoContext)_localctx).horas!=null?Integer.valueOf(((DuracaoContext)_localctx).horas.getText()):0)+":"+(((DuracaoContext)_localctx).minutos!=null?Integer.valueOf(((DuracaoContext)_localctx).minutos.getText()):0)+"</duracao>");
-			                                        
+			                                        ((DuracaoContext)_localctx).seconds =  ((((DuracaoContext)_localctx).horas!=null?Integer.valueOf(((DuracaoContext)_localctx).horas.getText()):0)*60*60 + (((DuracaoContext)_localctx).minutos!=null?Integer.valueOf(((DuracaoContext)_localctx).minutos.getText()):0)*60);
+			                                        _localctx.xmlIn.append("<duracao>"+(((DuracaoContext)_localctx).horas!=null?Integer.valueOf(((DuracaoContext)_localctx).horas.getText()):0)+":"+(((DuracaoContext)_localctx).minutos!=null?Integer.valueOf(((DuracaoContext)_localctx).minutos.getText()):0)+"</duracao>");
+			                                        ((DuracaoContext)_localctx).xmlOut =  _localctx.xmlIn;
+			                                    
 			}
 		}
 		catch (RecognitionException re) {
@@ -516,7 +561,10 @@ public class GAMuParser extends Parser {
 	}
 
 	public static class AtuacoesContext extends ParserRuleContext {
+		public StringBuilder xmlIn;
+		public long hora_inicio;
 		public long tempo;
+		public StringBuilder xmlOut;
 		public AtuacaoContext atuacao;
 		public AtuacaoContext atuacao(int i) {
 			return getRuleContext(AtuacaoContext.class,i);
@@ -524,8 +572,11 @@ public class GAMuParser extends Parser {
 		public List<AtuacaoContext> atuacao() {
 			return getRuleContexts(AtuacaoContext.class);
 		}
-		public AtuacoesContext(ParserRuleContext parent, int invokingState) {
+		public AtuacoesContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public AtuacoesContext(ParserRuleContext parent, int invokingState, StringBuilder xmlIn, long hora_inicio) {
 			super(parent, invokingState);
+			this.xmlIn = xmlIn;
+			this.hora_inicio = hora_inicio;
 		}
 		@Override public int getRuleIndex() { return RULE_atuacoes; }
 		@Override
@@ -538,16 +589,19 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final AtuacoesContext atuacoes() throws RecognitionException {
-		AtuacoesContext _localctx = new AtuacoesContext(_ctx, getState());
+	public final AtuacoesContext atuacoes(StringBuilder xmlIn,long hora_inicio) throws RecognitionException {
+		AtuacoesContext _localctx = new AtuacoesContext(_ctx, getState(), xmlIn, hora_inicio);
 		enterRule(_localctx, 10, RULE_atuacoes);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(86); match(T__2);
-			setState(87); ((AtuacoesContext)_localctx).atuacao = atuacao(_localctx.tempo-3600);
-			((AtuacoesContext)_localctx).tempo =  ((AtuacoesContext)_localctx).atuacao.tempo;
+			setState(87); ((AtuacoesContext)_localctx).atuacao = atuacao((_localctx.tempo-3600), _localctx.xmlIn, _localctx.hora_inicio);
+
+			                                                                ((AtuacoesContext)_localctx).tempo =  ((AtuacoesContext)_localctx).atuacao.tempo;
+			                                                                ((AtuacoesContext)_localctx).xmlOut =  ((AtuacoesContext)_localctx).atuacao.xmlOut;
+			                                                            
 			setState(89); match(T__8);
 			setState(96);
 			_errHandler.sync(this);
@@ -555,8 +609,11 @@ public class GAMuParser extends Parser {
 			while (_la==T__11 || _la==T__9) {
 				{
 				{
-				setState(90); ((AtuacoesContext)_localctx).atuacao = atuacao(_localctx.tempo);
-				((AtuacoesContext)_localctx).tempo =  ((AtuacoesContext)_localctx).atuacao.tempo;
+				setState(90); ((AtuacoesContext)_localctx).atuacao = atuacao(_localctx.tempo, _localctx.xmlOut, _localctx.hora_inicio);
+
+				                                                ((AtuacoesContext)_localctx).tempo =  ((AtuacoesContext)_localctx).atuacao.tempo;
+				                                                ((AtuacoesContext)_localctx).xmlOut =  ((AtuacoesContext)_localctx).atuacao.xmlOut;
+				                                            
 				setState(92); match(T__8);
 				}
 				}
@@ -564,7 +621,6 @@ public class GAMuParser extends Parser {
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			total_audition_time = _localctx.tempo;
 			}
 		}
 		catch (RecognitionException re) {
@@ -580,7 +636,10 @@ public class GAMuParser extends Parser {
 
 	public static class AtuacaoContext extends ParserRuleContext {
 		public long tempoIn;
+		public StringBuilder xmlIn;
+		public long hora_inicio;
 		public long tempo;
+		public StringBuilder xmlOut;
 		public GrupoContext grupo;
 		public SoloContext solo;
 		public SoloContext solo() {
@@ -590,9 +649,11 @@ public class GAMuParser extends Parser {
 			return getRuleContext(GrupoContext.class,0);
 		}
 		public AtuacaoContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public AtuacaoContext(ParserRuleContext parent, int invokingState, long tempoIn) {
+		public AtuacaoContext(ParserRuleContext parent, int invokingState, long tempoIn, StringBuilder xmlIn, long hora_inicio) {
 			super(parent, invokingState);
 			this.tempoIn = tempoIn;
+			this.xmlIn = xmlIn;
+			this.hora_inicio = hora_inicio;
 		}
 		@Override public int getRuleIndex() { return RULE_atuacao; }
 		@Override
@@ -605,32 +666,34 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final AtuacaoContext atuacao(long tempoIn) throws RecognitionException {
-		AtuacaoContext _localctx = new AtuacaoContext(_ctx, getState(), tempoIn);
+	public final AtuacaoContext atuacao(long tempoIn,StringBuilder xmlIn,long hora_inicio) throws RecognitionException {
+		AtuacaoContext _localctx = new AtuacaoContext(_ctx, getState(), tempoIn, xmlIn, hora_inicio);
 		enterRule(_localctx, 12, RULE_atuacao);
 		try {
-			setState(109);
+			setState(107);
 			switch (_input.LA(1)) {
 			case T__11:
 				enterOuterAlt(_localctx, 1);
 				{
-				audicao_xml.append("<atuacao tipo=\"grupo\">");
-				setState(102); ((AtuacaoContext)_localctx).grupo = grupo(_localctx.tempoIn);
+				_localctx.xmlIn.append("<atuacao tipo=\"grupo\">");
+				setState(100); ((AtuacaoContext)_localctx).grupo = grupo(_localctx.tempoIn, _localctx.xmlIn, _localctx.hora_inicio);
 
-				                                    ((AtuacaoContext)_localctx).tempo = ((AtuacaoContext)_localctx).grupo.tempo;
-				                                    audicao_xml.append("</atuacao>");
-				                                
+				                                            ((AtuacaoContext)_localctx).tempo = ((AtuacaoContext)_localctx).grupo.tempo;
+				                                            ((AtuacaoContext)_localctx).xmlOut =  ((AtuacaoContext)_localctx).grupo.xmlOut;
+				                                            _localctx.xmlOut.append("</atuacao>");
+				                                        
 				}
 				break;
 			case T__9:
 				enterOuterAlt(_localctx, 2);
 				{
-				audicao_xml.append("<atuacao tipo=\"solo\">");
-				setState(106); ((AtuacaoContext)_localctx).solo = solo(_localctx.tempoIn);
+				_localctx.xmlIn.append("<atuacao tipo=\"solo\">");
+				setState(104); ((AtuacaoContext)_localctx).solo = solo(_localctx.tempoIn, _localctx.xmlIn, _localctx.hora_inicio);
 
-				                                    ((AtuacaoContext)_localctx).tempo = ((AtuacaoContext)_localctx).solo.tempo;
-				                                    audicao_xml.append("</atuacao>");
-				                                
+				                                            ((AtuacaoContext)_localctx).tempo = ((AtuacaoContext)_localctx).solo.tempo;
+				                                            ((AtuacaoContext)_localctx).xmlOut =  ((AtuacaoContext)_localctx).solo.xmlOut;
+				                                            _localctx.xmlOut.append("</atuacao>");
+				                                        
 				}
 				break;
 			default:
@@ -650,8 +713,12 @@ public class GAMuParser extends Parser {
 
 	public static class GrupoContext extends ParserRuleContext {
 		public long tempoIn;
+		public StringBuilder xmlIn;
+		public long hora_inicio;
 		public long tempo;
+		public StringBuilder xmlOut;
 		public Token STRING;
+		public MusicosContext musicos;
 		public ObrasContext obras;
 		public ObrasContext obras() {
 			return getRuleContext(ObrasContext.class,0);
@@ -661,9 +728,11 @@ public class GAMuParser extends Parser {
 		}
 		public TerminalNode STRING() { return getToken(GAMuParser.STRING, 0); }
 		public GrupoContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public GrupoContext(ParserRuleContext parent, int invokingState, long tempoIn) {
+		public GrupoContext(ParserRuleContext parent, int invokingState, long tempoIn, StringBuilder xmlIn, long hora_inicio) {
 			super(parent, invokingState);
 			this.tempoIn = tempoIn;
+			this.xmlIn = xmlIn;
+			this.hora_inicio = hora_inicio;
 		}
 		@Override public int getRuleIndex() { return RULE_grupo; }
 		@Override
@@ -676,27 +745,39 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final GrupoContext grupo(long tempoIn) throws RecognitionException {
-		GrupoContext _localctx = new GrupoContext(_ctx, getState(), tempoIn);
+	public final GrupoContext grupo(long tempoIn,StringBuilder xmlIn,long hora_inicio) throws RecognitionException {
+		GrupoContext _localctx = new GrupoContext(_ctx, getState(), tempoIn, xmlIn, hora_inicio);
 		enterRule(_localctx, 14, RULE_grupo);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(111); match(T__11);
-			setState(112); ((GrupoContext)_localctx).STRING = match(STRING);
+			setState(109); match(T__11);
+			setState(110); ((GrupoContext)_localctx).STRING = match(STRING);
 
-			                                    audicao_xml.append("<nome_grupo>"+(((GrupoContext)_localctx).STRING!=null?((GrupoContext)_localctx).STRING.getText():null)+"</nome_grupo>");
-			                                    Time hora_ini = new Time( (hora_de_inicio +_localctx.tempoIn ) * 1000);
-			                                    audicao_xml.append("<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
+			                                    _localctx.xmlIn.append("<nome_grupo>"+(((GrupoContext)_localctx).STRING!=null?((GrupoContext)_localctx).STRING.getText():null)+"</nome_grupo>");
+			                                    Time hora_ini = new Time( (_localctx.hora_inicio +_localctx.tempoIn ) * 1000);
+			                                    _localctx.xmlIn.append("<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
 			                                
-			setState(114); match(T__0);
-			audicao_xml.append("<musicos>");
-			setState(116); musicos();
-			audicao_xml.append("</musicos>");
-			setState(118); match(T__4);
-			audicao_xml.append("<obras>");
-			setState(120); ((GrupoContext)_localctx).obras = obras(_localctx.tempoIn);
-			audicao_xml.append("</obras>");((GrupoContext)_localctx).tempo =  ((GrupoContext)_localctx).obras.tempo;
+			setState(112); match(T__0);
+
+			                                    _localctx.xmlIn.append("<musicos>");
+			                                
+			setState(114); ((GrupoContext)_localctx).musicos = musicos(_localctx.xmlIn);
+
+			                                    ((GrupoContext)_localctx).xmlIn =  ((GrupoContext)_localctx).musicos.xmlOut;
+			                                    _localctx.xmlIn.append("</musicos>");
+			                                
+			setState(116); match(T__4);
+
+			                                _localctx.xmlIn.append("<obras>");
+			                            
+			setState(118); ((GrupoContext)_localctx).obras = obras(_localctx.tempoIn, _localctx.xmlIn);
+
+			                                ((GrupoContext)_localctx).xmlIn =  ((GrupoContext)_localctx).obras.xmlOut;
+			                                _localctx.xmlIn.append("</obras>");
+			                                ((GrupoContext)_localctx).tempo =  ((GrupoContext)_localctx).obras.tempo;
+			                                ((GrupoContext)_localctx).xmlOut =  _localctx.xmlIn;
+			                            
 			}
 		}
 		catch (RecognitionException re) {
@@ -712,7 +793,11 @@ public class GAMuParser extends Parser {
 
 	public static class SoloContext extends ParserRuleContext {
 		public long tempoIn;
+		public StringBuilder xmlIn;
+		public long hora_inicio;
 		public long tempo;
+		public StringBuilder xmlOut;
+		public MusicoContext musico;
 		public ObrasContext obras;
 		public ObrasContext obras() {
 			return getRuleContext(ObrasContext.class,0);
@@ -721,9 +806,11 @@ public class GAMuParser extends Parser {
 			return getRuleContext(MusicoContext.class,0);
 		}
 		public SoloContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public SoloContext(ParserRuleContext parent, int invokingState, long tempoIn) {
+		public SoloContext(ParserRuleContext parent, int invokingState, long tempoIn, StringBuilder xmlIn, long hora_inicio) {
 			super(parent, invokingState);
 			this.tempoIn = tempoIn;
+			this.xmlIn = xmlIn;
+			this.hora_inicio = hora_inicio;
 		}
 		@Override public int getRuleIndex() { return RULE_solo; }
 		@Override
@@ -736,24 +823,36 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final SoloContext solo(long tempoIn) throws RecognitionException {
-		SoloContext _localctx = new SoloContext(_ctx, getState(), tempoIn);
+	public final SoloContext solo(long tempoIn,StringBuilder xmlIn,long hora_inicio) throws RecognitionException {
+		SoloContext _localctx = new SoloContext(_ctx, getState(), tempoIn, xmlIn, hora_inicio);
 		enterRule(_localctx, 16, RULE_solo);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 
-			                    Time hora_ini = new Time( (hora_de_inicio +_localctx.tempoIn) * 1000);
-			                    audicao_xml.append("<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
+			                    Time hora_ini = new Time( (_localctx.hora_inicio +_localctx.tempoIn) * 1000);
+			                    _localctx.xmlIn.append("<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
 			                
-			setState(124); match(T__9);
-			audicao_xml.append("<musicos>");
-			setState(126); musico();
-			audicao_xml.append("</musicos>");
-			setState(128); match(T__4);
-			audicao_xml.append("<obras>");
-			setState(130); ((SoloContext)_localctx).obras = obras(_localctx.tempoIn);
-			audicao_xml.append("</obras>");((SoloContext)_localctx).tempo =  ((SoloContext)_localctx).obras.tempo;
+			setState(122); match(T__9);
+
+			                            _localctx.xmlIn.append("<musicos>");
+			                        
+			setState(124); ((SoloContext)_localctx).musico = musico(_localctx.xmlIn);
+			   
+			                            ((SoloContext)_localctx).xmlIn = ((SoloContext)_localctx).musico.xmlOut; 
+			                            _localctx.xmlIn.append("</musicos>");
+			                        
+			setState(126); match(T__4);
+
+			                            _localctx.xmlIn.append("<obras>");
+			                        
+			setState(128); ((SoloContext)_localctx).obras = obras(_localctx.tempoIn, _localctx.xmlIn);
+
+			                            ((SoloContext)_localctx).xmlIn = ((SoloContext)_localctx).obras.xmlOut; 
+			                            _localctx.xmlIn.append("</obras>");
+			                            ((SoloContext)_localctx).tempo =  ((SoloContext)_localctx).obras.tempo;
+			                            ((SoloContext)_localctx).xmlOut = _localctx.xmlIn; 
+			                        
 			}
 		}
 		catch (RecognitionException re) {
@@ -769,7 +868,9 @@ public class GAMuParser extends Parser {
 
 	public static class ObrasContext extends ParserRuleContext {
 		public long tempoIn;
+		public StringBuilder xmlIn;
 		public long tempo;
+		public StringBuilder xmlOut;
 		public IdObraContext idObra;
 		public List<IdObraContext> idObra() {
 			return getRuleContexts(IdObraContext.class);
@@ -778,9 +879,10 @@ public class GAMuParser extends Parser {
 			return getRuleContext(IdObraContext.class,i);
 		}
 		public ObrasContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
-		public ObrasContext(ParserRuleContext parent, int invokingState, long tempoIn) {
+		public ObrasContext(ParserRuleContext parent, int invokingState, long tempoIn, StringBuilder xmlIn) {
 			super(parent, invokingState);
 			this.tempoIn = tempoIn;
+			this.xmlIn = xmlIn;
 		}
 		@Override public int getRuleIndex() { return RULE_obras; }
 		@Override
@@ -793,14 +895,14 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final ObrasContext obras(long tempoIn) throws RecognitionException {
-		ObrasContext _localctx = new ObrasContext(_ctx, getState(), tempoIn);
+	public final ObrasContext obras(long tempoIn,StringBuilder xmlIn) throws RecognitionException {
+		ObrasContext _localctx = new ObrasContext(_ctx, getState(), tempoIn, xmlIn);
 		enterRule(_localctx, 18, RULE_obras);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(133); ((ObrasContext)_localctx).idObra = idObra();
+			setState(131); ((ObrasContext)_localctx).idObra = idObra();
 			 
 			                            try{
 			                                String sql = "SELECT * FROM obra WHERE id='"+((ObrasContext)_localctx).idObra.id+"'";
@@ -809,31 +911,36 @@ public class GAMuParser extends Parser {
 			                                    _localctx.tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
 			                                    _localctx.tempo += _localctx.tempoIn;
 			                                    if(_localctx.tempo>max_audition_time){
-			                                        System.out.println(" obra: "+((ObrasContext)_localctx).idObra.id+" tempo _max ultrapassado");
+			                                        Time time = new Time(_localctx.tempo * 1000);
+			                                            System.out.print("line "+((ObrasContext)_localctx).idObra.linha+" - tempo _max ultrapassado");
+			                                            System.out.println(" "+((ObrasContext)_localctx).idObra.id+" tem duracao: "+time.toString());
+			                                        flag=1;
 			                                    }else{
-			                                        audicao_xml.append("<obra id=\""+((ObrasContext)_localctx).idObra.id+"\">");
-			                                        audicao_xml.append("<nome>"+rs.getString("nome")+"</nome>");
-			                                        audicao_xml.append("<duracao>"+rs.getString("duracao")+"</duracao>");
-			                                        audicao_xml.append("</obra>");
+			                                        _localctx.xmlIn.append("<obra id=\""+((ObrasContext)_localctx).idObra.id+"\">");
+			                                        _localctx.xmlIn.append("<nome>"+rs.getString("nome")+"</nome>");
+			                                        _localctx.xmlIn.append("<duracao>"+rs.getString("duracao")+"</duracao>");
+			                                        _localctx.xmlIn.append("</obra>");
 			                                    }
 			                                }else{
 			                                    System.out.print("line "+((ObrasContext)_localctx).idObra.linha);
 			                                    System.out.println(" obra: "+((ObrasContext)_localctx).idObra.id+" nao existe");
-			                                    audicao_xml.append("<obra></obra>");
+			                                    _localctx.xmlIn.append("<obra></obra>");
+			                                    flag=1;
 			                                }
 			                                rs.close();
 			                            }catch(SQLException se){
 			                                se.printStackTrace();
 			                            }
+			                            ((ObrasContext)_localctx).xmlOut =  _localctx.xmlIn;
 			                        
-			setState(141);
+			setState(139);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__1) {
 				{
 				{
-				setState(135); match(T__1);
-				setState(136); ((ObrasContext)_localctx).idObra = idObra();
+				setState(133); match(T__1);
+				setState(134); ((ObrasContext)_localctx).idObra = idObra();
 
 				                                try{
 				                                    String sql = "SELECT * FROM obra WHERE id='"+((ObrasContext)_localctx).idObra.id+"'";
@@ -841,26 +948,31 @@ public class GAMuParser extends Parser {
 				                                    if(rs.next()){
 				                                        _localctx.tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
 				                                        if(_localctx.tempo>max_audition_time){
-				                                            System.out.println(" obra: "+((ObrasContext)_localctx).idObra.id+" tempo _max ultrapassado");
+				                                            Time time = new Time(_localctx.tempo * 1000);
+				                                            System.out.print("line "+((ObrasContext)_localctx).idObra.linha+" - tempo _max ultrapassado");
+				                                            System.out.println(" "+((ObrasContext)_localctx).idObra.id+" tem duracao: "+time.toString());
+				                                            flag=1;
 				                                        }else{
-				                                            audicao_xml.append("<obra id=\""+((ObrasContext)_localctx).idObra.id+"\">");
-				                                            audicao_xml.append("<nome>"+rs.getString("nome")+"</nome>");
-				                                            audicao_xml.append("<duracao>"+rs.getString("duracao")+"</duracao>");
-				                                            audicao_xml.append("</obra>");
+				                                            _localctx.xmlIn.append("<obra id=\""+((ObrasContext)_localctx).idObra.id+"\">");
+				                                            _localctx.xmlIn.append("<nome>"+rs.getString("nome")+"</nome>");
+				                                            _localctx.xmlIn.append("<duracao>"+rs.getString("duracao")+"</duracao>");
+				                                            _localctx.xmlIn.append("</obra>");
 				                                        }
 				                                    }else{
 				                                        System.out.print("line "+((ObrasContext)_localctx).idObra.linha);
 				                                        System.out.println(" obra: "+((ObrasContext)_localctx).idObra.id+" nao existe");
-				                                        audicao_xml.append("<obra></obra>");
+				                                        _localctx.xmlIn.append("<obra></obra>");
+				                                        flag=1;
 				                                    }
 				                                    rs.close();
 				                                }catch(SQLException se){
 				                                    se.printStackTrace();
 				                                }
+				                                ((ObrasContext)_localctx).xmlOut =  _localctx.xmlIn;
 				                            
 				}
 				}
-				setState(143);
+				setState(141);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -878,14 +990,19 @@ public class GAMuParser extends Parser {
 	}
 
 	public static class MusicosContext extends ParserRuleContext {
+		public StringBuilder xmlIn;
+		public StringBuilder xmlOut;
+		public MusicoContext musico;
 		public MusicoContext musico(int i) {
 			return getRuleContext(MusicoContext.class,i);
 		}
 		public List<MusicoContext> musico() {
 			return getRuleContexts(MusicoContext.class);
 		}
-		public MusicosContext(ParserRuleContext parent, int invokingState) {
+		public MusicosContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public MusicosContext(ParserRuleContext parent, int invokingState, StringBuilder xmlIn) {
 			super(parent, invokingState);
+			this.xmlIn = xmlIn;
 		}
 		@Override public int getRuleIndex() { return RULE_musicos; }
 		@Override
@@ -898,24 +1015,26 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final MusicosContext musicos() throws RecognitionException {
-		MusicosContext _localctx = new MusicosContext(_ctx, getState());
+	public final MusicosContext musicos(StringBuilder xmlIn) throws RecognitionException {
+		MusicosContext _localctx = new MusicosContext(_ctx, getState(), xmlIn);
 		enterRule(_localctx, 20, RULE_musicos);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(144); musico();
-			setState(148);
+			setState(142); ((MusicosContext)_localctx).musico = musico(_localctx.xmlIn);
+			((MusicosContext)_localctx).xmlOut = ((MusicosContext)_localctx).musico.xmlOut;
+			setState(149);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==IDA || _la==IDP) {
+			while (_la==ID_ALUNO || _la==ID_PROFESSOR) {
 				{
 				{
-				setState(145); musico();
+				setState(144); ((MusicosContext)_localctx).musico = musico(_localctx.xmlOut);
+				((MusicosContext)_localctx).xmlOut = ((MusicosContext)_localctx).musico.xmlOut;
 				}
 				}
-				setState(150);
+				setState(151);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -933,6 +1052,8 @@ public class GAMuParser extends Parser {
 	}
 
 	public static class MusicoContext extends ParserRuleContext {
+		public StringBuilder xmlIn;
+		public StringBuilder xmlOut;
 		public IdAlunoContext idAluno;
 		public IdInstrumentoContext idInstrumento;
 		public IdProfContext idProf;
@@ -945,8 +1066,10 @@ public class GAMuParser extends Parser {
 		public IdAlunoContext idAluno() {
 			return getRuleContext(IdAlunoContext.class,0);
 		}
-		public MusicoContext(ParserRuleContext parent, int invokingState) {
+		public MusicoContext(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }
+		public MusicoContext(ParserRuleContext parent, int invokingState, StringBuilder xmlIn) {
 			super(parent, invokingState);
+			this.xmlIn = xmlIn;
 		}
 		@Override public int getRuleIndex() { return RULE_musico; }
 		@Override
@@ -959,20 +1082,20 @@ public class GAMuParser extends Parser {
 		}
 	}
 
-	public final MusicoContext musico() throws RecognitionException {
-		MusicoContext _localctx = new MusicoContext(_ctx, getState());
+	public final MusicoContext musico(StringBuilder xmlIn) throws RecognitionException {
+		MusicoContext _localctx = new MusicoContext(_ctx, getState(), xmlIn);
 		enterRule(_localctx, 22, RULE_musico);
 		try {
-			setState(161);
+			setState(162);
 			switch (_input.LA(1)) {
-			case IDA:
+			case ID_ALUNO:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(151); ((MusicoContext)_localctx).idAluno = idAluno();
-				setState(152); match(T__1);
-				setState(153); ((MusicoContext)_localctx).idInstrumento = idInstrumento();
+				setState(152); ((MusicoContext)_localctx).idAluno = idAluno();
+				setState(153); match(T__1);
+				setState(154); ((MusicoContext)_localctx).idInstrumento = idInstrumento();
 
-				                                            audicao_xml.append("<musico tipo=\"aluno\" id=\""+((MusicoContext)_localctx).idAluno.id+"\">");
+				                                            _localctx.xmlIn.append("<musico tipo=\"aluno\" id=\""+((MusicoContext)_localctx).idAluno.id+"\">");
 				                                            try{
 				                                                String sql = "SELECT * FROM aluno WHERE id='"+((MusicoContext)_localctx).idAluno.id+"'";
 				                                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
@@ -987,44 +1110,51 @@ public class GAMuParser extends Parser {
 				                                                        rs = (ResultSet) stmt.executeQuery(sql);
 				                                                        if(rs.next()){
 				                                                            //OK
-				                                                            audicao_xml.append("<nome>"+nome_aluno+"</nome>");
-				                                                            audicao_xml.append("<instrumento id=\""+((MusicoContext)_localctx).idInstrumento.id+"\">"+designacao_instrumento+"</instrumento>");
+				                                                            _localctx.xmlIn.append("<nome>"+nome_aluno+"</nome>");
+				                                                            _localctx.xmlIn.append("<instrumento id=\""+((MusicoContext)_localctx).idInstrumento.id+"\">"+designacao_instrumento+"</instrumento>");
 				                                                        }else{
 				                                                            System.out.print("line "+((MusicoContext)_localctx).idAluno.linha);
 				                                                            System.out.print(" (aluno: "+((MusicoContext)_localctx).idAluno.id+" - "+ nome_aluno+")" );
-				                                                            System.out.println(" nao tem habilitacoes para ("+((MusicoContext)_localctx).idInstrumento.id+" - "+ designacao_instrumento+")");
-				                                                            audicao_xml.append("<nome></nome>");
-				                                                            audicao_xml.append("<instrumento></instrumento>");
+				                                                            System.out.println(" nao tem habilitacoes para tocar ("+((MusicoContext)_localctx).idInstrumento.id+" - "+ designacao_instrumento+")");
+				                                                            
+				                                                            sql = "SELECT * FROM aluno_instrumento INNER JOIN instrumento ON aluno_instrumento.id_instrumento=instrumento.id WHERE aluno_instrumento.id_aluno='"+((MusicoContext)_localctx).idAluno.id+"'";
+				                                                            rs = (ResultSet) stmt.executeQuery(sql);
+				                                                            System.out.print("O Aluno: "+ ((MusicoContext)_localctx).idAluno.id);
+				                                                            System.out.println(" tem habilitacoes em:");
+				                                                            while(rs.next()){
+				                                                                System.out.println("  - "+rs.getString("id")+" "+rs.getString("designacao"));
+				                                                            }
+				                                                            
+				                                                            flag=1;
 				                                                        }
 				                                                        
 				                                                    }else{
 				                                                        System.out.print("line "+((MusicoContext)_localctx).idInstrumento.linha);
 				                                                        System.out.println("  instrumento: "+((MusicoContext)_localctx).idInstrumento.id+" nao existe");
-				                                                        audicao_xml.append("<nome></nome>");
-				                                                        audicao_xml.append("<instrumento></instrumento>");
+				                                                        flag=1;
 				                                                    }
 				                                                }else{
 				                                                    System.out.print("line "+((MusicoContext)_localctx).idAluno.linha);
 				                                                    System.out.println("  aluno: "+((MusicoContext)_localctx).idAluno.id+" nao existe");
-				                                                    audicao_xml.append("<nome></nome>");
-				                                                    audicao_xml.append("<instrumento></instrumento>");
+				                                                    flag=1;
 				                                                }
 				                                                rs.close();
 				                                            }catch(SQLException se){
 				                                                se.printStackTrace();
 				                                            }
-				                                            audicao_xml.append("</musico>");
+				                                            _localctx.xmlIn.append("</musico>");
+				                                            ((MusicoContext)_localctx).xmlOut =  _localctx.xmlIn;
 				                                         
 				}
 				break;
-			case IDP:
+			case ID_PROFESSOR:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(156); ((MusicoContext)_localctx).idProf = idProf();
-				setState(157); match(T__1);
-				setState(158); ((MusicoContext)_localctx).idInstrumento = idInstrumento();
+				setState(157); ((MusicoContext)_localctx).idProf = idProf();
+				setState(158); match(T__1);
+				setState(159); ((MusicoContext)_localctx).idInstrumento = idInstrumento();
 
-				                                            audicao_xml.append("<musico tipo=\"professor\" id=\""+((MusicoContext)_localctx).idProf.id+"\">");
+				                                            _localctx.xmlIn.append("<musico tipo=\"professor\" id=\""+((MusicoContext)_localctx).idProf.id+"\">");
 				                                            try{
 				                                                String sql = "SELECT * FROM professor WHERE id='"+((MusicoContext)_localctx).idProf.id+"'";
 				                                                ResultSet rs = (ResultSet) stmt.executeQuery(sql);
@@ -1039,35 +1169,30 @@ public class GAMuParser extends Parser {
 				                                                        rs = (ResultSet) stmt.executeQuery(sql);
 				                                                        if(rs.next()){
 				                                                            //OK
-				                                                            audicao_xml.append("<nome>"+nome_prof+"</nome>");
-				                                                            audicao_xml.append("<instrumento id=\""+((MusicoContext)_localctx).idInstrumento.id+"\">"+designacao_instrumento+"</instrumento>");
+				                                                            _localctx.xmlIn.append("<nome>"+nome_prof+"</nome>");
+				                                                            _localctx.xmlIn.append("<instrumento id=\""+((MusicoContext)_localctx).idInstrumento.id+"\">"+designacao_instrumento+"</instrumento>");
 				                                                        }else{
 				                                                            System.out.print("line "+((MusicoContext)_localctx).idProf.linha);
 				                                                            System.out.print(" (professor: "+((MusicoContext)_localctx).idProf.id+" - "+ nome_prof+")" );
-				                                                            System.out.println(" nao tem habilitacoes para ("+((MusicoContext)_localctx).idInstrumento.id+" - "+ designacao_instrumento+")");
-				                                                            audicao_xml.append("<nome></nome>");
-				                                                            audicao_xml.append("<instrumento></instrumento>");
-				                                                            
-				                                                            
-				                                                        }
-				                                                        
+				                                                            System.out.println(" nao tem habilitacoes para tocar("+((MusicoContext)_localctx).idInstrumento.id+" - "+ designacao_instrumento+")");
+				                                                            flag=1;
+				                                                        }  
 				                                                    }else{
 				                                                        System.out.print("line "+((MusicoContext)_localctx).idInstrumento.linha);
 				                                                        System.out.println("  instrumento: "+((MusicoContext)_localctx).idInstrumento.id+" nao existe");
-				                                                        audicao_xml.append("<nome></nome>");
-				                                                        audicao_xml.append("<instrumento></instrumento>");
+				                                                        flag=1;
 				                                                    }
 				                                                }else{
 				                                                    System.out.print("line "+((MusicoContext)_localctx).idProf.linha);
 				                                                    System.out.println("  professor: "+((MusicoContext)_localctx).idProf.id+" nao existe");
-				                                                    audicao_xml.append("<nome></nome>");
-				                                                    audicao_xml.append("<instrumento></instrumento>");
+				                                                    flag=1;
 				                                                }
 				                                                rs.close();
 				                                            }catch(SQLException se){
 				                                                se.printStackTrace();
 				                                            }
-				                                            audicao_xml.append("</musico>");
+				                                            _localctx.xmlIn.append("</musico>");
+				                                            ((MusicoContext)_localctx).xmlOut =  _localctx.xmlIn;
 				                                         
 				}
 				break;
@@ -1090,8 +1215,8 @@ public class GAMuParser extends Parser {
 		public String id;
 		public int linha;
 		public int coluna;
-		public Token IDO;
-		public TerminalNode IDO() { return getToken(GAMuParser.IDO, 0); }
+		public Token ID_OBRA;
+		public TerminalNode ID_OBRA() { return getToken(GAMuParser.ID_OBRA, 0); }
 		public IdObraContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1112,11 +1237,12 @@ public class GAMuParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(163); ((IdObraContext)_localctx).IDO = match(IDO);
-			   ((IdObraContext)_localctx).id =  (((IdObraContext)_localctx).IDO!=null?((IdObraContext)_localctx).IDO.getText():null);
-			                                                            ((IdObraContext)_localctx).linha =  ((IdObraContext)_localctx).IDO.getLine();
-			                                                            ((IdObraContext)_localctx).coluna =  ((IdObraContext)_localctx).IDO.getCharPositionInLine();
-			                                                        
+			setState(164); ((IdObraContext)_localctx).ID_OBRA = match(ID_OBRA);
+			   
+			                                                            ((IdObraContext)_localctx).id =  (((IdObraContext)_localctx).ID_OBRA!=null?((IdObraContext)_localctx).ID_OBRA.getText():null);
+			                                                            ((IdObraContext)_localctx).linha =  ((IdObraContext)_localctx).ID_OBRA.getLine();
+			                                                            ((IdObraContext)_localctx).coluna =  ((IdObraContext)_localctx).ID_OBRA.getCharPositionInLine();
+			                                                            
 			}
 		}
 		catch (RecognitionException re) {
@@ -1134,8 +1260,8 @@ public class GAMuParser extends Parser {
 		public String id;
 		public int linha;
 		public int coluna;
-		public Token IDP;
-		public TerminalNode IDP() { return getToken(GAMuParser.IDP, 0); }
+		public Token ID_PROFESSOR;
+		public TerminalNode ID_PROFESSOR() { return getToken(GAMuParser.ID_PROFESSOR, 0); }
 		public IdProfContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1156,11 +1282,12 @@ public class GAMuParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(166); ((IdProfContext)_localctx).IDP = match(IDP);
-			   ((IdProfContext)_localctx).id =  (((IdProfContext)_localctx).IDP!=null?((IdProfContext)_localctx).IDP.getText():null);
-			                                                            ((IdProfContext)_localctx).linha =  ((IdProfContext)_localctx).IDP.getLine();
-			                                                            ((IdProfContext)_localctx).coluna =  ((IdProfContext)_localctx).IDP.getCharPositionInLine();
-			                                                        
+			setState(167); ((IdProfContext)_localctx).ID_PROFESSOR = match(ID_PROFESSOR);
+			   
+			                                                            ((IdProfContext)_localctx).id =  (((IdProfContext)_localctx).ID_PROFESSOR!=null?((IdProfContext)_localctx).ID_PROFESSOR.getText():null);
+			                                                            ((IdProfContext)_localctx).linha =  ((IdProfContext)_localctx).ID_PROFESSOR.getLine();
+			                                                            ((IdProfContext)_localctx).coluna =  ((IdProfContext)_localctx).ID_PROFESSOR.getCharPositionInLine();
+			                                                            
 			}
 		}
 		catch (RecognitionException re) {
@@ -1178,8 +1305,8 @@ public class GAMuParser extends Parser {
 		public String id;
 		public int linha;
 		public int coluna;
-		public Token IDA;
-		public TerminalNode IDA() { return getToken(GAMuParser.IDA, 0); }
+		public Token ID_ALUNO;
+		public TerminalNode ID_ALUNO() { return getToken(GAMuParser.ID_ALUNO, 0); }
 		public IdAlunoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1200,11 +1327,12 @@ public class GAMuParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(169); ((IdAlunoContext)_localctx).IDA = match(IDA);
-			   ((IdAlunoContext)_localctx).id =  (((IdAlunoContext)_localctx).IDA!=null?((IdAlunoContext)_localctx).IDA.getText():null);
-			                                                            ((IdAlunoContext)_localctx).linha =  ((IdAlunoContext)_localctx).IDA.getLine();
-			                                                            ((IdAlunoContext)_localctx).coluna =  ((IdAlunoContext)_localctx).IDA.getCharPositionInLine();
-			                                                        
+			setState(170); ((IdAlunoContext)_localctx).ID_ALUNO = match(ID_ALUNO);
+			   
+			                                                            ((IdAlunoContext)_localctx).id =  (((IdAlunoContext)_localctx).ID_ALUNO!=null?((IdAlunoContext)_localctx).ID_ALUNO.getText():null);
+			                                                            ((IdAlunoContext)_localctx).linha =  ((IdAlunoContext)_localctx).ID_ALUNO.getLine();
+			                                                            ((IdAlunoContext)_localctx).coluna =  ((IdAlunoContext)_localctx).ID_ALUNO.getCharPositionInLine();
+			                                                            
 			}
 		}
 		catch (RecognitionException re) {
@@ -1222,8 +1350,8 @@ public class GAMuParser extends Parser {
 		public String id;
 		public int linha;
 		public int coluna;
-		public Token IDI;
-		public TerminalNode IDI() { return getToken(GAMuParser.IDI, 0); }
+		public Token ID_INSTRUMENTO;
+		public TerminalNode ID_INSTRUMENTO() { return getToken(GAMuParser.ID_INSTRUMENTO, 0); }
 		public IdInstrumentoContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1244,11 +1372,12 @@ public class GAMuParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(172); ((IdInstrumentoContext)_localctx).IDI = match(IDI);
-			   ((IdInstrumentoContext)_localctx).id =  (((IdInstrumentoContext)_localctx).IDI!=null?((IdInstrumentoContext)_localctx).IDI.getText():null);
-			                                                                    ((IdInstrumentoContext)_localctx).linha =  ((IdInstrumentoContext)_localctx).IDI.getLine();
-			                                                                    ((IdInstrumentoContext)_localctx).coluna =  ((IdInstrumentoContext)_localctx).IDI.getCharPositionInLine();
-			                                                                
+			setState(173); ((IdInstrumentoContext)_localctx).ID_INSTRUMENTO = match(ID_INSTRUMENTO);
+			   
+			                                                                            ((IdInstrumentoContext)_localctx).id =  (((IdInstrumentoContext)_localctx).ID_INSTRUMENTO!=null?((IdInstrumentoContext)_localctx).ID_INSTRUMENTO.getText():null);
+			                                                                            ((IdInstrumentoContext)_localctx).linha =  ((IdInstrumentoContext)_localctx).ID_INSTRUMENTO.getLine();
+			                                                                            ((IdInstrumentoContext)_localctx).coluna =  ((IdInstrumentoContext)_localctx).ID_INSTRUMENTO.getCharPositionInLine();
+			                                                                            
 			}
 		}
 		catch (RecognitionException re) {
@@ -1263,53 +1392,53 @@ public class GAMuParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\35\u00b2\4\2\t\2"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\35\u00b3\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\3\2\3\2"+
 		"\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\65"+
 		"\n\3\3\3\3\3\3\3\5\3:\n\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3"+
 		"\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3"+
-		"\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\7\7a\n\7\f\7\16\7d\13\7\3\7\3\7\3\b"+
-		"\3\b\3\b\3\b\3\b\3\b\3\b\3\b\5\bp\n\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t"+
-		"\3\t\3\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13"+
-		"\3\13\3\13\3\13\7\13\u008e\n\13\f\13\16\13\u0091\13\13\3\f\3\f\7\f\u0095"+
-		"\n\f\f\f\16\f\u0098\13\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\5\r\u00a4"+
-		"\n\r\3\16\3\16\3\16\3\17\3\17\3\17\3\20\3\20\3\20\3\21\3\21\3\21\3\21"+
-		"\2\2\22\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \2\2\u00a8\2\"\3\2\2\2"+
-		"\4\'\3\2\2\2\6G\3\2\2\2\bN\3\2\2\2\nS\3\2\2\2\fX\3\2\2\2\16o\3\2\2\2\20"+
-		"q\3\2\2\2\22}\3\2\2\2\24\u0087\3\2\2\2\26\u0092\3\2\2\2\30\u00a3\3\2\2"+
-		"\2\32\u00a5\3\2\2\2\34\u00a8\3\2\2\2\36\u00ab\3\2\2\2 \u00ae\3\2\2\2\""+
-		"#\5\4\3\2#$\b\2\1\2$%\5\f\7\2%&\b\2\1\2&\3\3\2\2\2\'(\7\n\2\2()\5\34\17"+
-		"\2)*\7\16\2\2*+\7\33\2\2+,\7\3\2\2,-\7\33\2\2-.\b\3\1\2./\7\b\2\2/\60"+
-		"\7\35\2\2\60\64\b\3\1\2\61\62\7\21\2\2\62\63\7\35\2\2\63\65\b\3\1\2\64"+
-		"\61\3\2\2\2\64\65\3\2\2\2\659\3\2\2\2\66\67\7\4\2\2\678\7\35\2\28:\b\3"+
-		"\1\29\66\3\2\2\29:\3\2\2\2:;\3\2\2\2;<\7\5\2\2<=\5\6\4\2=>\7\6\2\2>?\5"+
-		"\b\5\2?@\b\3\1\2@A\7\17\2\2AB\7\35\2\2BC\b\3\1\2CD\7\r\2\2DE\5\n\6\2E"+
-		"F\b\3\1\2F\5\3\2\2\2GH\7\33\2\2HI\7\3\2\2IJ\7\33\2\2JK\7\3\2\2KL\7\33"+
-		"\2\2LM\b\4\1\2M\7\3\2\2\2NO\7\33\2\2OP\7\7\2\2PQ\7\33\2\2QR\b\5\1\2R\t"+
-		"\3\2\2\2ST\7\33\2\2TU\7\7\2\2UV\7\33\2\2VW\b\6\1\2W\13\3\2\2\2XY\7\22"+
-		"\2\2YZ\5\16\b\2Z[\b\7\1\2[b\7\f\2\2\\]\5\16\b\2]^\b\7\1\2^_\7\f\2\2_a"+
-		"\3\2\2\2`\\\3\2\2\2ad\3\2\2\2b`\3\2\2\2bc\3\2\2\2ce\3\2\2\2db\3\2\2\2"+
-		"ef\b\7\1\2f\r\3\2\2\2gh\b\b\1\2hi\5\20\t\2ij\b\b\1\2jp\3\2\2\2kl\b\b\1"+
-		"\2lm\5\22\n\2mn\b\b\1\2np\3\2\2\2og\3\2\2\2ok\3\2\2\2p\17\3\2\2\2qr\7"+
-		"\t\2\2rs\7\35\2\2st\b\t\1\2tu\7\24\2\2uv\b\t\1\2vw\5\26\f\2wx\b\t\1\2"+
-		"xy\7\20\2\2yz\b\t\1\2z{\5\24\13\2{|\b\t\1\2|\21\3\2\2\2}~\b\n\1\2~\177"+
-		"\7\13\2\2\177\u0080\b\n\1\2\u0080\u0081\5\30\r\2\u0081\u0082\b\n\1\2\u0082"+
-		"\u0083\7\20\2\2\u0083\u0084\b\n\1\2\u0084\u0085\5\24\13\2\u0085\u0086"+
-		"\b\n\1\2\u0086\23\3\2\2\2\u0087\u0088\5\32\16\2\u0088\u008f\b\13\1\2\u0089"+
-		"\u008a\7\23\2\2\u008a\u008b\5\32\16\2\u008b\u008c\b\13\1\2\u008c\u008e"+
-		"\3\2\2\2\u008d\u0089\3\2\2\2\u008e\u0091\3\2\2\2\u008f\u008d\3\2\2\2\u008f"+
-		"\u0090\3\2\2\2\u0090\25\3\2\2\2\u0091\u008f\3\2\2\2\u0092\u0096\5\30\r"+
-		"\2\u0093\u0095\5\30\r\2\u0094\u0093\3\2\2\2\u0095\u0098\3\2\2\2\u0096"+
-		"\u0094\3\2\2\2\u0096\u0097\3\2\2\2\u0097\27\3\2\2\2\u0098\u0096\3\2\2"+
-		"\2\u0099\u009a\5\36\20\2\u009a\u009b\7\23\2\2\u009b\u009c\5 \21\2\u009c"+
-		"\u009d\b\r\1\2\u009d\u00a4\3\2\2\2\u009e\u009f\5\34\17\2\u009f\u00a0\7"+
-		"\23\2\2\u00a0\u00a1\5 \21\2\u00a1\u00a2\b\r\1\2\u00a2\u00a4\3\2\2\2\u00a3"+
-		"\u0099\3\2\2\2\u00a3\u009e\3\2\2\2\u00a4\31\3\2\2\2\u00a5\u00a6\7\30\2"+
-		"\2\u00a6\u00a7\b\16\1\2\u00a7\33\3\2\2\2\u00a8\u00a9\7\27\2\2\u00a9\u00aa"+
-		"\b\17\1\2\u00aa\35\3\2\2\2\u00ab\u00ac\7\26\2\2\u00ac\u00ad\b\20\1\2\u00ad"+
-		"\37\3\2\2\2\u00ae\u00af\7\31\2\2\u00af\u00b0\b\21\1\2\u00b0!\3\2\2\2\t"+
-		"\649bo\u008f\u0096\u00a3";
+		"\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\7\7a\n\7\f\7\16\7d\13\7\3\b\3\b\3\b"+
+		"\3\b\3\b\3\b\3\b\3\b\5\bn\n\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t"+
+		"\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3"+
+		"\13\3\13\7\13\u008c\n\13\f\13\16\13\u008f\13\13\3\f\3\f\3\f\3\f\3\f\7"+
+		"\f\u0096\n\f\f\f\16\f\u0099\13\f\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3"+
+		"\r\5\r\u00a5\n\r\3\16\3\16\3\16\3\17\3\17\3\17\3\20\3\20\3\20\3\21\3\21"+
+		"\3\21\3\21\2\2\22\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \2\2\u00a9\2"+
+		"\"\3\2\2\2\4\'\3\2\2\2\6G\3\2\2\2\bN\3\2\2\2\nS\3\2\2\2\fX\3\2\2\2\16"+
+		"m\3\2\2\2\20o\3\2\2\2\22{\3\2\2\2\24\u0085\3\2\2\2\26\u0090\3\2\2\2\30"+
+		"\u00a4\3\2\2\2\32\u00a6\3\2\2\2\34\u00a9\3\2\2\2\36\u00ac\3\2\2\2 \u00af"+
+		"\3\2\2\2\"#\5\4\3\2#$\b\2\1\2$%\5\f\7\2%&\b\2\1\2&\3\3\2\2\2\'(\7\n\2"+
+		"\2()\5\34\17\2)*\7\16\2\2*+\7\33\2\2+,\7\3\2\2,-\7\33\2\2-.\b\3\1\2./"+
+		"\7\b\2\2/\60\7\35\2\2\60\64\b\3\1\2\61\62\7\21\2\2\62\63\7\35\2\2\63\65"+
+		"\b\3\1\2\64\61\3\2\2\2\64\65\3\2\2\2\659\3\2\2\2\66\67\7\4\2\2\678\7\35"+
+		"\2\28:\b\3\1\29\66\3\2\2\29:\3\2\2\2:;\3\2\2\2;<\7\5\2\2<=\5\6\4\2=>\7"+
+		"\6\2\2>?\5\b\5\2?@\b\3\1\2@A\7\17\2\2AB\7\35\2\2BC\b\3\1\2CD\7\r\2\2D"+
+		"E\5\n\6\2EF\b\3\1\2F\5\3\2\2\2GH\7\33\2\2HI\7\3\2\2IJ\7\33\2\2JK\7\3\2"+
+		"\2KL\7\33\2\2LM\b\4\1\2M\7\3\2\2\2NO\7\33\2\2OP\7\7\2\2PQ\7\33\2\2QR\b"+
+		"\5\1\2R\t\3\2\2\2ST\7\33\2\2TU\7\7\2\2UV\7\33\2\2VW\b\6\1\2W\13\3\2\2"+
+		"\2XY\7\22\2\2YZ\5\16\b\2Z[\b\7\1\2[b\7\f\2\2\\]\5\16\b\2]^\b\7\1\2^_\7"+
+		"\f\2\2_a\3\2\2\2`\\\3\2\2\2ad\3\2\2\2b`\3\2\2\2bc\3\2\2\2c\r\3\2\2\2d"+
+		"b\3\2\2\2ef\b\b\1\2fg\5\20\t\2gh\b\b\1\2hn\3\2\2\2ij\b\b\1\2jk\5\22\n"+
+		"\2kl\b\b\1\2ln\3\2\2\2me\3\2\2\2mi\3\2\2\2n\17\3\2\2\2op\7\t\2\2pq\7\35"+
+		"\2\2qr\b\t\1\2rs\7\24\2\2st\b\t\1\2tu\5\26\f\2uv\b\t\1\2vw\7\20\2\2wx"+
+		"\b\t\1\2xy\5\24\13\2yz\b\t\1\2z\21\3\2\2\2{|\b\n\1\2|}\7\13\2\2}~\b\n"+
+		"\1\2~\177\5\30\r\2\177\u0080\b\n\1\2\u0080\u0081\7\20\2\2\u0081\u0082"+
+		"\b\n\1\2\u0082\u0083\5\24\13\2\u0083\u0084\b\n\1\2\u0084\23\3\2\2\2\u0085"+
+		"\u0086\5\32\16\2\u0086\u008d\b\13\1\2\u0087\u0088\7\23\2\2\u0088\u0089"+
+		"\5\32\16\2\u0089\u008a\b\13\1\2\u008a\u008c\3\2\2\2\u008b\u0087\3\2\2"+
+		"\2\u008c\u008f\3\2\2\2\u008d\u008b\3\2\2\2\u008d\u008e\3\2\2\2\u008e\25"+
+		"\3\2\2\2\u008f\u008d\3\2\2\2\u0090\u0091\5\30\r\2\u0091\u0097\b\f\1\2"+
+		"\u0092\u0093\5\30\r\2\u0093\u0094\b\f\1\2\u0094\u0096\3\2\2\2\u0095\u0092"+
+		"\3\2\2\2\u0096\u0099\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0098\3\2\2\2\u0098"+
+		"\27\3\2\2\2\u0099\u0097\3\2\2\2\u009a\u009b\5\36\20\2\u009b\u009c\7\23"+
+		"\2\2\u009c\u009d\5 \21\2\u009d\u009e\b\r\1\2\u009e\u00a5\3\2\2\2\u009f"+
+		"\u00a0\5\34\17\2\u00a0\u00a1\7\23\2\2\u00a1\u00a2\5 \21\2\u00a2\u00a3"+
+		"\b\r\1\2\u00a3\u00a5\3\2\2\2\u00a4\u009a\3\2\2\2\u00a4\u009f\3\2\2\2\u00a5"+
+		"\31\3\2\2\2\u00a6\u00a7\7\30\2\2\u00a7\u00a8\b\16\1\2\u00a8\33\3\2\2\2"+
+		"\u00a9\u00aa\7\27\2\2\u00aa\u00ab\b\17\1\2\u00ab\35\3\2\2\2\u00ac\u00ad"+
+		"\7\26\2\2\u00ad\u00ae\b\20\1\2\u00ae\37\3\2\2\2\u00af\u00b0\7\31\2\2\u00b0"+
+		"\u00b1\b\21\1\2\u00b1!\3\2\2\2\t\649bm\u008d\u0097\u00a4";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
