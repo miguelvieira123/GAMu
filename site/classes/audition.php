@@ -13,7 +13,7 @@
   		//$xsl->load("../../schemas/audition.xsl", LIBXML_NOCDATA);
   		//$xslt->importStylesheet($xsl);
  		//echo $xslt->transformToXML($xml);
-		
+
 		$xml = simplexml_load_file($file);
 		$audicoes = $xml->xpath("//audicao");
 		foreach($audicoes as $audicao){
@@ -59,42 +59,42 @@
 			$out.= "hora: ".(string)$audi->metainfo->hora."\n";
 			$out.= "local: ".(string)$audi->metainfo->local."\n";
 			$out.= "duracao-maxima: ".(string)$audi->metainfo->duracao."\n";
-			$out.= "atuacoes:\n\t";
+			$out.= "atuacoes:\n   ";
 			foreach($audi->atuacoes->atuacao as $atu){
 				if($atu['tipo']=="grupo"){
-					$out.="grupo: ".(string)$atu->nome_grupo."\n\t";
+					$out.="grupo: ".(string)$atu->nome_grupo."\n   ";
 					$x=0;
 					foreach($atu->musicos->musico as $elem){
 						if($x==0){
-							$out .= "elementos:". (string)$elem['id'].",". (string)$elem->instrumento['id'];
+							$out .= "elementos:". (string)$elem['id'].", ". (string)$elem->instrumento['id'];
 							$x++;
 						}
-						else $out .= "\n\t\t  ".(string)$elem['id'].",". (string)$elem->instrumento['id'];
+						else $out .= "\n      ".(string)$elem['id'].", ". (string)$elem->instrumento['id'];
 					}
 					$x=0;
 					foreach($atu->obras->obra as $obra){
 						if($x==0){
-							$out.= "\n\tobras: ".$obra['id'];
+							$out.= "\n   obras: ".$obra['id'];
 							$x++;
 						}
-						else $out.= ",\n\t\t".$obra['id'];
+						else $out.= ",\n    ".$obra['id'];
 					}
-				$out.= "\n\t#";
+				$out.= "\n   #";
 				}
 				else if($atu['tipo']=="solo"){
-					$out .= "\n\tsolo:". (string)$atu->musicos->musico['id'].",". (string)$atu->musicos->musico->instrumento['id']."\n\t";
+					$out .= "\n   solo:". (string)$atu->musicos->musico['id'].",". (string)$atu->musicos->musico->instrumento['id']."\n   ";
 					$x=0;
 					foreach($atu->obras->obra as $obra){
 						if($x==0){
 							$out.= "obras: ".$obra['id'];
 							$x++;
 						}
-						else $out.= ",\n\t\t".$obra['id'];
+						else $out.= ",\n    ".$obra['id'];
 					}
-				$out.= "\n\t#";
+				$out.= "\n   #";
 				}
 			}
-		
+
 		}
 		return $out;
 	}

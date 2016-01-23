@@ -18,22 +18,28 @@
         <script type="text/javascript" src="./js/load_lines.js" charset="UTF-8"></script>
 	</head>
 	<body>
-		<h3>Validar Audição</h3>
+		<h3>Alterar Audição</h3>
 		<form accept-charset="UTF-8">
 			<fieldset class="GA">
-                		<legend>Nova Audição</legend>
+        <legend>Audição</legend>
 				<br/>
 				texto:
 				<textarea id="texto" rows="33" cols="55" class="lined">
-				<?php echo "\n".$str?>
+					<?php echo "\n".$str ?>
 				</textarea>
 				<br />
 				<input type="button" value="send phrase" id="send_phrase" />
 			</fieldset>
-			<fieldset id="responce">
+			<fieldset id="responceaa">
 				<legend>Mensagens do Servidor</legend>
 				<div id="msg">
 				</div>
+				<u>
+					<font color="red">
+						<div id="erros">
+						</div>
+					</font>
+				</u>
 			</fieldset>
 		</form>
 	</body>

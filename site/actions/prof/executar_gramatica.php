@@ -1,5 +1,5 @@
 <?php
-	
+	include_once '../../classes/mutex.php';
 	include_once '../../connectBD.php';
 	include_once '../../classes/cookie.php';
 	$prof = getInfoByCookie($dbh);
@@ -10,10 +10,10 @@
 
 	$vars = $_POST;
 
-    $vars["phrase"] = "organizador:".$prof['id']."\n".$vars["phrase"];
+    $vars["phrase"] = " organizador:".$prof['id']." \n".$vars["phrase"];
 	// tornar a string segura
     $texto = mres( $vars["phrase"] );
-	
+
     //apenas organizador pode mexer na audicao
 //-------------------------------------------------------------------------------------------
 	$xml = new DomDocument();
@@ -29,8 +29,8 @@
 	preg_match($pattern,$vars["phrase"],$res);
 	$title = explode("\"", $res[0]);//$title[1] tem nome da audicao
 	$organiz = $xml->xpath("//audicao[@id='".$title[1]."']/metainfo/organizador");
-	
-	
+
+
 	if(sizeof($organiz)>0){
 		//Aqui bloco diz que existe audicao com o mesmo nome
 		if($organiz[0]['id']!=$prof['id']){
@@ -39,32 +39,38 @@
 			die();
 		}//se Id do PROF que altera não coincide com o ID do organizador ... para
 	}
-	
-	//else die();//aqui não existe audicao, podes comentar esta linha para continuar o script
+
+//não existe audicao, continuar o script
 //--------------------------------------------------------------------------------------------
 
-    
-    
-    
+
+		$mutex = new Mutex("race_1", "mutex.lock");
+		if($mutex->isLocked()){
+			sleep(0.3);
+		}
+		$mutex->getLock();
     //executar gramatica
-    exec("java -jar gramaticaGAMu.jar ". $texto, $out); 
+    @exec("java -jar gramaticaGAMu.jar ". $texto, $out);
+		$mutex->releaseLock();
+
     $i=0;
-    
     // recolher prints
     foreach($out as $line) {
         $vars["msg"][$i] = $line;
         $i++;
     }
-    
+
     //enviar mensagens para o cliente
-     echo json_encode($vars);
-    
-    // funcoes auxiliares --------------------------------------------
+    echo json_encode($vars);
+
+
+
+		// funcoes auxiliares --------------------------------------------
     function mres($value){
         $search = array("\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a");
         $replace = array("\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z");
         return str_replace($search, $replace, $value);
     }
-    
-    
+
+
 ?>
