@@ -5,7 +5,7 @@
         <title>Relatorio</title>
     </head>
     <body>
-        <div align="center" >
+        <div align="center" style="background-color:#E6E6FA">
             <h1>Um Gestor de Audições/Concertos Musicais</h1>
             <h2>Projeto Final (1º semestre - perfil de PLC::MIEI::2015)</h2>
             <h3>Grupo 9</h3>
@@ -79,6 +79,8 @@
                                 Foi desenvolvida uma gramática em ANTLR e criado um JAR para ser executado no momento em que 
                                 um utilizador submete uma nova audição. A gramática faz validações sintáticas e semânticas ao
                                 planeamento de uma audição, e devolve feedback informando o utilizador caso exista algum erro.
+                                É também importante criar uma zona de exclusão mútua para executar o <i>parser</i>, uma vez que é este 
+                                que atualiza o ficheiro XML que contém todas as audições.
                             </p>
                             <p>De seguida mostra-se a estrutura básica de uma audição sem regras, condições e </p>
 <textarea rows="35" cols="90" wrap='off' readonly="readonly" style="resize: vertical;">
@@ -126,6 +128,15 @@
     idProf 	returns[String id]:   IDP{$id = $IDP.text;};
     idAluno	returns[String id]:   IDA{$id = $IDA.text;};
 </textarea>
+                    <p>
+                        O editor integrado permite visualisar de forma rápida e intuitiva os vários tipos de erros
+                        que a gramática é capaz de identificar. como existe um elevado número de simbolos sintáticos 
+                        que o utilizador tem de usar, é apresentado um botão com um planeamento exemplo, para acelarar 
+                        o inicio do processo de planeamento.
+                    </p>
+                    <img src="gramatica_sintax_semantica.PNG" alt="aaa" />
+                    
+                    
                         <h3 id="indice_23">Segurança</h3>
                             <p>
                                 Para tratar da segurança dos utilizadores do sistema, utilizamos uma tecnologia de Cookies
@@ -293,7 +304,7 @@ function exportStudents($dbh){
                     <img src="avisos_criar.PNG" alt="avisos_criar" height="300pt"/>
                     <h2 id="indice_4">Conclusão</h2>
                         <p>
-                            O desenvolvimento deste sistema recorre a várias tecnologias, como por exemplo HTTP, MySQL, GIT, ANTLR, etc.
+                            O desenvolvimento deste sistema recorre a várias tecnologias, como por exemplo HTTP, MySQL, GIT, ANTLR, AJAX, JSON etc.
                             Como tal a integração de todos estes componentes foi especialmente dificil. O sistema desenvolvido disponibiliza
                             um conjunto de funcionalidades que facilitam a programação de audições e a comunicação entre os docentes e os alunos,
                             para além disso permite também importar e exportar toda a informação relevante utilizada pelo sistema.
@@ -304,8 +315,8 @@ function exportStudents($dbh){
                     
                     <h2 id="indice_5">Ficheiros</h2>
                     <p>Dicionário de dados -<a href="BD_GAMu.pdf"> BD_GAMu.pdf </a></p>
-                    <p>Documentação da gramatica -<a href="grammar_javadoc/"> grammar_javadoc </a></p>
-                    
+                    <p>Relatório Gramática - <a href="Relatorio_GAMu.pdf">Relatorio_GAMu</a></p>
+                    <p>Script Inserções SQL - <a href="gamu.sql">insertsSQL</a></p>
                 </td>
             </tr>
         </table>
