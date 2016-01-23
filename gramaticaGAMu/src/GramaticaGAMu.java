@@ -87,7 +87,7 @@ public class GramaticaGAMu {
         if(parser.getNumberOfSyntaxErrors()>0){
             try { //RollBack
                 FileUtils.copyDirectory( dest, source );
-                System.out.println("Existem erros de <font color=\"red\">Sintax!</font> Audicao nao inserida");
+                System.out.println("Existem erros de <font color=\"red\">Sintax!</font> Audicao nao foi inserida");
             } catch (IOException e) {
                 //e.printStackTrace();
             }
