@@ -46,7 +46,7 @@ grammar GAMu;
         import org.w3c.dom.Node;
         import org.xml.sax.InputSource;
         import org.xml.sax.SAXException;
-
+        import javax.xml.transform.OutputKeys;
         }
 @members{
             // JDBC driver name and database URL
@@ -60,9 +60,7 @@ grammar GAMu;
             Statement stmt = null;
             
             // Grammar variables 
-            private int max_audition_time = 0;
-            private String titulo;
-            private String anoLetivo=null;
+            
             /** flag!=0, ocorreu erro semantico.*/
             private int flag = 0;
             
@@ -83,14 +81,14 @@ audicao     @init{
                       
                    }catch(SQLException se){
                       //Handle errors for JDBC
-                      se.printStackTrace();
+                      //    se.printStackTrace();
                    }catch(Exception e){
                       //Handle errors for Class.forName
-                      e.printStackTrace();
+                      //e.printStackTrace();
                    }
                    //iniciar a construcao do XML
                    StringBuilder audicao_xml = new StringBuilder();
-                   audicao_xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                   audicao_xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
                    }
             @after{
                     try{
@@ -100,7 +98,7 @@ audicao     @init{
                             conn.close();
                     }catch(SQLException se){
                       //Handle errors for JDBC
-                      se.printStackTrace();
+                      //se.printStackTrace();
                     }
                     
                     
@@ -108,31 +106,31 @@ audicao     @init{
                   }
             :	metaAud [audicao_xml]
                 {
-                 titulo = $metaAud.titulo_aud;
-                 anoLetivo = $metaAud.ano_letivo;
+                 //titulo = $metaAud.titulo_aud;
+                 String anoLetivo = $metaAud.ano_letivo;
                  audicao_xml = $metaAud.xmlOut;
                  if(audicao_xml != null){
-                    audicao_xml.append("</metainfo><atuacoes>");
+                    audicao_xml.append("</metainfo>\n<atuacoes>\n");
                  }else{
                     audicao_xml = new StringBuilder();
                  }
                  
                 } 
-                atuacoes [audicao_xml, $metaAud.hora_inicio]
+                atuacoes [audicao_xml, $metaAud.hora_inicio, $metaAud.tempo_max_aud]
                 {
                    Time audicao = new Time($atuacoes.tempo * 1000);
                    System.out.println("tempo total audicao: "+ audicao.toString());
-                   Time max = new Time(max_audition_time*1000);
+                   Time max = new Time($metaAud.tempo_max_aud*1000);
                    System.out.println("duracao-maxima: "+ max.toString());
                    
-                    if(max_audition_time < $atuacoes.tempo){
-                        long dif = $atuacoes.tempo - max_audition_time - 3600;
+                    if($metaAud.tempo_max_aud < $atuacoes.tempo){
+                        long dif = $atuacoes.tempo - $metaAud.tempo_max_aud - 3600;
                         Time time = new Time(dif * 1000);
                         System.out.println("tempo total ultrapasssa duracao estimada:<font color=\"red\"> +"+time.toString()+"</font>");
                     }
                     audicao_xml = $atuacoes.xmlOut;
                     if(audicao_xml != null){
-                        audicao_xml.append("</atuacoes></audicao>");
+                        audicao_xml.append("</atuacoes>\n</audicao>");
                     }else{
                         audicao_xml = new StringBuilder();
                     }
@@ -156,7 +154,7 @@ audicao     @init{
                         // remover Nodo antigo
                         XPathFactory xpf = XPathFactory.newInstance();
                         XPath xpath = xpf.newXPath();
-                        XPathExpression expression = xpath.compile("//audicao[@id="+titulo+"]");
+                        XPathExpression expression = xpath.compile("//audicao[@id="+$metaAud.titulo_aud+"]");
                         Node audicao_antiga = (Node) expression.evaluate(doc, XPathConstants.NODE);
                         if(audicao_antiga != null){
                             audicao_antiga.getParentNode().removeChild(audicao_antiga);
@@ -169,6 +167,7 @@ audicao     @init{
                         // write the content into xml file
                         TransformerFactory transformerFactory = TransformerFactory.newInstance();
                         Transformer transformer = transformerFactory.newTransformer();
+                        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
                         DOMSource source = new DOMSource(doc);
                         StreamResult result = new StreamResult(new File(filepath));
                         transformer.transform(source, result);
@@ -184,18 +183,18 @@ audicao     @init{
             ;
 
 metaAud     [StringBuilder xmlIn]
-            returns[String titulo_aud, String ano_letivo, StringBuilder xmlOut, long hora_inicio]
+            returns[String titulo_aud, String ano_letivo, StringBuilder xmlOut, long hora_inicio, int tempo_max_aud]
             :	'organizador:' id_prof=idProf 
                 'ano-letivo:' a1=INT'/'a2=INT {$ano_letivo = $a1.text+"_"+$a2.text;}
                 'titulo:' STRING  { 
                                     $titulo_aud = $STRING.text;
-                                    $xmlIn.append("<audicao id="+$STRING.text+">");
-                                    $xmlIn.append("<metainfo>");
+                                    $xmlIn.append("\n<audicao id="+$STRING.text+">");
+                                    $xmlIn.append("\n<metainfo>");
                                     try{
                                             String sql = "SELECT * FROM professor WHERE id='"+$id_prof.id+"'";
                                             ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                             if(rs.next()){
-                                                $xmlIn.append("<organizador id=\""+$id_prof.id+"\">"+rs.getString("nome")+"</organizador>");
+                                                $xmlIn.append("<organizador id=\""+$id_prof.id+"\">"+rs.getString("nome")+"</organizador>\n");
                                             }else{
                                                 System.out.print("line "+$id_prof.linha+" coluna: "+ $id_prof.coluna);
                                                 System.out.println("  professor: "+$id_prof.id+" nao existe");
@@ -203,16 +202,16 @@ metaAud     [StringBuilder xmlIn]
                                             }
                                             rs.close();
                                         }catch(SQLException se){
-                                            se.printStackTrace();
+                                            //se.printStackTrace();
                                         }
                                   }
-                ('subtitulo:' STRING{$xmlIn.append("<subtitulo>"+$STRING.text+"</subtitulo>");})? 
-                ('tema:' STRING{$xmlIn.append("<tema>"+$STRING.text+"</tema>");})?
+                ('subtitulo:' STRING{$xmlIn.append("<subtitulo>"+$STRING.text+"</subtitulo>\n");})? 
+                ('tema:' STRING{$xmlIn.append("<tema>"+$STRING.text+"</tema>\n");})?
                 'data:' data[$xmlIn] 
                 'hora:' hora[$xmlIn] { $hora_inicio = $hora.seconds-3600;}
-                'local:' STRING {$xmlIn.append("<local>"+$STRING.text+"</local>");}
+                'local:' STRING {$xmlIn.append("<local>"+$STRING.text+"</local>\n");}
                 'duracao-maxima:' duracao[$xmlIn]   {
-                                                        max_audition_time = $duracao.seconds-3600;
+                                                        $tempo_max_aud = $duracao.seconds-3600;
                                                         $xmlOut = $xmlIn;
                                                     }
             ;
@@ -220,7 +219,7 @@ metaAud     [StringBuilder xmlIn]
 data        [StringBuilder xmlIn]
             returns[StringBuilder xmlOut]:   
             dia=INT'/'mes=INT'/'ano=INT {
-                                            $xmlIn.append("<data>"+$dia.int+"/"+$mes.int+"/"+$ano.int+"</data>");
+                                            $xmlIn.append("<data>"+$dia.int+"/"+$mes.int+"/"+$ano.int+"</data>\n");
                                             $xmlOut = $xmlIn;
                                         }
             ;
@@ -229,7 +228,7 @@ hora        [StringBuilder xmlIn]
             returns[int seconds, StringBuilder xmlOut]:   
             horas=INT':'minutos=INT {
                                         $seconds = ($horas.int*60*60 + $minutos.int*60);
-                                        $xmlIn.append("<hora>"+$horas.int+":"+$minutos.int+"</hora>");
+                                        $xmlIn.append("<hora>"+$horas.int+":"+$minutos.int+"</hora>\n");
                                         $xmlOut = $xmlIn;
                                     }
             ;
@@ -237,91 +236,91 @@ duracao     [StringBuilder xmlIn]
             returns[int seconds, StringBuilder xmlOut]:   
             horas=INT':'minutos=INT {
                                         $seconds = ($horas.int*60*60 + $minutos.int*60);
-                                        $xmlIn.append("<duracao>"+$horas.int+":"+$minutos.int+"</duracao>");
+                                        $xmlIn.append("<duracao>"+$horas.int+":"+$minutos.int+"</duracao>\n");
                                         $xmlOut = $xmlIn;
                                     }
             ;
 
-atuacoes    [StringBuilder xmlIn, long hora_inicio]
+atuacoes    [StringBuilder xmlIn, long hora_inicio, int tempo_max_aud]
             returns[long tempo, StringBuilder xmlOut]
-            :   'atuacoes:' atuacao[($tempo-3600), $xmlIn, $hora_inicio]  {
+            :   'atuacoes:' atuacao[($tempo-3600), $xmlIn, $hora_inicio, $tempo_max_aud]  {
                                                                 $tempo = $atuacao.tempo;
                                                                 $xmlOut = $atuacao.xmlOut;
                                                             } '#' 
-                (atuacao[$tempo, $xmlOut, $hora_inicio]   {
+                (atuacao[$tempo, $xmlOut, $hora_inicio, $tempo_max_aud]   {
                                                 $tempo = $atuacao.tempo;
                                                 $xmlOut = $atuacao.xmlOut;
                                             } '#')* 
             ;
 
-atuacao     [long tempoIn, StringBuilder xmlIn, long hora_inicio]
+atuacao     [long tempoIn, StringBuilder xmlIn, long hora_inicio, int tempo_max_aud]
             returns[long tempo, StringBuilder xmlOut]
-            :   {$xmlIn.append("<atuacao tipo=\"grupo\">");}
-                grupo[$tempoIn, $xmlIn, $hora_inicio] {
+            :   {$xmlIn.append("\n<atuacao tipo=\"grupo\">\n");}
+                grupo[$tempoIn, $xmlIn, $hora_inicio, $tempo_max_aud] {
                                             $tempo=$grupo.tempo;
                                             $xmlOut = $grupo.xmlOut;
                                             $xmlOut.append("</atuacao>");
                                         }
-            |   {$xmlIn.append("<atuacao tipo=\"solo\">");}
-                solo[$tempoIn, $xmlIn, $hora_inicio]  {
+            |   {$xmlIn.append("\n<atuacao tipo=\"solo\">");}
+                solo[$tempoIn, $xmlIn, $hora_inicio, $tempo_max_aud]  {
                                             $tempo=$solo.tempo;
                                             $xmlOut = $solo.xmlOut;
                                             $xmlOut.append("</atuacao>");
                                         }
             ;
 
-grupo       [long tempoIn, StringBuilder xmlIn, long hora_inicio]
+grupo       [long tempoIn, StringBuilder xmlIn, long hora_inicio, int tempo_max_aud]
             returns[long tempo, StringBuilder xmlOut]
             :   'grupo:' STRING {
-                                    $xmlIn.append("<nome_grupo>"+$STRING.text+"</nome_grupo>");
+                                    $xmlIn.append("\n<nome_grupo>"+$STRING.text+"</nome_grupo>");
                                     Time hora_ini = new Time( ($hora_inicio +$tempoIn ) * 1000);
-                                    $xmlIn.append("<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
+                                    $xmlIn.append("\n<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
                                 }
                 'elementos:'    {
-                                    $xmlIn.append("<musicos>");
+                                    $xmlIn.append("\n<musicos>\n");
                                 } 
                                     musicos[$xmlIn]
                                 {
                                     $xmlIn = $musicos.xmlOut;
-                                    $xmlIn.append("</musicos>");
+                                    $xmlIn.append("\n</musicos>\n");
                                 } 
                 'obras:'    {
-                                $xmlIn.append("<obras>");
+                                $xmlIn.append("\n<obras>\n");
                             }  
-                                obras[$tempoIn, $xmlIn]
+                                obras[$tempoIn, $xmlIn, $tempo_max_aud]
                             {
                                 $xmlIn = $obras.xmlOut;
-                                $xmlIn.append("</obras>");
+                                $xmlIn.append("\n</obras>\n");
                                 $tempo = $obras.tempo;
                                 $xmlOut = $xmlIn;
                             }
             ;
-solo        [long tempoIn, StringBuilder xmlIn, long hora_inicio]
+solo        [long tempoIn, StringBuilder xmlIn, long hora_inicio, int tempo_max_aud]
             returns[long tempo, StringBuilder xmlOut]
             :   {
                     Time hora_ini = new Time( ($hora_inicio +$tempoIn) * 1000);
-                    $xmlIn.append("<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
+                    $xmlIn.append("\n<hora_inicio>"+hora_ini.toString()+"</hora_inicio>");
                 }
                 'solo:' {
-                            $xmlIn.append("<musicos>");
+                            $xmlIn.append("\n<musicos>\n");
                         } 
                             musico[$xmlIn]
                         {   
                             $xmlIn=$musico.xmlOut; 
-                            $xmlIn.append("</musicos>");
+                            $xmlIn.append("\n</musicos>\n");
                         }
                 'obras:'{
-                            $xmlIn.append("<obras>");
+                            $xmlIn.append("\n<obras>\n");
                         } 
-                            obras[$tempoIn, $xmlIn]
+                            obras[$tempoIn, $xmlIn, $tempo_max_aud]
                         {
                             $xmlIn=$obras.xmlOut; 
-                            $xmlIn.append("</obras>");
+                            $xmlIn.append("\n</obras>\n");
                             $tempo = $obras.tempo;
                             $xmlOut=$xmlIn; 
                         }
             ;
-obras       [long tempoIn, StringBuilder xmlIn]
+obras       [long tempoIn, StringBuilder xmlIn, int tempo_max_aud]
             returns[long tempo, StringBuilder xmlOut] 
             :   idObra { 
                             try{
@@ -330,13 +329,13 @@ obras       [long tempoIn, StringBuilder xmlIn]
                                 if(rs.next()){
                                     $tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
                                     $tempo += $tempoIn;
-                                    if($tempo>max_audition_time){
+                                    if($tempo>$tempo_max_aud){
                                         Time time = new Time($tempo * 1000);
                                             System.out.print("line "+$idObra.linha+" - tempo _max ultrapassado");
                                             System.out.println(" "+$idObra.id+" tem duracao: "+time.toString());
                                         flag=1;
                                     }else{
-                                        $xmlIn.append("<obra id=\""+$idObra.id+"\">");
+                                        $xmlIn.append("\n<obra id=\""+$idObra.id+"\">");
                                         $xmlIn.append("<nome>"+rs.getString("nome")+"</nome>");
                                         $xmlIn.append("<duracao>"+rs.getString("duracao")+"</duracao>");
                                         $xmlIn.append("</obra>");
@@ -349,7 +348,7 @@ obras       [long tempoIn, StringBuilder xmlIn]
                                 }
                                 rs.close();
                             }catch(SQLException se){
-                                se.printStackTrace();
+                                //se.printStackTrace();
                             }
                             $xmlOut = $xmlIn;
                         }
@@ -359,13 +358,13 @@ obras       [long tempoIn, StringBuilder xmlIn]
                                     ResultSet rs = (ResultSet) stmt.executeQuery(sql);
                                     if(rs.next()){
                                         $tempo += rs.getTime("duracao").toLocalTime().toSecondOfDay();
-                                        if($tempo>max_audition_time){
+                                        if($tempo>$tempo_max_aud){
                                             Time time = new Time($tempo * 1000);
                                             System.out.print("line "+$idObra.linha+" - tempo _max ultrapassado");
                                             System.out.println(" "+$idObra.id+" tem duracao: "+time.toString());
                                             flag=1;
                                         }else{
-                                            $xmlIn.append("<obra id=\""+$idObra.id+"\">");
+                                            $xmlIn.append("\n<obra id=\""+$idObra.id+"\">");
                                             $xmlIn.append("<nome>"+rs.getString("nome")+"</nome>");
                                             $xmlIn.append("<duracao>"+rs.getString("duracao")+"</duracao>");
                                             $xmlIn.append("</obra>");
@@ -378,7 +377,7 @@ obras       [long tempoIn, StringBuilder xmlIn]
                                     }
                                     rs.close();
                                 }catch(SQLException se){
-                                    se.printStackTrace();
+                                    //se.printStackTrace();
                                 }
                                 $xmlOut = $xmlIn;
                             }
@@ -394,7 +393,7 @@ musicos     [StringBuilder xmlIn]
 musico      [StringBuilder xmlIn]
             returns[StringBuilder xmlOut]
             :    idAluno ',' idInstrumento {
-                                            $xmlIn.append("<musico tipo=\"aluno\" id=\""+$idAluno.id+"\">");
+                                            $xmlIn.append("\n<musico tipo=\"aluno\" id=\""+$idAluno.id+"\">");
                                             try{
                                                 String sql = "SELECT * FROM aluno WHERE id='"+$idAluno.id+"'";
                                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
@@ -423,13 +422,18 @@ musico      [StringBuilder xmlIn]
                                                             while(rs.next()){
                                                                 System.out.println("  - "+rs.getString("id")+" "+rs.getString("designacao"));
                                                             }
-                                                            
                                                             flag=1;
                                                         }
-                                                        
                                                     }else{
                                                         System.out.print("line "+$idInstrumento.linha);
                                                         System.out.println("  instrumento: "+$idInstrumento.id+" nao existe");
+                                                        sql = "SELECT * FROM aluno_instrumento INNER JOIN instrumento ON aluno_instrumento.id_instrumento=instrumento.id WHERE aluno_instrumento.id_aluno='"+$idAluno.id+"'";
+                                                        rs = (ResultSet) stmt.executeQuery(sql);
+                                                        System.out.print("O Aluno: "+ $idAluno.id);
+                                                        System.out.println(" tem habilitacoes em:");
+                                                        while(rs.next()){
+                                                            System.out.println("  - "+rs.getString("id")+" "+rs.getString("designacao"));
+                                                        }
                                                         flag=1;
                                                     }
                                                 }else{
@@ -439,13 +443,13 @@ musico      [StringBuilder xmlIn]
                                                 }
                                                 rs.close();
                                             }catch(SQLException se){
-                                                se.printStackTrace();
+                                                //se.printStackTrace();
                                             }
                                             $xmlIn.append("</musico>");
                                             $xmlOut = $xmlIn;
                                          } 
             |   idProf ',' idInstrumento {
-                                            $xmlIn.append("<musico tipo=\"professor\" id=\""+$idProf.id+"\">");
+                                            $xmlIn.append("\n<musico tipo=\"professor\" id=\""+$idProf.id+"\">");
                                             try{
                                                 String sql = "SELECT * FROM professor WHERE id='"+$idProf.id+"'";
                                                 ResultSet rs = (ResultSet) stmt.executeQuery(sql);
@@ -480,7 +484,7 @@ musico      [StringBuilder xmlIn]
                                                 }
                                                 rs.close();
                                             }catch(SQLException se){
-                                                se.printStackTrace();
+                                                //se.printStackTrace();
                                             }
                                             $xmlIn.append("</musico>");
                                             $xmlOut = $xmlIn;
@@ -490,7 +494,8 @@ musico      [StringBuilder xmlIn]
 
 
 
-idObra	returns[String id, int linha, int coluna]:   ID_OBRA{   
+idObra	returns[String id, int linha, int coluna]:   ID_OBRA{
+                                                            
                                                             $id = $ID_OBRA.text;
                                                             $linha = $ID_OBRA.getLine();
                                                             $coluna = $ID_OBRA.getCharPositionInLine();

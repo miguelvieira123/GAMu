@@ -8,8 +8,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.io.PrintStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -25,19 +23,19 @@ public class GramaticaGAMu {
         
         //System.out.println("versao ANTLR: "+ RuntimeMetaData.getRuntimeVersion());
         
-        ANTLRInputStream in = new ANTLRInputStream( " organizador: P1\n" +
+        ANTLRInputStream in = new ANTLRInputStream( " organizador: P2\n" +
                                                     " ano-letivo: 2015/2016\n" +
-                                                    " titulo: \"TesteJava\"\n" +
-                                                    " subtitulo: \"subtitulo\" \n" +
-                                                    " tema: \"o tema\" \n" +
+                                                    " titulo: \"Teste2\"\n" +
+                                                    " subtitulo: \"subtitulo2\" \n" +
+                                                    " tema: \"o tema2\" \n" +
                                                     " data: 20/12/2015\n" +
                                                     " hora: 13:30\n" +
                                                     " local: \"local da audicao\"\n" +
                                                     " duracao-maxima: 13:00\n" +
                                                     " atuacoes:\n" +
                                                     "     grupo: \"nome da banda\" \n" +
-                                                    "     elementos: A1510,I10\n" +
-                                                    "                P11,I5\n" +//line 12
+                                                    "     elementos: A1510,I9\n" +
+                                                    "                P11,I15\n" +//line 12
                                                     "                A20021,I7\n" +
                                                     "     obras: O1,\n" +
                                                     "            O2,\n" +
@@ -62,7 +60,7 @@ public class GramaticaGAMu {
         
         ANTLRInputStream in2 = new ANTLRInputStream( temp );
         
-        GAMuLexer lexer = new GAMuLexer( (CharStream) in2);
+        GAMuLexer lexer = new GAMuLexer( (CharStream) in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         GAMuParser parser = new GAMuParser(tokens);
         
@@ -74,13 +72,16 @@ public class GramaticaGAMu {
         try { //fazer copia de segurança
             FileUtils.copyDirectory( source, dest );
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
-        PrintStream orig_err = System.err;
-        System.setErr(System.out);
-        parser.audicao();
-        System.setErr(orig_err);
-        
+        try{
+            PrintStream orig_err = System.err;
+            System.setErr(System.out);
+            parser.audicao();
+            System.setErr(orig_err);
+        }catch(NullPointerException e){
+            //e.printStackTrace();
+        }
        
         
         if(parser.getNumberOfSyntaxErrors()>0){
@@ -88,7 +89,7 @@ public class GramaticaGAMu {
                 FileUtils.copyDirectory( dest, source );
                 System.out.println("Existem erros de <font color=\"red\">Sintax!</font> Audicao nao inserida");
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }else{
             if(parser.getFlag()==0){

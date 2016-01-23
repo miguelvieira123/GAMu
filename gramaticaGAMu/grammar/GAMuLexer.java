@@ -35,7 +35,7 @@
         import org.w3c.dom.Node;
         import org.xml.sax.InputSource;
         import org.xml.sax.SAXException;
-
+        import javax.xml.transform.OutputKeys;
         
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -88,9 +88,7 @@ public class GAMuLexer extends Lexer {
 	            Statement stmt = null;
 	            
 	            // Grammar variables 
-	            private int max_audition_time = 0;
-	            private String titulo;
-	            private String anoLetivo=null;
+	            
 	            /** flag!=0, ocorreu erro semantico.*/
 	            private int flag = 0;
 	            
