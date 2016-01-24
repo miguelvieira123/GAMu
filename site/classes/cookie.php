@@ -1,4 +1,7 @@
 <?php
+/** !
+ *This function generates Cookies and sends them for user
+ */
 	function setUserCookie($ID,$dbh){
 		$value=$ID. $_SERVER['HTTP_USER_AGENT'].$_SERVER['REMOTE_ADDR']."gamu".time();
 		$sql = "UPDATE utilizador SET cookie=MD5('".$value."') WHERE id_perfil='".$ID."'";
@@ -9,7 +12,9 @@
 			return true;
 		}
 	}
-
+/** !
+ *This function reads type of user by Cookie
+ */
 	function getTypeByCookie($dbh){
 		if(array_key_exists("KEY",$_COOKIE)==false)return -1;
 		$sql = "SELECT tipo_perfil FROM utilizador WHERE cookie='".$_COOKIE['KEY']."'";
@@ -22,6 +27,9 @@
 		}
 		else return -3;
 	}
+	/** !
+ *This function reads id of user by Cookie
+ */
 	function getIdByCookie($dbh){
 		if(array_key_exists("KEY",$_COOKIE)==false)return -1;
 		$sql = "SELECT id_perfil FROM utilizador WHERE cookie='".$_COOKIE['KEY']."'";
@@ -34,7 +42,9 @@
 		}
 		else return -3;
 	}
-
+/** !
+ *This function reads id and type of user by Cookie
+ */
 	function getInfoByCookie($dbh){
 		if(array_key_exists("KEY",$_COOKIE)==false)return -1;
 		$out = array();
@@ -50,6 +60,9 @@
 		}
 		else return -3;
 	}
+	/** !
+ *This function drop cookie from DB
+ */
 	function delCookie($dbh){
 		if(array_key_exists("KEY",$_COOKIE)==false)return -1;
 		$sql = "UPDATE utilizador SET cookie='' WHERE cookie='".$_COOKIE['KEY']."'";

@@ -1,4 +1,8 @@
 <?php
+ /*!
+ * This function adds students to $file
+ * And return log
+ */
 	function importStudents($file,$dbh){
 		$out = "";
 		$xml = new DomDocument();
@@ -52,6 +56,10 @@
 	return $out;
 	}
 //----------------------------------------------------------------------------------------------------------------------------------------------------
+	/*!
+ * This function adds courses to $file
+ * And return log
+ */
 	function importCourses($file,$dbh){
 		$out="";
 		$sql = "INSERT INTO curso VALUES ";
@@ -96,6 +104,10 @@
 	return $out;
 	}
 //-------------------------------------------------------------------------------------------------------------------------------------------
+	/*!
+ * This function adds professors to $file
+ * And return log
+ */
 	function importProfessors($file,$dbh){
 		$out = "";
 		$xml = new DomDocument();
@@ -144,6 +156,10 @@
 	return $out;
 	}
 //----------------------------------------------------------------------------------------------------------------------------------------------
+	/*!
+ * This function adds auditions to $file
+ * And return log
+ */
 	function importAudition($file,$dbh){
 		$out="";
 		$xmlD_new = new DomDocument();
@@ -182,10 +198,11 @@
 		return $out;
 	}
 //----------------------------------------------------------------------------------------------------------------------------------------------
-	function importWorks($file,$dbh){
-		print_r($file);
-	}
-//----------------------------------------------------------------------------------------------------------------------------------------------
+		/*!
+ * This function returns id of the last student
+ * if Query returns false , function return -1
+ * Returns -2 if query returned null
+ */
 	function getLastStudentId($dbh){
 		$sql = "SELECT id FROM aluno ORDER BY id DESC LIMIT 1";
 		$res = $dbh->query($sql);
@@ -197,6 +214,11 @@
 		}
 		else return -2;
 	}
+		/*!
+ * This function returns id of the student by student's name and birthday
+ * if Query returns false , function return -1
+ * Returns -2 if query returned null
+ */
 	function checkStudent($name,$birthday,$dbh){
 		$sql = "SELECT id FROM aluno WHERE nome='".$name."' AND dataNsc='".$birthday."'";
 		$res = $dbh->query($sql);
@@ -209,6 +231,11 @@
 		else if($res->rowCount()>1) return -2;
 		else return -3;
 	}
+			/*!
+ * Returns 1 if student's id exists in database
+ * if Query returns false , function return -1
+ * Returns -2 if query returned null
+ */
 	function checkStudentId($ID,$dbh){
 		$sql = "SELECT id FROM aluno WHERE id='".$ID."'";
 		$res = $dbh->query($sql);
@@ -217,6 +244,11 @@
 		else if($res->rowCount()>1) return -2;
 		else return -3;
 	}
+			/*!
+ * Returns 1 if course's id exists in database
+ * if Query returns false , function return -1
+ * Returns -2 if query returned null
+ */
 	function checkCourseId($ID,$dbh){
 		$sql = "SELECT id FROM curso WHERE id='".$ID."'";
 		$res = $dbh->query($sql);
@@ -225,6 +257,11 @@
 		else if($res->rowCount()>1) return -2;
 		else return -3;
 	}
+				/*!
+ * Returns 1 if professor's id exists in database
+ * if Query returns false , function return -1
+ * Returns -2 if query returned null
+ */
 	function checkProfessorId($ID,$dbh){
 		$sql = "SELECT id FROM professor WHERE id='".$ID."'";
 		$res = $dbh->query($sql);
@@ -233,6 +270,11 @@
 		else if($res->rowCount()>1) return -2;
 		else return -3;
 	}
+				/*!
+ * Returns 1 if exists registration by student's id, course's id and  school year
+ * if Query returns false , function return -1
+ * Returns -3 if query returned null
+ */
 	function checkMatricula($idA,$idC,$ano,$dbh){
 		$sql = "SELECT id_aluno FROM matricula WHERE id_aluno='".$idA."' AND id_curso='".$idC."' AND anoLetivo='".$ano."'";
 		$res = $dbh->query($sql);

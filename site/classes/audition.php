@@ -1,4 +1,7 @@
 <?php
+	/*!
+	* Returns <div> with a list of Auditions
+	*/
 	function getAuditions($file,$idP,$dbh){
 		$xml = new DomDocument();
 		$xml->load($file);
@@ -8,11 +11,6 @@
 			echo substr($error['message'],30,strlen($error['message']));
 			//die();
 		}
-		//$xslt = new XSLTProcessor();
-  		//$xsl = new DOMDocument();
-  		//$xsl->load("../../schemas/audition.xsl", LIBXML_NOCDATA);
-  		//$xslt->importStylesheet($xsl);
- 		//echo $xslt->transformToXML($xml);
 
 		$xml = simplexml_load_file($file);
 		$audicoes = $xml->xpath("//audicao");
@@ -39,6 +37,9 @@
 		}
 
 	}
+	/*!
+	* Returns formatted string with audition's data
+	*/
 	function getStrOfAdition($id,$xmlF,$xsdF){
 		$out = "";
 		$xml = new DomDocument();
@@ -105,7 +106,9 @@
 		if(@date("Y/m/d")>$new_data)return true;
 		else return false;
 	}
-
+	/*!
+	* Cleans one audition from xml by  audition's id
+	*/
 	function delAudition($idAu,$idP){
 		$xml = new DomDocument();
 		$xml->load("../../files/auditions/2015_2016.xml");
@@ -127,7 +130,9 @@
 		$xml->documentElement->removeChild($node[0]);
 		$xml->save("../../files/auditions/2015_2016.xml");
 	}
-
+	/*!
+	* Returns array with audition's id  by student's id
+	*/
 	function getIdByStudentId($idA,$xmlF,$xsdF){
 		$out= array();
 		$i=0;

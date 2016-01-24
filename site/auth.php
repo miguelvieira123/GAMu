@@ -1,3 +1,6 @@
+/*!
+*Pagina para validar o client
+*/
 <?php
 	
 	if(!array_key_exists("login", $_REQUEST)||!array_key_exists("passwd", $_REQUEST))header("Location:index.html");
