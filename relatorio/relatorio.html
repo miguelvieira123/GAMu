@@ -62,7 +62,7 @@
                     <h2 id="indice_1">Introdução</h2>
                     
                     <h2 id="indice_2">Estrutura da Aplicação</h2>
-                        <img src="arquitetura_aplicacao.PNG" alt="arqui" height="400pt" />
+                        <img src="arquitetura_aplicacao.PNG" alt="arquitet" height="400pt" />
                         <h3 id="indice_21">Base de Dados</h3>
                             <p>Para armazenar a informação optamos por usar uma Base de Dados MySQL, 
                                 isto é uma Base de Dados Relacional o que permite manter a concistência dos dados.
@@ -140,10 +140,10 @@
                         <h3 id="indice_23">Segurança</h3>
                             <p>
                                 Para tratar da segurança dos utilizadores do sistema, utilizamos uma tecnologia de Cookies
-                                que permite identificar únicamente um utilizador em cada sessão. Quando um utilizador 
-                                efetua o login, e caso seja bem sucedido, é gerada uma string que é enviada para o cliente,
-                                e simultaneamente guardada na base de dados, onde fica associada com o utilizador. Esta string serve 
-                                para identificar os utilizadores e controlar o acesso às funcionalidades do sistema.
+                                que permite identificar únicamente um utilizador em cada sessão(1 minuto por sessão). 
+                                Quando um utilizador efetua o login, e caso seja bem sucedido, é gerada uma string(Cookie) que é enviada para o cliente,
+                                e simultaneamente guardada na base de dados. Este Cookie serve para identificar os utilizadores e controlar o acesso 
+                                às funcionalidades do sistema.
                             </p>
                     
                     <h2 id="indice_3">Funcionalidades</h2>
@@ -314,9 +314,11 @@ function exportStudents($dbh){
                     
                     
                     <h2 id="indice_5">Ficheiros</h2>
-                    <p>Dicionário de dados -<a href="BD_GAMu.pdf"> BD_GAMu.pdf </a></p>
+                    <p>Dicionário de dados - <a href="BD_GAMu.pdf"> BD_GAMu.pdf </a></p>
                     <p>Relatório Gramática - <a href="Relatorio_GAMu.pdf">Relatorio_GAMu</a></p>
                     <p>Script Inserções SQL - <a href="gamu.sql">insertsSQL</a></p>
+                    <p>Documentação dos PHP desenvolvido - <a href="documentacao_PHP/index.html">doxygenPHP</a></p>
+                    <p>Documentação JAR - <a href="grammar_javadoc/index.html">JavaDoc</a></p>
                 </td>
             </tr>
         </table>

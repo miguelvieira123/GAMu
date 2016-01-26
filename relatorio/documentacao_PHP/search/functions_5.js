@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['getauditions',['getAuditions',['../classes_2audition_8php.html#a3cbf1b184ea72108e1a4cae48535e11c',1,'audition.php']]],
+  ['getbirthday',['getBirthday',['../class_professor.html#a84c9359e627c5904ede82d40e64e4652',1,'Professor\getBirthday()'],['../class_students.html#af733d0d6ca49325871091acf8be3135b',1,'Students\getBirthday()']]],
+  ['getcourses',['getCourses',['../class_professor.html#af64cb70630036ca752bc09607c835f18',1,'Professor']]],
+  ['getfilehandle',['getFileHandle',['../class_mutex.html#ace1d0abc6d3588a590f0086687b8a6d7',1,'Mutex']]],
+  ['getidbycookie',['getIdByCookie',['../cookie_8php.html#a0f845e6d616f4fba9141ececf210451b',1,'cookie.php']]],
+  ['getidbystudentid',['getIdByStudentId',['../classes_2audition_8php.html#ab4e2005be9cc8bbd8a4623360e517438',1,'audition.php']]],
+  ['getinfobycookie',['getInfoByCookie',['../cookie_8php.html#a7c7d939411c711137ac7678ee0d3a1f0',1,'cookie.php']]],
+  ['getinstruments',['getInstruments',['../class_students.html#adcdf6ddc38859db2d8994b4af8b4e1f1',1,'Students']]],
+  ['getlaststudentid',['getLastStudentId',['../classes_2import_8php.html#ada91cbb0884b842fefaa67e1c55d8625',1,'import.php']]],
+  ['getlock',['getLock',['../class_mutex.html#a65126540ed921159fa2a120f8d8568f4',1,'Mutex']]],
+  ['getlockfilepath',['getLockFilePath',['../class_mutex.html#a41aa837e5f50e00037a116a336481150',1,'Mutex']]],
+  ['getmail',['getMail',['../class_professor.html#ae98bb5ca4f2b369abebf4f53361f2d4b',1,'Professor\getMail()'],['../class_students.html#ab067c4b25afa0d4455dab2b02584b872',1,'Students\getMail()']]],
+  ['getmobile',['getMobile',['../class_professor.html#af3033eeec3937c701396e945310f7ac7',1,'Professor\getMobile()'],['../class_students.html#a80055edcf26dca7e006ebc9ae763ecdb',1,'Students\getMobile()']]],
+  ['getname',['getName',['../class_professor.html#a17866635723548b1e7b33e918b92dca9',1,'Professor\getName()'],['../class_students.html#aa95a359fffbb8d268590d23390320719',1,'Students\getName()']]],
+  ['getnewsbyid',['getNewsByID',['../class_users.html#aaf63421aeaecf0c4eb8baaecc9f6924f',1,'Users']]],
+  ['getnewsbyida',['getNewsByIDA',['../class_users.html#a4f878909d57263096454167dce515db8',1,'Users']]],
+  ['getnewsbyidp',['getNewsByIDP',['../class_users.html#a3a6e477cbe1f516b03efc21bb18b6f75',1,'Users']]],
+  ['getstrofadition',['getStrOfAdition',['../classes_2audition_8php.html#af65d4972d81a43480dc360cca78ac85d',1,'audition.php']]],
+  ['gettypebycookie',['getTypeByCookie',['../cookie_8php.html#af833ad65ae4644f340017cf904c53368',1,'cookie.php']]]
+];
